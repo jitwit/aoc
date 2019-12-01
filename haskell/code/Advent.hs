@@ -7,10 +7,10 @@ module Advent
   , input_ints2d
     -- parsing ish
   , ints_of_bytes
+  , module Advent.Write
   ) where
 
 import Data.ByteString.Lazy (ByteString (..))
-
 import qualified Data.ByteString.Lazy.Char8 as B
 import Data.Char
 import Data.Functor
@@ -19,6 +19,8 @@ import Data.List
 
 import System.FilePath.Posix
 import Text.Printf
+
+import Advent.Write
 
 type Year = Int
 type Day = Int
@@ -42,3 +44,5 @@ input_ints y d = input_bytes y d <&> ints_of_bytes
 
 input_ints2d :: Year -> Day -> IO [[Int]]
 input_ints2d y d = input_bytes y d <&> map ints_of_bytes . B.lines
+
+

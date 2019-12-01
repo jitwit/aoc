@@ -1,36 +1,48 @@
 cabal-version: 2.4
 name:          advent
 version:       0.1.0.0
-license-file:  LICENSE
 author:        jitwit
-category:      Snow
+category:      Puzzles
 build-type:    Simple
 
 common base
-  default-language: Haskell2010       
-  build-depends: base >= 4.12 && < 5                            
-  
+  default-language: Haskell2010
+  build-depends: base
+
+common ds
+  default-language: Haskell2010
+  build-depends:
+--    algebraic-graphs,
+    array,
+    containers,
+    fingertree,
+    groups,
+    hashable,
+    MemoTrie,
+    psqueues,
+    unordered-containers,
+    vector
+
+common kmettverse
+  default-language: Haskell2010
+  build-depends: comonad, contravariant, lens
+
+common reading
+ default-language: Haskell2010
+ build-depends: bytestring, filepath, trifecta
+
+common writing
+  default-language: Haskell2010
+  build-depends: ansi-wl-pprint, JuicyPixels
+
 library
-  import: base
+  import: base, ds, reading, writing
   hs-source-dirs:
     haskell/code
   exposed-modules:
-    Advent
+    Advent,
+    Advent.Write
   build-depends:
-    bytestring,
-    comonad,
-    containers,
-    contravariant,
-    data-default,
-    filepath,
-    fingertree,
-    groups, 
-    ghc-prim,
-    hashable,
-    lens,
-    transformers,
-    trifecta,
-    unordered-containers
     
 executable 19-1
   import: base

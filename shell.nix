@@ -4,10 +4,10 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { mkDerivation, base, bytestring, comonad, containers
-      , contravariant, data-default, filepath, fingertree, ghc-prim
-      , groups, hashable, lens, stdenv, transformers, trifecta
-      , unordered-containers
+  f = { mkDerivation, ansi-wl-pprint, array, base, bytestring
+      , containers, filepath, fingertree, groups, hashable, JuicyPixels
+      , MemoTrie, psqueues, stdenv, trifecta, unordered-containers
+      , vector
       }:
       mkDerivation {
         pname = "advent";
@@ -16,9 +16,9 @@ let
         isLibrary = true;
         isExecutable = true;
         libraryHaskellDepends = [
-          base bytestring comonad containers contravariant data-default
-          filepath fingertree ghc-prim groups hashable lens transformers
-          trifecta unordered-containers
+          ansi-wl-pprint array base bytestring containers filepath fingertree
+          groups hashable JuicyPixels MemoTrie psqueues trifecta
+          unordered-containers vector
         ];
         executableHaskellDepends = [ base ];
         license = "unknown";
