@@ -1,16 +1,14 @@
-{-# language TypeApplications #-}
-
 module Main where
 
-import Data.Bool
+import Advent
 
-fuel n = n`div`3 - 2
+fuel n = n `div` 3 - 2
 
-fuel_ n = bool 0 (n + fuel_ (fuel n)) (0 < n)
+fuel_ n = if 0 < n then 0 else n + fuel_ (fuel n)
 
 partA = sum . map fuel
 partB = sum . map (fuel_ . fuel)
 
-main = do masses <- map (read @ Int) . words <$> readFile "../../input/19/1.in"
+main = do masses <- input_ints 19 1
           print $ partA masses
           print $ partB masses
