@@ -3,17 +3,13 @@ NB. shit works.
 
 NB. map over array of chars to set open paren = 1 and close paren =
 NB. 0. then double and decrement to get 1 and _1.
-floors =: <:+:'('&= 1!:1 < '../../input/15/1.in'
+floors =: <:+:'('&=1!:1<'../../input/15/1.in'
+santas_trip =: +/\0,floors
 
-NB. sum over array.
-partA =: +/floors
+NB. final floor
+partA =: {:santas_trip
 
-NB. accumulate sum over array and find first index of _1. increment
-NB. answer make it 1-indexed.
-partB =: >:(+/\floors)i._1
+NB. find first appearance of _1 in trip
+partB =: santas_trip i._1
 
 partA;partB
-
-
-
-

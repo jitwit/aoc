@@ -6,9 +6,10 @@
 
 (print-gensym #f)
 
+(define (advent-file-path file)
+  (string-append "~/code/advent/code/" file))
+
 (define source-files
-  '("code/biblio.ss"
-    "code/outils.ss"
-    "code/style-sheet.ss"))
+  (map advent-file-path '("biblio.ss" "outils.ss" "style-sheet.ss")))
 
 (for-all load source-files)

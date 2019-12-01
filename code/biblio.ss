@@ -109,8 +109,8 @@
                ;; if it's december, and the requested day matches today
                ;; make sure we're before 10 pm before triggering req
                (and (= 12 (date-month auj))
-                    (= (date-day adj) (advent-day))
-                    (< (date-hour adj) 22)))
+                    (= (date-day auj) (advent-day))
+                    (< (date-hour auj) 22)))
            ;; fetch.sh contains curl request from firefox dev
            ;; outils. cookie goes stale after 30 days
            (let ((year (advent-year))
