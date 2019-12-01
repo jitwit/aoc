@@ -1,5 +1,7 @@
 (include "~/code/advent/code/biblio.ss")
 
+(import (euler))
+
 (define masses
   (parse-advent input))
 
@@ -10,11 +12,9 @@
   (apply + (map fuel masses)))
 
 (define (fuel+ mass)
-  (letrec ((%fuel (lambda (mass)
-                    (if (< 0 mass)
-                        (+ mass (%fuel (fuel mass)))
-                        0))))
-    (%fuel (fuel mass))))
+  (if (< 0 mass)
+      (+ mass (fuel+ (fuel mass)))
+      0))
 
 (define (part-b)
-  (apply + (map fuel+ masses)))
+  (apply + (map (compose fuel+ fuel) masses)))
