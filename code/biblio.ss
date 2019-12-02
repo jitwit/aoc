@@ -133,13 +133,19 @@
       (format #t "downloading ~s...~%" advent)
       (fetch-advent))))
 
-(define (parse-advent parser)
-  (let ((advent (advent-file)))
-    (advent-ensure)
-    (if (file-exists? advent)
-	(with-input-from-file advent parser)
-	(error 'parse-advent "failed to retrieve advent input"
-               advent (advent-year) (advent-day)))))
+(define (run-advent-parser parser file)
+  (if (file-exists? file)
+      (with-input-from-file file parser)
+      (error 'parse-advent "failed to retrieve advent input" file)))
+
+(define parse-advent
+  (case-lambda
+    ((parser)
+     (let ((advent (advent-file)))
+       (advent-ensure)
+       (run-advent-parser parser advent)))
+    ((parser file)
+     (run-advent-parser parser file))))
 
 (define (solve-advent part-a part-b parsed-input)
   (format #t "part-a: ~a~%part-b: ~a~%"

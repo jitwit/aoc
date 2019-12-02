@@ -38,7 +38,7 @@ common writing
 library
   import: base, ds, reading, writing
   hs-source-dirs:
-    haskell/code
+    code
   exposed-modules:
     Advent,
     Advent.Write
