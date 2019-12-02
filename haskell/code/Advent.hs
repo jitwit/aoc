@@ -44,5 +44,3 @@ input_ints y d = input_bytes y d <&> ints_of_bytes
 
 input_ints2d :: Year -> Day -> IO [[Int]]
 input_ints2d y d = input_bytes y d <&> map ints_of_bytes . B.lines
-
-

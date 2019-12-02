@@ -1,14 +1,14 @@
-{-# language LambdaCase #-}
+{-# language LambdaCase, TypeSynonymInstances, FlexibleInstances #-}
 
 module Advent.Write
   ( AdventDoc (..)
   , Solution (..)
-  , put_report
+  , output
   ) where
 
 import Text.PrettyPrint.ANSI.Leijen as PP hiding ((<$>))
 
-data Solution a b = PartA a | PartB b | Solved a b
+data Solution a b = A a | B b | AB a b
 
 class AdventDoc a where
   report :: a -> Doc
@@ -25,14 +25,14 @@ instance AdventDoc Float where
 instance AdventDoc Double where
   report = double
 
+instance AdventDoc String where
+  report = string
+
 instance (AdventDoc a, AdventDoc b) => AdventDoc (Solution a b) where
   report = \ case
-    PartA a -> string "PartA:" <> space <> report a
-    PartB b -> string "PartB:" <> space <> report b
-    Solved a b -> vsep $ report <$> [PartA a,PartB b]
-      
+    A a -> string "Part-A " <> bold (red $ report a)
+    B b -> string "Part-B " <> bold (green $ report b)
+    AB a b -> vsep $ report <$> [A a,B b]
 
-report' = undefined
-
-put_report :: AdventDoc a => a -> IO ()
-put_report = putDoc . (<>line) . report
+output :: AdventDoc a => a -> IO ()
+output = putDoc . (<>line) . report
