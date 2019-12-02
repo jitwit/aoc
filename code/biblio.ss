@@ -42,9 +42,16 @@
 (define (input-chars-transform-parse transform parser)
   (lambda ()
     (let ((cleaner (input-chars-with transform)))
-      (with-input-from-string (list->string
-				cleaner)
+      (with-input-from-string (list->string (cleaner))
 			      parser))))
+
+(define comma-separated
+  (input-chars-transform-parse
+   (lambda (c)
+     (match c
+       (#\, #\space)
+       (x x)))
+   input))
 
 (define (n-tuples n xs)
   (let loop ((xs xs) (vs '()))
