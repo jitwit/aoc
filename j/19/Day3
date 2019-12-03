@@ -1,0 +1,53 @@
+# -*- mode: org -*-
+
+* Crossed Wires
+
+  [[https://adventofcode.com/2019/day/3][puzzle]]
+
+#+begin_src j :session :exports code
+#+end_src
+
+#+begin_src j :session :exports both
+#+end_src
+
+** Reading input
+
+#+begin_src j :session :exports both
+require 'tables/csv'
+
+wires=: readcsv '../../scheme/19/3.in'
+
+mag =: makenum@:}.
+dir =: {&0j1 1 0j_1 _1@:I.@:E.&'URDL'@:{.
+parse=: mag*dir
+
+wireA =: parse"1 > 0{::wires
+wireB =: parse"1 > 1{::wires
+
+fill =: 4 : 0
+dz =. y-x
+step =. dz % | dz
+x + (step * >:i.|dz)
+)
+
+]trya =. (+/\ 0,wireA)
+(_1}.trya)fill"0(_1}. (1|.trya))
+#+end_src
+
+#+RESULTS:
+#+begin_example
+0
+  8
+8j5
+3j5
+3j2
+
+  1   2   3   4   5 6 7 8
+
+8j1 8j2 8j3 8j4 8j5 0 0 0
+
+7j5 6j5 5j5 4j5 3j5 0 0 0
+
+3j4 3j3 3j2   0   0 0 0 0
+#+end_example
+
