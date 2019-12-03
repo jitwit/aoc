@@ -1,0 +1,71 @@
+# -*- mode: org -*-
+
+* Day 2: 1202 Program Alarm
+
+  [[https://adventofcode.com/2019/day/2][Puzzle]]
+
+** Run source code
+
+   Input is comma separated, thence ~readcsv~.
+   
+#+begin_src j :session :exports code
+require 'tables/csv'
+
+source =: {. makenum readcsv '../../input/19/2.in'
+eg1 =: 1 1 1 4 99 5 6 0 99
+eg2 =: 1 9 10 3 2 3 11 0 99 30 40 50
+#+end_src
+
+#+RESULTS:
+
+  Some names for operating on program state. ~seed~ allows boxes up
+  source array after setting values in positions 1 and 2, with an
+  instruction pointer initially 0 (~(1 2})~ is dyadic). ~ip addr mem~
+  indexes ~mem~ at offset ~3~ from ~ip~. ~param_add~ and ~param_mul~
+  also index into ~mem~, but twice to get value of location at
+  position at offsets ~ip + 1 2~ finished by ~+/~ or ~*/~.
+
+#+begin_src j :session :exports code
+seed =: [:0&;(1 2})
+addr =: 3&+@[{]
+param_add =: [:+/1 2&+@[({{])]
+param_mul =: [:*/1 2&+@[({{])]
+#+end_src
+
+#+RESULTS:
+
+  Select index by modding ~ip~ by 3. This works because opcodes are ~1
+  2 99~. ~op_add~ and ~op_mul~ bundled together in gerund to to be
+  targeted by ~selop~.
+
+#+begin_src j :session :exports code
+selop =: [: 3&| 0&{:: { 1&{::    NB. mod by 3 of ip to select by agenda in step
+op_add =: (4: + 0&{::) ; 0&{:: param_add`addr`]} 1&{::
+op_mul =: (4: + 0&{::) ; 0&{:: param_mul`addr`]} 1&{::
+step =: ]`op_add`op_mul@.selop
+#+end_src
+
+  And now, run machine by reaching fixpoint!
+
+#+begin_src j :session :exports code
+run =: [: 0&{ [: 1&{:: step ^: _ @: seed
+partA =: 12 2 run source
+#+end_src
+
+#+RESULTS:
+
+  Riding on the (not valid?) assumption that the result is linear in
+  the seeded params, ~partB~ can be don as follows.
+
+#+begin_src j :session :exports both
+r00 =: runA 0 0
+drx =: (runA 1 0) - r00
+dry =: (runA 0 1) - r00
+partA;]partB =: (100*<.drx%~19690720-r00)+(dry%~drx|19690720-r00)
+#+end_src
+
+#+RESULTS:
+: ┌────────┬────┐
+: │11590668│2254│
+: └────────┴────┘
+
