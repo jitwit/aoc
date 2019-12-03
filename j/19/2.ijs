@@ -1,29 +1,19 @@
 require 'tables/csv'
 
-source =: {. makenum readcsv '../../input/19/2.in'
+source    =: {. makenum readcsv '../../input/19/2.in'
 
-NB. ip op1 mem => mem[pc+1] + mem[pc+2]
-ops =: (+/)`(*/)
-op1 =: [: +/ 1 2&+ @ [ ({ { ]) ]
-op2 =: [: */ 1 2&+ @ [ ({ { ]) ]
-addr =: 3&+@[{] NB. y[ip+3]
-fkyah1 =: op1`addr`]
-fkyah2 =: op2`addr`]
+seed      =: [:0&;(1 2})          NB. put x at positions 1 2 of y
+param_add =: [:+/1 2&+@[({{])]    NB. ip op1 mem => mem[pc+1] + mem[pc+2]
+param_mul =: [:*/1 2&+@[({{])]    NB. ip op2 mem => mem[pc+1] * mem[pc+2]
+addr      =: 3&+@[{]              NB. y[ip+3]
+selop     =: [: 3&| 0&{:: { 1&{:: NB. mod 3 of ip to select by agenda in step
 
-machine =: 4 : 0
-mem =. x (1 2}) y
-ip =. 0
-while. 1 do.
-  select. ip{mem
-    case. 1 do. mem =. ip fkyah1 } mem
-    NB. (ip op1 mem) ((3+ip){mem) } mem NB. 
-    case. 2 do. mem =. ip fkyah2 } mem
-    case. 99 do. break.
-  end.
-  ip =. ip + 4
-end.
-0{mem
-)
+op_add    =: (4: + 0&{::) ; (0&{:: ((param_add`addr`])}) 1&{::)
+op_mul    =: (4: + 0&{::) ; (0&{:: ((param_mul`addr`])}) 1&{::)
 
-]partA =: 12 2 machine source
+step      =: (]`op_add`op_mul)@.selop NB. small step of machine
 
+eg1 =: 0;1 1 1 4 99 5 6 0 99
+eg2 =: 0;1 9 10 3 2 3 11 0 99 30 40 50
+]partA =: 0{1{:: step ^: _ ] 12 2 seed source NB. reach fixpoint of step
+timex '0{1{:: step ^: _ ] 12 2 seed source'

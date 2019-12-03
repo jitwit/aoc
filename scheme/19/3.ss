@@ -46,26 +46,32 @@
 (define tripb
   (trip (cadr sects)))
 
-(define intersections
-  '())
-
 (define solve-a
   (lambda (is)
-    (apply min (filter (lambda (x) (not (zero? x)))
-                       (map (lambda (i) (apply + (map abs i))) is)))))
+    (apply min
+           (filter (lambda (x)
+                     (not
+                      (zero? x)))
+                   (map (lambda (i)
+                          (apply + (map abs i)))
+                        is)))))
 
 (define solve-b
   (lambda (is)
-    (sort (lambda (x y)
-            (< (car x) (car y)))
-          is)))
+    (caar
+     (sort (lambda (x y)
+             (< (car x) (car y)))
+           is))))
 
 (define (travel)
   (define s 0)
-  (set! intersections '())
+  (define intersections '())
   (let xloop ((xs tripa) (tx 0))
     (if (null? (cdr xs))
-        (solve-b intersections)
+        (list
+         (length intersections)
+         (solve-a (map cdr intersections))
+         (solve-b intersections))
         (let ((a (car xs))
               (b (cadr xs)))
           (let yloop ((ys tripb) (ty 0))
@@ -73,14 +79,10 @@
                 (xloop (cdr xs) (+ tx (mag (- b a))))
                 (let ((c (car ys))
                       (d (cadr ys)))
-                  (let ((ra (real-part a))
-                        (rb (real-part b))
-                        (rc (real-part c))
-                        (rd (real-part d))
-                        (ia (imag-part a))
-                        (ib (imag-part b))
-                        (ic (imag-part c))
-                        (id (imag-part d)))
+                  (let ((ra (real-part a)) (ia (imag-part a))
+                        (rb (real-part b)) (ib (imag-part b))
+                        (rc (real-part c)) (ic (imag-part c))
+                        (rd (real-part d)) (id (imag-part d)))
                     (cond ((and (= ra rb)
                                 (= ic id)
                                 (<= (min rc rd) ra (max rc rd))
@@ -97,3 +99,8 @@
                                         rc ia) intersections)))
                     (yloop (cdr ys)
                            (+ ty (mag (- d c))))))))))))
+
+(if ((lambda ()
+       (define x 3)
+       x))
+    1 2)
