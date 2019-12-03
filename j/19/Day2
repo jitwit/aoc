@@ -1,10 +1,10 @@
 # -*- mode: org -*-
 
-* Day 2: 1202 Program Alarm
+* 1202 Program Alarm
 
-  [[https://adventofcode.com/2019/day/2][Puzzle]]
+  [[https://adventofcode.com/2019/day/2][puzzle]]
 
-** Run source code
+** Read source code
 
    Input is comma separated, thence ~readcsv~.
    
@@ -17,6 +17,8 @@ eg2 =: 1 9 10 3 2 3 11 0 99 30 40 50
 #+end_src
 
 #+RESULTS:
+
+** Name operations 
 
   Some names for operating on program state. ~seed~ allows boxes up
   source array after setting values in positions 1 and 2, with an
@@ -45,6 +47,8 @@ op_mul =: (4: + 0&{::) ; 0&{:: param_mul`addr`]} 1&{::
 step =: ]`op_add`op_mul@.selop
 #+end_src
 
+** Execute array
+
   And now, run machine by reaching fixpoint!
 
 #+begin_src j :session :exports code
@@ -68,4 +72,5 @@ partA;]partB =: (100*<.drx%~19690720-r00)+(dry%~drx|19690720-r00)
 : ┌────────┬────┐
 : │11590668│2254│
 : └────────┴────┘
+
 

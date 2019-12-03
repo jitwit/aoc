@@ -1,0 +1,29 @@
+# -*- mode: org -*-
+
+* The Tyranny of the Rocket Equation
+
+  [[https://adventofcode.com/2019/day/1][puzzle]]
+
+** Solution
+
+   Read input to list of numbers. ~fuel~ is calulcated from quotient
+   by 3 - 2. The second part recursively sums ~y + fuel~, until ~y~
+   reaches 0.
+   
+#+begin_src j :session :exports code
+masses =: 0 ". 'm' freads '../../input/19/1.in'
+fuel   =: -&2@<.@%&3
+fuelB  =: 0:`(+$:@fuel)@.(0&<)
+#+end_src
+
+  Calls ~fuel~ once before passing it to ~fuelB~ to follow the problem
+  description.
+
+#+begin_src j :session :exports both
+<"0 +/ (] ,. fuelB"0) fuel masses
+#+end_src
+
+#+RESULTS:
+: ┌───────┬───────┐
+: │3453056│5176705│
+: └───────┴───────┘
