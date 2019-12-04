@@ -7,7 +7,7 @@
 ** Solution
 
    Read input to list of numbers. ~fuel~ is calulcated from quotient
-   by 3 - 2. The second part recursively sums ~y + fuel~, until ~y~
+   by 3 - 2. ~fuelB~ recursively sums ~y + fuel y~, until ~y~
    reaches 0.
    
 #+begin_src j :session :exports code
@@ -15,6 +15,8 @@ masses =: 0 ". 'm' freads '../../input/19/1.in'
 fuel   =: -&2@<.@%&3
 fuelB  =: 0:`(+$:@fuel)@.(0&<)
 #+end_src
+
+#+RESULTS:
 
   Calls ~fuel~ once before passing it to ~fuelB~ to follow the problem
   description.
