@@ -5,7 +5,7 @@
   enough time for this solution to run. It does still work from a
   ~jconsole~ repl.
 
-#+begin_src j :session :exports both
+#+begin_src j :session :exports both :tangle 4.ijs
 eg =: 228888,111111,123346,123350,123789,123345,123999
 input =: 134792 }. i.675810
 

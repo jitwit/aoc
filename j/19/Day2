@@ -5,7 +5,7 @@
 
    Input is comma separated, thence ~readcsv~.
    
-#+begin_src j :session :exports code
+#+begin_src j :session :exports code :tangle 2.ijs
 require 'tables/csv'
 
 source =: {. makenum readcsv '../../input/19/2.in'
@@ -24,7 +24,7 @@ eg2 =: 1 9 10 3 2 3 11 0 99 30 40 50
   also index into ~mem~, but twice to get value of location at
   position at offsets ~ip + 1 2~ finished by ~+/~ or ~*/~.
 
-#+begin_src j :session :exports code
+#+begin_src j :session :exports code :tangle 2.ijs
 seed =: [:0&;(1 2})
 addr =: 3&+@[{]
 param_add =: [:+/1 2&+@[({{])]
@@ -37,7 +37,7 @@ param_mul =: [:*/1 2&+@[({{])]
   2 99~. ~op_add~ and ~op_mul~ bundled together in gerund to to be
   targeted by ~selop~.
 
-#+begin_src j :session :exports code
+#+begin_src j :session :exports code :tangle 2.ijs
 selop =: [: 3&| 0&{:: { 1&{::    NB. mod by 3 of ip to select by agenda in step
 op_add =: (4: + 0&{::) ; 0&{:: param_add`addr`]} 1&{::
 op_mul =: (4: + 0&{::) ; 0&{:: param_mul`addr`]} 1&{::
@@ -50,7 +50,7 @@ step =: ]`op_add`op_mul@.selop
 
   And now, run machine by reaching fixpoint!
 
-#+begin_src j :session :exports code
+#+begin_src j :session :exports code :tangle 2.ijs
 run =: [: 0&{ [: 1&{:: step ^: _ @: seed
 runA =: run&source
 partA =: runA 12 2
@@ -60,7 +60,7 @@ partA =: runA 12 2
 
   Let's see an example program run 
 
-#+begin_src j :session :exports both
+#+begin_src j :session :exports both :tangle 2.ijs
 step ^:a: 0;eg1
 step ^:a: 0;eg2
 #+end_src
@@ -87,7 +87,7 @@ step ^:a: 0;eg2
   Riding on the (not valid?) assumption that the result is linear in
   the seeded params, ~partB~ can be don as follows.
 
-#+begin_src j :session :exports both
+#+begin_src j :session :exports both :tangle 2.ijs
 r00 =: runA 0 0
 drx =: (runA 1 0) - r00
 dry =: (runA 0 1) - r00
