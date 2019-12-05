@@ -17,5 +17,4 @@
           (when (ormap (curry <= 2) groups)
             (inc! a))
           (when (ormap (curry = 2) groups)
-            (display-ln x)
             (inc! b)))))))

@@ -140,11 +140,13 @@
 
   Finally, we ~run~ and read ~out~.
 
-#+begin_src scheme :session :exports both
-(list
+#+begin_src scheme :session :exports both :results output
+(display-ln
  (parameterize ((in 1))
    (run)
-   (out))
+   (out)))
+
+(display-ln
  (parameterize ((in 5))
    (run)
    (out)))

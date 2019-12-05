@@ -6,10 +6,10 @@ leaderboards :
 	make $(leaderboard-json)
 
 output/irc-leaderboard.json : code/secret.sh
-	sh $< $(irc-leaderboard) $@
+	sh $< $(irc-leaderboard-uri) $@
 
 output/haskell-leaderboard.json : code/secret.sh
-	sh $< $(haskell-leaderboard) $@
+	sh $< $(haskell-leaderboard-uri) $@
 
 input/%/%.in :
 	echo $@
