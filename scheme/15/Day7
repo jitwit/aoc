@@ -6,6 +6,9 @@
   values, the rest are 16 bit bitwise operations of other wires. The
   solution is the value of wire ~a~.
 
+  The solution's machinery is similar to the material in [[https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-22.html#%25_sec_3.3.4][SICP chapter
+  3]].
+
 ** Cells  
 
   We solve this using a network of cells with local state. The first
@@ -130,6 +133,8 @@
 
 ** Network
 
+  There's probably a more elegant way of doing this, but I find it fun
+  in any case. The cells are accessible as honest scheme variables.
   
 #+begin_src scheme :session :exports code
 (define (compile-network)
@@ -154,7 +159,7 @@
 #+RESULTS:
 : 3176
 
-   A bonus to this solution is that the second part can be calculated very simply:
+   A bonus to this approach is that the second part comes very simply:
 
 #+begin_src scheme :session :exports both
 (feed b (signal a))
@@ -164,4 +169,3 @@
 #+RESULTS:
 : 14710
 
-   This wasn't planned but came out as serendipity.

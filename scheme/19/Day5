@@ -1,9 +1,9 @@
 # -*- mode: org -*-
-
-* [[https://adventofcode.com/2019/day/5][Day 5: Sunny with a Chance of Asteroids]]
+#+title: [[https://adventofcode.com/2019/day/5][Day 5: Sunny with a Chance of Asteroids]]
 
   I would have like to solve this in ~J~ like day 2, but the amount of
-  conditional referencing feels a bit beyond my current skill level.
+  conditional referencing feels a bit intimidating at my current skill
+  level.
 
 ** Parsing
   
@@ -63,7 +63,6 @@
 #+end_src
 
 #+RESULTS:
-: #<void>
 
 ** Executing
 
