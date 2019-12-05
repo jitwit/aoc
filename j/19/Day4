@@ -1,8 +1,9 @@
 # -*- mode: org -*-
-
-* Day 4: Secure Container
-
-  [[https://adventofcode.com/2019/day/4][puzzle]]
+#+title: [[https://adventofcode.com/2019/day/4][Day 4: Secure Container]]
+  
+  Org evaluation times out after ~0.1~s, which is unfortunately not
+  enough time for this solution to run. It does still work from a
+  ~jconsole~ repl.
 
 #+begin_src j :session :exports both
 eg =: 228888,111111,123346,123350,123789,123345,123999
@@ -10,47 +11,26 @@ input =: 134792 }. i.675810
 
 digits =: 1&$`($:@:(<.@:%&10),10&|)@.(9&<)
 goodA =: 0&e.@~:*.]-:/:~
-goodB =: _4&e.+.2&e.@(-_1&|.)@I.@~:*.]-:/:~
-timex 'digits"0 i.10000'
-+/ (goodB @: digits"0) (1000 {. input)
-goodB 12333449
-(-_1&|.) I. ~: digits 333344
-(<"0 @: ,. (goodA@:digits"0) ,. (goodB@:digits"0)) eg
+goodB =: (_4&e.+.2&e.)@(-_1&|.)@I.@~:*.]-:/:~
+<"0 (] ,. goodA ,. goodB @: digits"0) eg
 #+end_src
 
 #+RESULTS:
 #+begin_example
-0.017033
-
-16
-
-0
-
-_4 4
-
 ┌──────┬─┬─┐
-│228888│1│1│
+│228888│0│1│
 ├──────┼─┼─┤
-│111111│1│0│
+│111111│0│0│
 ├──────┼─┼─┤
-│123346│1│1│
+│123346│0│1│
 ├──────┼─┼─┤
 │123350│0│0│
 ├──────┼─┼─┤
 │123789│0│0│
 ├──────┼─┼─┤
-│123345│1│1│
+│123345│0│1│
 ├──────┼─┼─┤
-│123999│1│0│
+│123999│0│0│
 └──────┴─┴─┘
 #+end_example
-
-#+begin_src j :session :exports both
-NB. 134792 675810
-
-#+end_src
-
-#+RESULTS:
-
-** SOLUTION
 

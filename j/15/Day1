@@ -1,0 +1,24 @@
+# -*- mode: org -*-
+#+title: [[https://adventofcode.com/2015/day/1][Day 1: Not Quite Lisp]]
+
+  We convert the parens to numbers by comparing for equality with
+  '('. After that, ~0,1~ is remapped to ~-1,1~ by doubling then
+  decrementing (~<: +:~).
+
+#+begin_src j :session :exports code
+input =: 1!:1<'../../input/15/1.in'
+floors =: <:+:'('&=input
+#+end_src
+
+#+RESULTS:
+
+  Having the list of movements, the floors are charted by ~+/\~. The
+  presentation is the final floor for part A and the index of the
+  first negative floor for part B.
+
+#+begin_src j :session :exports both
+santas_trip =: +/\0,floors
+({: ; i.&_1) santas_trip
+#+end_src
+
+

@@ -1,27 +1,3 @@
-# -*- mode: org -*-
-
-* [[https://adventofcode.com/2015/day/7][Day 7: Some Assembly Required]]
-  
-  The "assembly" describes a network of wires. Some wires are provided
-  values, the rest are 16 bit bitwise operations of other wires. The
-  solution is the value of wire ~a~.
-
-  The solution's machinery is similar to the material in [[https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-22.html#%25_sec_3.3.4][SICP chapter
-  3]].
-
-** Cells  
-
-  We solve this using a network of cells with local state. The first
-  section declares the API.
-
-  + ~signal~ to get a wires signal or ~false~ if it hasn't been
-    set.
-  + ~feed~ to update a cell's signal.
-  + ~add-connection~ manages connections between cells. It registers
-    itself as a neighbor to the input cells. Whenever they update it
-    passes on the new value to the output cell.
-    
-#+begin_src scheme :session :exports code :tangle 7.ss
 (include "~/code/advent/load.ss")
 (advent-year 15)
 (advent-day 7)
@@ -62,23 +38,7 @@
         ((fires) fires)
         (else (error 'cell "I DON'T KNOW" m))))
     me))
-#+end_src
 
-#+RESULTS:
-: #<void>
-
-  Now for the connectors. They pass along values from input cells to
-  output ones. The mechanism is to give the input cells the connection
-  as a thunk.
-
-  Some of the inputs have constants as cells. In this case, a simpler
-  connector is passed to the cell. ~get-wires~ extracts the symbols
-  from the input file and ~mask~ ensures we stay within 16 bits.
-
-  The icing on the cake is ~compile-network~ which builds up a scheme
-  expression from the input to ~eval~.
-
-#+begin_src scheme :session :exports code :tangle 7.ss
 (define (connection f cell-x cell-y cell-z)
   (define (connect)
     (let ((x (signal cell-x))
@@ -126,17 +86,6 @@
     ((_ (x LSHIFT s -> z)) (connection fxsll x s z))
     ((_ (x -> z)) (simple-connector (lambda (a) a) x z))))
 
-#+end_src
-
-#+RESULTS:
-: #<void>
-
-** Network
-
-  There's probably a more elegant way of doing this, but I find it fun
-  in any case. The cells are accessible as honest scheme variables.
-  
-#+begin_src scheme :session :exports code :tangle 7.ss
 (define (compile-network)
   (let ((network (parse-advent lines)))
     (eval
@@ -147,25 +96,12 @@
         ,@(map (lambda (decl)
                  `(wired ,decl))
                network)))))
-#+end_src
 
-   Finally, the solution!
+(define (run)
+  (compile-network)
+  (display-ln
+   (signal a))
 
-#+begin_src scheme :session :exports both
-(compile-network)
-(signal a)
-#+end_src
-
-#+RESULTS:
-: 3176
-
-   A bonus to this approach is that the second part comes very simply:
-
-#+begin_src scheme :session :exports both
-(feed b (signal a))
-(signal a)
-#+end_src
-
-#+RESULTS:
-: 14710
-
+  (feed b (signal a))
+  (display-ln
+   (signal a)))
