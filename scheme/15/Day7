@@ -1,0 +1,167 @@
+# -*- mode: org -*-
+
+* [[https://adventofcode.com/2015/day/7][Day 7: Some Assembly Required]]
+  
+  The "assembly" describes a network of wires. Some wires are provided
+  values, the rest are 16 bit bitwise operations of other wires. The
+  solution is the value of wire ~a~.
+
+** Cells  
+
+  We solve this using a network of cells with local state. The first
+  section declares the API.
+
+  + ~signal~ to get a wires signal or ~false~ if it hasn't been
+    set.
+  + ~feed~ to update a cell's signal.
+  + ~add-connection~ manages connections between cells. It registers
+    itself as a neighbor to the input cells. Whenever they update it
+    passes on the new value to the output cell.
+    
+#+begin_src scheme :session :exports code
+(include "~/code/advent/load.ss")
+(advent-year 15)
+(advent-day 7)
+
+(define (signal cell)
+  (cell 'signal))
+
+(define (propagate thunks)
+  (for-all (lambda (thunk)
+             (thunk))
+           thunks))
+
+(define (feed cell signal)
+  ((cell 'set-signal!) signal))
+
+(define (add-connection cell thunk)
+  ((cell 'connect) thunk))
+
+(define (make-cell)
+  (let ((signal #f)
+        (neighbors '()))
+    (define (set-signal! x)
+      (unless (eqv? x signal)
+        (set! signal x)
+        (propagate neighbors)))
+    (define (connect neighbor)
+      (unless (memv neighbor neighbors)
+        (set! neighbors (cons neighbor neighbors))
+        (propagate neighbors)))
+    (define (reset!)
+      (set! signal #f))
+    (define (me m)
+      (case m
+        ((signal) signal)
+        ((set-signal!) set-signal!)
+        ((connect) connect)
+        ((reset!) reset!)
+        ((fires) fires)
+        (else (error 'cell "I DON'T KNOW" m))))
+    me))
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+  Now for the connectors. They pass along values from input cells to
+  output ones. The mechanism is to give the input cells the connection
+  as a thunk.
+
+  Some of the inputs have constants as cells. In this case, a simpler
+  connector is passed to the cell. ~get-wires~ extracts the symbols
+  from the input file and ~mask~ ensures we stay within 16 bits.
+
+  The icing on the cake is ~compile-network~ which builds up a scheme
+  expression from the input to ~eval~.
+
+#+begin_src scheme :session :exports code
+(define (connection f cell-x cell-y cell-z)
+  (define (connect)
+    (let ((x (signal cell-x))
+          (y (signal cell-y)))
+      (when (and x y)
+        (feed cell-z (f x y)))))
+  (cond ((number? cell-x)
+         (simple-connector (lambda (y)
+                             (f cell-x y))
+                           cell-y
+                           cell-z))
+        ((number? cell-y)
+         (simple-connector (lambda (x)
+                             (f x cell-y))
+                           cell-x
+                           cell-z))
+        (else
+         (add-connection cell-x connect)
+         (add-connection cell-y connect)
+         connect)))
+
+(define (simple-connector f cell-x cell-z)
+  (define (connect)
+    (let ((x (signal cell-x)))
+      (when x
+        (feed cell-z (f x)))))
+  (cond ((number? cell-x) (feed cell-z (f cell-x)))
+        (else (add-connection cell-x connect) connect)))
+
+(define (get-wires network)
+  (nub-eq (filter (lambda (x)
+                    (not (or (number? x)
+                             (memq x '(-> AND OR NOT LSHIFT RSHIFT)))))
+                  (apply append network))))
+
+(define (mask x)
+  (fxlogand x (fx1- (fxsll 1 16))))
+
+(define-syntax wired
+  (syntax-rules (-> AND OR NOT LSHIFT RSHIFT)
+    ((_ (x AND y -> z)) (connection fxlogand x y z))
+    ((_ (x OR y -> z)) (connection fxlogor x y z))
+    ((_ (NOT y -> z)) (simple-connector (compose mask fxlognot) y z))
+    ((_ (x RSHIFT s -> z)) (connection fxsrl x s z))
+    ((_ (x LSHIFT s -> z)) (connection fxsll x s z))
+    ((_ (x -> z)) (simple-connector (lambda (a) a) x z))))
+
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+** Network
+
+  
+#+begin_src scheme :session :exports code
+(define (compile-network)
+  (let ((network (parse-advent lines)))
+    (eval
+     `(begin
+        ,@(map (lambda (wire)
+                 `(define ,wire (make-cell)))
+               (get-wires network))
+        ,@(map (lambda (decl)
+                 `(wired ,decl))
+               network)))))
+#+end_src
+
+   Finally, the solution!
+
+#+begin_src scheme :session :exports both
+(compile-network)
+(signal a)
+#+end_src
+
+#+RESULTS:
+: 3176
+
+   A bonus to this solution is that the second part can be calculated very simply:
+
+#+begin_src scheme :session :exports both
+(feed b (signal a))
+(signal a)
+#+end_src
+
+#+RESULTS:
+: 14710
+
+   This wasn't planned but came out as serendipity.

@@ -24,7 +24,7 @@
 #+RESULTS:
 : #<void>
 
-** Biblio
+** Operating
 
   The *intcode* program state will be represented as a vector. There
   are two thread parameters ~in~ and ~out~ for communicating with an
@@ -58,15 +58,21 @@
 (define reset!
   (case-lambda
     (() (set! memory (list->vector intcode)))
+    ;; for trying out the example inputs
     ((intcode) (set! memory (list->vector intcode)))))
 #+end_src
 
 #+RESULTS:
 : #<void>
 
-  With that in hand, it is time to define a step of the interpreter.
+** Executing
 
-#+begin_src scheme :session :exports both
+  With that in hand, it is time to define a step of the
+  interpreter. It take an input pointer ~ip~, mutates ~memory~
+  according to the opcode referenced by it, and gives back a possibly
+  updated ~ip~.
+
+#+begin_src scheme :session :exports code
 (define (step ip)
   (let ((op (*ref ip)))
     (case (mod op 100)
@@ -125,19 +131,24 @@
   (let loop ((ip 0))
     (let ((ip* (step ip)))
       (unless (= ip ip*)
-        (loop (step ip*)))))
-  (out))
+        (loop (step ip*))))))
 #+end_src
 
 #+RESULTS:
 : #<void>
 
+** Solving
+
+  Finally, we ~run~ and read ~out~.
+
 #+begin_src scheme :session :exports both
 (list
  (parameterize ((in 1))
-   (run))
+   (run)
+   (out))
  (parameterize ((in 5))
-   (run)))
+   (run)
+   (out)))
 #+end_src
 
 #+RESULTS:
