@@ -1,4 +1,6 @@
 (load "~/code/advent/load.ss")
+(advent-year 19)
+(advent-day 4)
 
 (define range
   (let ((s (symbol->string (car (parse-advent input)))))
@@ -15,4 +17,5 @@
           (when (ormap (curry <= 2) groups)
             (inc! a))
           (when (ormap (curry = 2) groups)
+            (display-ln x)
             (inc! b)))))))

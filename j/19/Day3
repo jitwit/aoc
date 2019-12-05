@@ -4,12 +4,6 @@
 
   [[https://adventofcode.com/2019/day/3][puzzle]]
 
-#+begin_src j :session :exports code
-#+end_src
-
-#+begin_src j :session :exports both
-#+end_src
-
 ** Reading input
 
 #+begin_src j :session :exports both
@@ -34,7 +28,7 @@ step =. dz % | dz
 wires
 
 10 fill 10j3
-0 step 0j4
+10 step 10j4
 NB. fill/ 0 10 10j3
 NB. 0 ;"1 (A ,: B)
 NB. (trip A);  (zip_trip (trip A))
@@ -50,4 +44,10 @@ NB. (trip A);  (zip_trip (trip A))
 : 10j1 10j2 10j3
 : 
 : 0j1
+
+#+begin_src j :session :exports code
+#+end_src
+
+#+begin_src j :session :exports both
+#+end_src
 

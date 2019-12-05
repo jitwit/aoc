@@ -1,15 +1,14 @@
 # -*- mode: org -*-
 
-
 * AOC solutions
 
   Solutions to advent of code problems in ~scheme~, ~J~, and
   ~haskell~.
 
-*** 2019  
+*** 2019
  
-   - [[./j/19/Day1][Day 1: The Tyranny of the Rocket Equation]]
-   - [[./j/19/Day2][Day 2: 1202 Program Alarm]]
+   - [[./j/19/Day1][Day 1: The Tyranny of the Rocket Equation]] (J)
+   - [[./j/19/Day2][Day 2: 1202 Program Alarm]] (J)
 
 
 
