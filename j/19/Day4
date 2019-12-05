@@ -5,16 +5,57 @@
   enough time for this solution to run. It does still work from a
   ~jconsole~ repl.
 
-#+begin_src j :session :exports both :tangle 4.ijs
+#+begin_src j :session :exports code
 eg =: 228888,111111,123346,123350,123789,123345,123999
-input =: 134792 }. i.675810
+input =: 134792+i.(675810-134792)
 
+#+end_src
+
+#+RESULTS:
+  
+  I am sure there's either a built in way to do this, or a better
+  way. ~digits~ is the slowest part of the solution. Recursively
+  div/mods by 10 and appends to a list.
+  
+#+BEGIN_SRC j :session :exports code
 digits =: 1&$`($:@:(<.@:%&10),10&|)@.(9&<)
-goodA =: 0&e.@~:*.]-:/:~
-goodB =: (_4&e.+.2&e.)@(-_1&|.)@I.@~:*.]-:/:~
+#+END_SRC
+
+#+RESULTS:
+
+  Check that the digit list is sorted and check that some index is a
+  repeat (~0&e.~). Since the list is sorted, any repeat must be a
+  consecutive one.
+
+#+BEGIN_SRC j :session :exports code
+goodA =: 0&e.@~: *. (-: /:~)
+#+END_SRC
+
+#+RESULTS:
+  
+  Check for sorted digit list again, but here the requirements are a
+  more complicated. There must be a repeat of length exactly 2. We
+  diverge slightly from the idea above, by looking at the differences
+  between consecutive digits.
+
+  Verb uses ~I.~ to get values at classified indices, rotates by ~_1~
+  and takes the difference. The last trick is that this solution will
+  miss numbers like ~111122~ which has the repeat of 2 at the end of
+  the string -- to fix this, look for negative ~_4~ which is in the
+  list of differences precisely in this situation.
+
+#+BEGIN_SRC j :session :exports code
+goodB =: (_4&e.+.2&e.) @ (-_1&|.) @ I. @ ~: *. (-:/:~)
+#+END_SRC
+
+#+RESULTS:
+
+  print!
+
+#+BEGIN_SRC j :session :exports both
 <"0 (] ,. (goodA ,. goodB) @: digits"0) eg
 ([: +/ (goodA , goodB) @: digits"0) input
-#+end_src
+#+END_SRC
 
 #+RESULTS:
 #+begin_example
@@ -34,4 +75,3 @@ goodB =: (_4&e.+.2&e.)@(-_1&|.)@I.@~:*.]-:/:~
 │123999│1│0│
 └──────┴─┴─┘
 #+end_example
-

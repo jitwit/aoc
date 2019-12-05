@@ -21,29 +21,18 @@ trip =: [: <"0 [: +/\ 0&, @: >
 step =: (%|)@:-~
 
 fill =: 4 : 0
-dz =. (0{y)-(_1{x)
+dz =. y - x
 step =. dz % | dz
-(_1{x)+(step * >:i.|dz)
+x+(step * >:i.|dz)
 )
-wires
+NB. wires
 
-10 fill 10j3
-10 step 10j4
 NB. fill/ 0 10 10j3
 NB. 0 ;"1 (A ,: B)
 NB. (trip A);  (zip_trip (trip A))
 #+end_src
 
 #+RESULTS:
-: ┌───┬───┬────┬────┐
-: │8  │0j5│_5  │0j_3│
-: ├───┼───┼────┼────┤
-: │0j7│6  │0j_4│_4  │
-: └───┴───┴────┴────┘
-: 
-: 10j1 10j2 10j3
-: 
-: 0j1
 
 #+begin_src j :session :exports code
 #+end_src

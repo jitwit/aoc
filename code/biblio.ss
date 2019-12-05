@@ -43,7 +43,7 @@
   (lambda ()
     (let ((cleaner (input-chars-with transform)))
       (with-input-from-string (list->string (cleaner))
-			      parser))))
+                              parser))))
 
 (define comma-separated
   (input-chars-transform-parse

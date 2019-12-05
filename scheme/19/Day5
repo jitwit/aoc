@@ -1,11 +1,7 @@
 # -*- mode: org -*-
 #+title: [[https://adventofcode.com/2019/day/5][Day 5: Sunny with a Chance of Asteroids]]
 
-  I would have like to solve this in ~J~ like day 2, but the amount of
-  conditional referencing feels a bit intimidating at my current skill
-  level.
-
-** Parsing
+** Reading
   
   Intcode programs are given as a comma separated list of ints. The
   some code in [[./../../code/][code/]] that makes getting a hold of this more
@@ -63,6 +59,7 @@
 #+end_src
 
 #+RESULTS:
+: #<void>
 
 ** Executing
 
@@ -119,7 +116,7 @@
 #+end_src
 
 #+RESULTS:
-: #<void>
+>
 
   To run a program to completion, we wait until the ~ip~ does not
   advance (opcode 99).
@@ -136,22 +133,19 @@
 #+RESULTS:
 : #<void>
 
-** Solving
 
   Finally, we ~run~ and read ~out~.
 
-#+begin_src scheme :session :exports both :results output
-(display-ln
+#+begin_src scheme :session :exports both :results value
+(cons
  (parameterize ((in 1))
    (run)
-   (out)))
-
-(display-ln
+   (out))
  (parameterize ((in 5))
    (run)
    (out)))
 #+end_src
 
 #+RESULTS:
-: (7265618 7731427)
+: (7265618 . 7731427)
 

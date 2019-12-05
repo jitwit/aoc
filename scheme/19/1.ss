@@ -10,8 +10,8 @@
 (define (fuel+ mass)
   (if (< 0 mass) (+ mass (fuel+ (fuel mass))) 0))
 
-(define (part-a)
+(define (part-a masses)
   (apply + (map fuel masses)))
 
-(define (part-b)
+(define (part-b masses)
   (apply + (map (compose fuel+ fuel) masses)))

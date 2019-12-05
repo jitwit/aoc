@@ -1,0 +1,111 @@
+# -*- mode: org -*-
+#+title: [[https://adventofcode.com/2017/day/24][Day 24: Electromagnetic Moat]]
+
+ Clearing of the throat
+
+#+BEGIN_SRC scheme :session :exports code
+(load "~/code/advent/load.ss")
+
+(advent-year 17)
+(advent-day 24)
+
+(import (prefix (patricia) t:)
+	(prefix (patricia-set) s:))
+#+END_SRC
+
+#+RESULTS:
+: #<void>
+
+  Rather ugly parsing of the bridges. The pool of available pieces
+  shall be stored in a map of sets. 
+
+#+BEGIN_SRC scheme :session :exports code
+(define bridges
+  (fold-right (lambda (bridge T)
+                (let-values (((x y) (apply values bridge)))
+                  (t:insert-with s:union y (s:singleton x)
+                                 (t:insert-with s:union x (s:singleton y) T))))
+              t:empty-tree
+              (n-tuples 2
+                        (parse-advent
+                         (input-chars-transform-parse
+                          (lambda (x)
+                            (if (char=? x #\/)
+                                #\space
+                                x))
+                          input)))))
+#+END_SRC
+
+#+RESULTS:
+: #<void>
+
+  As we select a bridge to connect, we delete it from the pool. All
+  paths are expanded from a node, which have an endpoint that agrees.
+
+#+begin_src scheme :session :exports code
+
+(define (connections pin bridges)
+  (s:set->list
+   (t:lookup-with-default pin s:empty-set bridges)))
+
+(define (connect in out bridges)
+  (t:modify (lambda (S)
+              (s:delete in S))
+	    out
+	    (t:modify (lambda (S) (s:delete out S))
+		      in
+		      bridges)))
+
+(define (expand pin network)
+  `(,pin ,@(map (lambda (out)
+		  (expand out (connect pin out network)))
+		(connections pin network))))
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+  To find the strongest and deepest paths, we expore them all
+  recursively. Two variables are visible for ~set!~ ing as we find
+  better paths.
+
+#+begin_src scheme :session :exports code
+(define (explore root network)
+  (let ((deepest 0)
+        (strongest 0)
+        (global 0))
+    (let walk ((level 0) (signal root) (pin root) (network network))
+      (let ((outs (connections pin network)))
+        (cond ((null? outs)
+               (when (or (> level deepest)
+                         (and (= level deepest)
+                              (> signal strongest)))
+                 (set! deepest level)
+                 (set! strongest signal))
+               (when (> signal global)
+                 (set! global signal)))
+              (else
+               (for-all (lambda (out)
+                          (walk (1+ level)
+                                (+ signal pin out)
+                                out
+                                (connect pin out network)))
+                        outs)))))
+    (values global strongest)))
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+
+  And printing
+
+#+BEGIN_SRC scheme :session :results output
+(let-values (((part-a part-b) (explore 0 bridges)))
+  (format #t "part-a: ~a~%part-b: ~a~%" part-a part-b))
+#+END_SRC
+
+#+RESULTS:
+: part-a: 1868
+: part-b: 1841
+
