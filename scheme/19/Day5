@@ -1,0 +1,145 @@
+# -*- mode: org -*-
+
+* [[https://adventofcode.com/2019/day/5][Day 5: Sunny with a Chance of Asteroids]]
+
+  I would have like to solve this in ~J~ like day 2, but the amount of
+  conditional referencing feels a bit beyond my current skill level.
+
+** Parsing
+  
+  Intcode programs are given as a comma separated list of ints. The
+  some code in [[./../../code/][code/]] that makes getting a hold of this more
+  convenient. The puzzle input is downloaded based on the thread
+  parameters ~advent-year~ and ~advent-day~.
+
+#+begin_src scheme :session :exports code
+(load "~/code/advent/load.ss")
+(advent-year 19)
+(advent-day 5)
+
+(define intcode
+  (parse-advent comma-separated))
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+** Biblio
+
+  The *intcode* program state will be represented as a vector. There
+  are two thread parameters ~in~ and ~out~ for communicating with an
+  instance.
+
+#+begin_src scheme :session :exports code
+(define in
+  (make-parameter 1))
+
+(define out
+  (make-parameter 0))
+
+(define memory
+  (list->vector intcode))
+
+(define (ref ip opcode param)
+  (let ((mode (mod (quotient opcode (expt 10 (1+ param))) 10)))
+    (if (zero? mode)
+        (**ref (+ ip param))
+        (*ref (+ ip param)))))
+
+(define (*ref addr)
+  (vector-ref memory addr))
+
+(define (**ref addr)
+  (*ref (*ref addr)))
+
+(define (store! addr val)
+  (vector-set! memory addr val))
+
+(define reset!
+  (case-lambda
+    (() (set! memory (list->vector intcode)))
+    ((intcode) (set! memory (list->vector intcode)))))
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+  With that in hand, it is time to define a step of the interpreter.
+
+#+begin_src scheme :session :exports both
+(define (step ip)
+  (let ((op (*ref ip)))
+    (case (mod op 100)
+      ((1)
+       (store! (*ref (+ ip 3))
+               (+ (ref ip op 1)
+                  (ref ip op 2)))
+       (+ ip 4))
+      ((2)
+       (store! (*ref (+ ip 3))
+               (* (ref ip op 1)
+                  (ref ip op 2)))
+       (+ ip 4))
+      ((3)
+       (store! (*ref (+ ip 1))
+               (in))
+       (+ ip 2))
+      ((4)
+       (out (ref ip op 1))
+       (+ ip 2))
+      ((5)
+       (if (zero? (ref ip op 1))
+           (+ ip 3)
+           (ref ip op 2)))
+      ((6)
+       (if (zero? (ref ip op 1))
+           (ref ip op 2)
+           (+ ip 3)))
+      ((7)
+       (store! (*ref (+ ip 3))
+               (if (< (ref ip op 1)
+                      (ref ip op 2))
+                   1
+                   0))
+       (+ ip 4))
+      ((8)
+       (store! (*ref (+ ip 3))
+               (if (= (ref ip op 1)
+                      (ref ip op 2))
+                   1
+                   0))
+       (+ ip 4))
+      ((99) ip)
+      (else (error 'run "bad opcode" op)))))
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+  To run a program to completion, we wait until the ~ip~ does not
+  advance (opcode 99).
+
+#+begin_src scheme :session :exports code
+(define (run . intcode)
+  (apply reset! intcode)
+  (let loop ((ip 0))
+    (let ((ip* (step ip)))
+      (unless (= ip ip*)
+        (loop (step ip*)))))
+  (out))
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+#+begin_src scheme :session :exports both
+(list
+ (parameterize ((in 1))
+   (run))
+ (parameterize ((in 5))
+   (run)))
+#+end_src
+
+#+RESULTS:
+: (7265618 7731427)
+

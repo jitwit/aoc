@@ -12,7 +12,7 @@ common base
 common ds
   default-language: Haskell2010
   build-depends:
---    algebraic-graphs,
+    algebraic-graphs,
     array,
     containers,
     fingertree,
@@ -41,7 +41,6 @@ library
     code
   exposed-modules:
     Advent,
-    Advent.Loeb,
     Advent.Write
   build-depends:
     

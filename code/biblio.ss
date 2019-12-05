@@ -120,7 +120,7 @@
                     (< (date-hour auj) 22)))
            ;; fetch.sh contains curl request from firefox dev
            ;; outils. cookie goes stale after 30 days
-           (let ((year (advent-year))
+           (let ((year (mod (advent-year) 100))
                  (day (advent-day)))
              (format #t "Fetching day ~a year 20~a~%" day year)
              (system
