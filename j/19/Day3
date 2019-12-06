@@ -2,47 +2,62 @@
 
 * [[https://adventofcode.com/2019/day/3][Day 3: Crossed Wires]]
 
-  Again with the timeout issues.
+** Parsing
+
+  Again with the org timeout issues... Solution takes around ~0.2s~
+  from jconsole. Anyway, to parse we take the first char to get the
+  direction as a complex number, multiplying it by the magnitude of
+  the move indicated in the rest of the string.
 
 #+begin_src j :session :exports code :tangle 3.ijs
 require 'tables/csv'
 
-NB. read number of tail of string, and multiply it by direction
-NB. indicated by head of string
 parse =: makenum@:}.*{&0j1 1 0j_1 _1@:I.@:E.&'URDL'@:{.
 input=: parse &.> readcsv '../../input/19/3.in'
 eg=: parse &.> readcsv '../../scheme/19/3.in'
-
-NB. cumulatively add moves
-trip =: [: +/\ 0&, @: >
-NB. two complex numbers, steps between
-steps =: [ + ((%|) * 1+i.@|) @: -~
-NB. list of points, calculate hops
-wind =: [: steps/&.> 2 <\ ]
-
-NB. awkward boxing gymnastics. need to avoid having items filled out by shape.
-wires =: ,. ,; &.> <"1 wind"1 ,. trip"1 eg
 #+end_src
 
 #+RESULTS:
 
-#+begin_src j :session :exports code :tangle 3.ijs
+** Moving  
+
+  We trace the turns by summing cumutavely with ~+/\~. The segment
+  between turns ~x,y~ is filled by calculating
+  ~x+(y-x)%|y-x|i.|y-x|~. There's currently a lot of awkward boxing
+  gymnastic to avoid having the list filled by shape...
+
+#+BEGIN_SRC j :session :exports code :tangle 3.ijs
+steps =: [ + ((%|) * 1+i.@|) @: -~
+unwind =: [: steps/&.> 2 <\ ]
+wires =: ,. ,; &.> <"1 unwind"1 ,. ([: +/\ 0&, @: >)"1 eg
+#+END_SRC
+
+#+RESULTS:
+
+** Solving
+  
+  The last step is answering the questions how many intersections, and
+  when is earliest intersection? To do this, we employ sparse
+  arrays. The shape will be given by the bounding box of the two
+  wires. The two paths will be intersected by adding times if both
+  entries are nonzero.
+
+#+begin_src j :session :exports both :tangle 3.ijs
 wireA =: +.,;>0{::wires
 wireB =: +.,;>1{::wires
 
-arr =: 1 $.(([: >: >./ - <./) wireA,wireB);0 1;0
-crossings =: ((1+i.#wireA) ((<"1 wireA)}) arr) (([: * [) * + * [: * ]) (1+i.#wireB) ((<"1 wireB)}) arr
+NB. arr =: 1 $.(([: >: >./ - <./) wireA,wireB);0 1;0
+mk =: 1 $. (0 1;0) ;~ [: ([: >: >./ - <./) ,
+arr =: wireA mk wireB
+
 NB. sum x+y if both nonzero or 0
-(<./ 5$.crossings);~# crossings
+intersection =: ([: * [) * + * [: * ]
+crossings =: ((1+i.#wireA) ((<"1 wireA)}) arr) intersection (1+i.#wireB) ((<"1 wireB)}) arr
 
-
+(7$.crossings) ; (<./ 5$.crossings)
 #+end_src
 
 #+RESULTS:
 : ┌─┬──┐
-: │9│30│
+: │2│30│
 : └─┴──┘
-
-#+begin_src j :session :exports both
-#+end_src
-
