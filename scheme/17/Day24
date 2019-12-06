@@ -40,7 +40,9 @@
 : #<void>
 
   As we select a bridge to connect, we delete it from the pool. All
-  paths are expanded from a node, which have an endpoint that agrees.
+  paths are expanded from a node have an endpoint that agrees. Though
+  the bridges are not directed, an entry is stored from both endpoints
+  for better lookups.
 
 #+begin_src scheme :session :exports code
 
@@ -56,10 +58,6 @@
 		      in
 		      bridges)))
 
-(define (expand pin network)
-  `(,pin ,@(map (lambda (out)
-		  (expand out (connect pin out network)))
-		(connections pin network))))
 #+end_src
 
 #+RESULTS:
@@ -98,14 +96,12 @@
 : #<void>
 
 
-  And printing
+  And printing, starting with a pin ~0~.
 
-#+BEGIN_SRC scheme :session :results output
-(let-values (((part-a part-b) (explore 0 bridges)))
-  (format #t "part-a: ~a~%part-b: ~a~%" part-a part-b))
+#+BEGIN_SRC scheme :session :export both
+(explore 0 bridges)
 #+END_SRC
 
 #+RESULTS:
-: part-a: 1868
-: part-b: 1841
+: (1868 1841)
 
