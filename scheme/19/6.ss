@@ -2,18 +2,29 @@
 (advent-year 19)
 (advent-day 6)
 
-(define orbits
-  (map (lambda (line)
-         (cons (substring line 0 3)
-               (substring line 4 7)))
-       (parse-advent lines-raw)))
-
 (define solar-system
-  (let ((tree (make-hashtable string-hash string=?)))
+  (let ((children (make-hashtable string-hash string=?))
+        (parents (make-hashtable string-hash string=?)))
     (for-all (lambda (pq)
-               (hashtable-update! tree (car pq) (lambda (qs) (cons (cdr pq) qs)) '()))
-             orbits)
-    tree))
+               (let ((p (substring pq 0 3))
+                     (q (substring pq 4 7)))
+                 (hashtable-set! parents q p)
+                 (hashtable-update! children
+                                    p
+                                    (lambda (qs)
+                                      (cons q qs))
+                                    '())))
+             (parse-advent lines-raw))
+    (lambda (me)
+      (case me
+        ((parents) parents)
+        ((children) children)))))
+
+(define (children planet)
+  (hashtable-ref (solar-system 'children) planet '()))
+
+(define (parent planet)
+  (hashtable-ref (solar-system 'parents) planet #f))
 
 (define (count-orbits planet)
   (let ((count 0))
@@ -21,29 +32,21 @@
       (for-all (lambda (q)
                  (set! count (+ count d))
                  (walk q (1+ d)))
-               (hashtable-ref solar-system p '())))
+               (children p)))
     count))
 
-(define (solar-path earth planet)
-  (call/cc
-   (lambda (path)
-     (let walk ((curr earth) (planets (list earth)))
-       (if (string=? curr planet)
-           (path (reverse planets))
-           (for-all (lambda (q)
-                      (walk q (cons q planets)))
-                    (hashtable-ref solar-system curr '())))))))
+(count-orbits "COM")
+
+(define (solar-path planet)
+  (let walk ((planet planet) (path '()))
+    (cond ((parent planet) => (lambda (p)
+                                (walk p (cons p path))))
+          (else path))))
 
 (define (orbital-transfers P Q)
-  (let ((ps (solar-path "COM" P))
-        (qs (solar-path "COM" Q)))
-    (let walk ((ps ps) (qs qs))
-      (if (string=? (car ps) (car qs))
-          (walk (cdr ps) (cdr qs))
-          (+ -2 (length ps) (length qs))))))
+  (let walk ((ps (solar-path P)) (qs (solar-path Q)))
+    (if (string=? (car ps) (car qs))
+        (walk (cdr ps) (cdr qs))
+        (+ (length ps) (length qs)))))
 
-(define (solve)
-  (display-ln
-   (count-orbits "COM"))
-  (display-ln
-   (orbital-transfers "SAN" "YOU")))
+(orbital-transfers "SAN" "YOU")

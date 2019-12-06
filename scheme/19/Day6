@@ -3,30 +3,37 @@
 
   At first I thought the problem was over a graph, which would make
   the count in part A more interesting. Anyhow, first we clear our
-  throats, we parse simply into strings, and we put the tree into a
-  hashtable for quicker lookups.
+  throats, we parse simply into strings, and we put the tree into
+  hashtables for quicker lookups.
 
-#+begin_src scheme :session :exports code
+#+begin_src scheme :session :exports code :tangle 6.ss
 (load "~/code/advent/load.ss")
 (advent-year 19)
 (advent-day 6)
 
-(define orbits
-  (map (lambda (line)
-         (cons (substring line 0 3)
-               (substring line 4 7)))
-       (parse-advent lines-raw)))
-
 (define solar-system
-  (let ((tree (make-hashtable string-hash string=?)))
+  (let ((children (make-hashtable string-hash string=?))
+        (parents (make-hashtable string-hash string=?)))
     (for-all (lambda (pq)
-               (hashtable-update! tree
-                                  (car pq)
-                                  (lambda (qs)
-                                    (cons (cdr pq) qs))
-                                  '()))
-             orbits)
-    tree))
+               (let ((p (substring pq 0 3))
+                     (q (substring pq 4 7)))
+                 (hashtable-set! parents q p)
+                 (hashtable-update! children
+                                    p
+                                    (lambda (qs)
+                                      (cons q qs))
+                                    '())))
+             (parse-advent lines-raw))
+    (lambda (me)
+      (case me
+        ((parents) parents)
+        ((children) children)))))
+
+(define (children planet)
+  (hashtable-ref (solar-system 'children) planet '()))
+
+(define (parent planet)
+  (hashtable-ref (solar-system 'parents) planet #f))
 #+end_src
 
 #+RESULTS:
@@ -35,17 +42,16 @@
 ** Part A
 
   Now, some solving. We count the orbits by starting at ~"COM"~, by
-  keeping track of the depth while traversing the tree. Since it's a
-  tree, there's no need to keep track of previously visited states.
+  keeping track of the depth while traversing the tree.
 
-#+begin_src scheme :session :exports both
+#+begin_src scheme :session :exports both :tangle 6.ss
 (define (count-orbits planet)
   (let ((count 0))
     (let walk ((p planet) (d 1))
       (for-all (lambda (q)
                  (set! count (+ count d))
                  (walk q (1+ d)))
-               (hashtable-ref solar-system p '())))
+               (children p)))
     count))
 
 (count-orbits "COM")
@@ -54,26 +60,21 @@
 #+RESULTS:
 : 292387
 
-** Part B
+** TODO Part B
 
-  The second half is a little more playful. To calculate the
-  er... orbital transfers... we find the paths from the root ~"COM"~
-  to the target planets. With the paths in hand, we find where they
-  diverge (which is at their least common ancestor). From there, we
-  find the transfers by adding the lengths of the remaining parts of
-  the paths and subtract 2 (since we transfer between the planets just
-  outside the targets). First, paths:
+  The second half is a little more fun. To calculate the er... orbital
+  transfers... we find the paths from the root ~"COM"~ to the target
+  planets. With the paths in hand, we find where they diverge (which
+  is at their least common ancestor). Given that, the transfers are
+  found by adding the lengths of the remaining parts of the
+  paths. First, paths:
 
-#+begin_src scheme :session :exports code
-(define (solar-path earth planet)
-  (call/cc
-   (lambda (path)
-     (let walk ((curr earth) (planets (list earth)))
-       (if (string=? curr planet)
-           (path (reverse planets))
-           (for-all (lambda (next)
-                      (walk next (cons next planets)))
-                    (hashtable-ref solar-system curr '())))))))
+#+begin_src scheme :session :exports code :tangle 6.ss
+(define (solar-path planet)
+  (let walk ((planet planet) (path '()))
+    (cond ((parent planet) => (lambda (p)
+                                (walk p (cons p path))))
+          (else path))))
 #+end_src
 
 #+RESULTS:
@@ -81,14 +82,12 @@
 
   Last, transfers:
 
-#+begin_src scheme :session :exports both
+#+begin_src scheme :session :exports both :tangle 6.ss
 (define (orbital-transfers P Q)
-  (let ((ps (solar-path "COM" P))
-        (qs (solar-path "COM" Q)))
-    (let walk ((ps ps) (qs qs))
-      (if (string=? (car ps) (car qs))
-          (walk (cdr ps) (cdr qs))
-          (+ -2 (length ps) (length qs))))))
+  (let walk ((ps (solar-path P)) (qs (solar-path Q)))
+    (if (string=? (car ps) (car qs))
+        (walk (cdr ps) (cdr qs))
+        (+ (length ps) (length qs)))))
 
 (orbital-transfers "SAN" "YOU")
 #+end_src
