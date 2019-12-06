@@ -8,12 +8,12 @@
                (substring line 4 7)))
        (parse-advent lines-raw)))
 
-(define solar-map
-  (let ((t (make-hashtable string-hash string=?)))
+(define solar-system
+  (let ((tree (make-hashtable string-hash string=?)))
     (for-all (lambda (pq)
-               (hashtable-update! t (car pq) (lambda (qs) (cons (cdr pq) qs)) '()))
+               (hashtable-update! tree (car pq) (lambda (qs) (cons (cdr pq) qs)) '()))
              orbits)
-    t))
+    tree))
 
 (define (count-orbits planet)
   (let ((count 0))
@@ -21,7 +21,7 @@
       (for-all (lambda (q)
                  (set! count (+ count d))
                  (walk q (1+ d)))
-               (hashtable-ref solar-map p '())))
+               (hashtable-ref solar-system p '())))
     count))
 
 (define (solar-path earth planet)
@@ -32,7 +32,7 @@
            (path (reverse planets))
            (for-all (lambda (q)
                       (walk q (cons q planets)))
-                    (hashtable-ref solar-map curr '())))))))
+                    (hashtable-ref solar-system curr '())))))))
 
 (define (orbital-transfers P Q)
   (let ((ps (solar-path "COM" P))
@@ -41,3 +41,9 @@
       (if (string=? (car ps) (car qs))
           (walk (cdr ps) (cdr qs))
           (+ -2 (length ps) (length qs))))))
+
+(define (solve)
+  (display-ln
+   (count-orbits "COM"))
+  (display-ln
+   (orbital-transfers "SAN" "YOU")))

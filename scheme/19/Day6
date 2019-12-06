@@ -54,14 +54,13 @@
 
   The second half is a little more playful. To calculate the
   er... orbital transfers... we find the paths from the root ~"COM"~
-  to the target planets. With those paths in hand, we find the first
-  element where they no longer agree, which is their least common
-  ancestor. From that, we count the transfers by adding the lengths of
-  the remaining parts of the paths, and subtract 2 (due to problem
-  description!). First, paths:
+  to the target planets. With the paths in hand, we find where they
+  diverge (which is at their least common ancestor). From there, we
+  find the transfers by adding the lengths of the remaining parts of
+  the paths and subtract 2 (since we transfer between the planets just
+  outside the targets). First, paths:
 
 #+begin_src scheme :session :exports code
-;; call/cc for early exit
 (define (solar-path earth planet)
   (call/cc
    (lambda (path)
@@ -76,7 +75,7 @@
 #+RESULTS:
 : #<void>
 
-  Finally, lcas:
+  Last, transfers:
 
 #+begin_src scheme :session :exports both
 (define (orbital-transfers P Q)
