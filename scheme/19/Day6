@@ -1,10 +1,10 @@
 # -*- mode: org -*-
 #+title: [[https://adventofcode.com/2019/day/6][Day 6: Universal Orbit Map]]
 
-  At first, I assumed the problem was over a graph. That would mean
-  the count in part A would need to be redefined. Anyhow, first we
-  clear our throats, we parse simply into strings, and we put the tree
-  into a hashtable for quicker lookups.
+  At first I thought the problem was over a graph, which would make
+  the count in part A more interesting. Anyhow, first we clear our
+  throats, we parse simply into strings, and we put the tree into a
+  hashtable for quicker lookups.
 
 #+begin_src scheme :session :exports code
 (load "~/code/advent/load.ss")
@@ -17,12 +17,12 @@
                (substring line 4 7)))
        (parse-advent lines-raw)))
 
-(define solar-map
-  (let ((t (make-hashtable string-hash string=?)))
+(define solar-system
+  (let ((tree (make-hashtable string-hash string=?)))
     (for-all (lambda (pq)
-               (hashtable-update! t (car pq) (lambda (qs) (cons (cdr pq) qs)) '()))
+               (hashtable-update! tree (car pq) (lambda (qs) (cons (cdr pq) qs)) '()))
              orbits)
-    t))
+    tree))
 #+end_src
 
 #+RESULTS:
@@ -30,9 +30,9 @@
 
 ** Part A
 
-  And now, some solving. We count the orbits by starting at ~"COM"~,
-  and keeping track of the depth while traversing the tree. Since it's
-  a tree, there's no need to keep track of previously visited states.
+  Now, some solving. We count the orbits by starting at ~"COM"~, by
+  keeping track of the depth while traversing the tree. Since it's a
+  tree, there's no need to keep track of previously visited states.
 
 #+begin_src scheme :session :exports both
 (define (count-orbits planet)
@@ -41,7 +41,7 @@
       (for-all (lambda (q)
                  (set! count (+ count d))
                  (walk q (1+ d)))
-               (hashtable-ref solar-map p '())))
+               (hashtable-ref solar-system p '())))
     count))
 
 (count-orbits "COM")
@@ -58,7 +58,7 @@
   element where they no longer agree, which is their least common
   ancestor. From that, we count the transfers by adding the lengths of
   the remaining parts of the paths, and subtract 2 (due to problem
-  description!).
+  description!). First, paths:
 
 #+begin_src scheme :session :exports code
 ;; call/cc for early exit
@@ -70,13 +70,13 @@
            (path (reverse planets))
            (for-all (lambda (q)
                       (walk q (cons q planets)))
-                    (hashtable-ref solar-map curr '())))))))
+                    (hashtable-ref solar-system curr '())))))))
 #+end_src
 
 #+RESULTS:
 : #<void>
 
-  Finally:
+  Finally, lcas:
 
 #+begin_src scheme :session :exports both
 (define (orbital-transfers P Q)
@@ -87,7 +87,7 @@
           (walk (cdr ps) (cdr qs))
           (+ -2 (length ps) (length qs))))))
 
-(orbital-transfers "YOU" "SAN")
+(orbital-transfers "SAN" "YOU")
 #+end_src
 
 #+RESULTS:
