@@ -6,7 +6,7 @@
   values, the rest are 16 bit bitwise operations of other wires. The
   solution is the value of wire ~a~.
 
-  The solution's machinery is similar to the material in [[https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-22.html#%25_sec_3.3.4][SICP chapter
+  The solution's machinery is inspired by the material in [[https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-22.html#%25_sec_3.3.4][SICP chapter
   3]].
 
 ** Cells  
@@ -169,3 +169,5 @@
 #+RESULTS:
 : 14710
 
+  A downside... it breaks definitions for things like ~car~, ~cdr~,
+  ~cd~, ... and so on!

@@ -45,7 +45,6 @@
   for better lookups.
 
 #+begin_src scheme :session :exports code
-
 (define (connections pin bridges)
   (s:set->list
    (t:lookup-with-default pin s:empty-set bridges)))
@@ -57,7 +56,6 @@
 	    (t:modify (lambda (S) (s:delete out S))
 		      in
 		      bridges)))
-
 #+end_src
 
 #+RESULTS:

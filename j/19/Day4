@@ -16,9 +16,16 @@ input =: 134792+i.(675810-134792)
   I am sure there's either a built in way to do this, or a better
   way. ~digits~ is the slowest part of the solution. Recursively
   div/mods by 10 and appends to a list.
+
+  OK! Scrolling online, I found an unrelated problem where someone
+  needed the digits of numbers and I learned that we can very simply
+  take the inverse of the base 10 function! The solution is still
+  slow, but this makes the overall time ~35% faster!
   
 #+BEGIN_SRC j :session :exports code
-digits =: 1&$`($:@:(<.@:%&10),10&|)@.(9&<)
+original_digits =: 1&$`($:@:(<.@:%&10),10&|)@.(9&<)
+digits =: 10&#.^:_1
+NB. 
 #+END_SRC
 
 #+RESULTS:

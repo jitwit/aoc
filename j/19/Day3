@@ -1,41 +1,47 @@
 # -*- mode: org -*-
 
-* Crossed Wires
+* [[https://adventofcode.com/2019/day/3][Day 3: Crossed Wires]]
 
-  [[https://adventofcode.com/2019/day/3][puzzle]]
+  Again with the timeout issues.
 
-** Reading input
-
-#+begin_src j :session :exports both
+#+begin_src j :session :exports code :tangle 3.ijs
 require 'tables/csv'
 
-input=: readcsv '../../scheme/19/3.in'
+NB. read number of tail of string, and multiply it by direction
+NB. indicated by head of string
+parse =: makenum@:}.*{&0j1 1 0j_1 _1@:I.@:E.&'URDL'@:{.
+input=: parse &.> readcsv '../../input/19/3.in'
+eg=: parse &.> readcsv '../../scheme/19/3.in'
 
-mag =: makenum@:}.
-dir =: {&0j1 1 0j_1 _1@:I.@:E.&'URDL'@:{.
-parse =: mag*dir
+NB. cumulatively add moves
+trip =: [: +/\ 0&, @: >
+NB. two complex numbers, steps between
+steps =: [ + ((%|) * 1+i.@|) @: -~
+NB. list of points, calculate hops
+wind =: [: steps/&.> 2 <\ ]
 
-wires =: parse L:0 input
-trip =: [: <"0 [: +/\ 0&, @: >
-
-step =: (%|)@:-~
-
-fill =: 4 : 0
-dz =. y - x
-step =. dz % | dz
-x+(step * >:i.|dz)
-)
-NB. wires
-
-NB. fill/ 0 10 10j3
-NB. 0 ;"1 (A ,: B)
-NB. (trip A);  (zip_trip (trip A))
+NB. awkward boxing gymnastics. need to avoid having items filled out by shape.
+wires =: ,. ,; &.> <"1 wind"1 ,. trip"1 eg
 #+end_src
 
 #+RESULTS:
 
-#+begin_src j :session :exports code
+#+begin_src j :session :exports code :tangle 3.ijs
+wireA =: +.,;>0{::wires
+wireB =: +.,;>1{::wires
+
+arr =: 1 $.(([: >: >./ - <./) wireA,wireB);0 1;0
+crossings =: ((1+i.#wireA) ((<"1 wireA)}) arr) (([: * [) * + * [: * ]) (1+i.#wireB) ((<"1 wireB)}) arr
+NB. sum x+y if both nonzero or 0
+(<./ 5$.crossings);~# crossings
+
+
 #+end_src
+
+#+RESULTS:
+: ┌─┬──┐
+: │9│30│
+: └─┴──┘
 
 #+begin_src j :session :exports both
 #+end_src

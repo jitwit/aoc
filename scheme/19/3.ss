@@ -100,7 +100,4 @@
                     (yloop (cdr ys)
                            (+ ty (mag (- d c))))))))))))
 
-(if ((lambda ()
-       (define x 3)
-       x))
-    1 2)
+

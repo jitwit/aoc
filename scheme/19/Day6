@@ -20,7 +20,11 @@
 (define solar-system
   (let ((tree (make-hashtable string-hash string=?)))
     (for-all (lambda (pq)
-               (hashtable-update! tree (car pq) (lambda (qs) (cons (cdr pq) qs)) '()))
+               (hashtable-update! tree
+                                  (car pq)
+                                  (lambda (qs)
+                                    (cons (cdr pq) qs))
+                                  '()))
              orbits)
     tree))
 #+end_src
@@ -67,8 +71,8 @@
      (let walk ((curr earth) (planets (list earth)))
        (if (string=? curr planet)
            (path (reverse planets))
-           (for-all (lambda (q)
-                      (walk q (cons q planets)))
+           (for-all (lambda (next)
+                      (walk next (cons next planets)))
                     (hashtable-ref solar-system curr '())))))))
 #+end_src
 
@@ -91,5 +95,4 @@
 
 #+RESULTS:
 : 433
-
 
