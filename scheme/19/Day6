@@ -1,0 +1,96 @@
+# -*- mode: org -*-
+#+title: [[https://adventofcode.com/2019/day/6][Day 6: Universal Orbit Map]]
+
+  At first, I assumed the problem was over a graph. That would mean
+  the count in part A would need to be redefined. Anyhow, first we
+  clear our throats, we parse simply into strings, and we put the tree
+  into a hashtable for quicker lookups.
+
+#+begin_src scheme :session :exports code
+(load "~/code/advent/load.ss")
+(advent-year 19)
+(advent-day 6)
+
+(define orbits
+  (map (lambda (line)
+         (cons (substring line 0 3)
+               (substring line 4 7)))
+       (parse-advent lines-raw)))
+
+(define solar-map
+  (let ((t (make-hashtable string-hash string=?)))
+    (for-all (lambda (pq)
+               (hashtable-update! t (car pq) (lambda (qs) (cons (cdr pq) qs)) '()))
+             orbits)
+    t))
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+** Part A
+
+  And now, some solving. We count the orbits by starting at ~"COM"~,
+  and keeping track of the depth while traversing the tree. Since it's
+  a tree, there's no need to keep track of previously visited states.
+
+#+begin_src scheme :session :exports both
+(define (count-orbits planet)
+  (let ((count 0))
+    (let walk ((p planet) (d 1))
+      (for-all (lambda (q)
+                 (set! count (+ count d))
+                 (walk q (1+ d)))
+               (hashtable-ref solar-map p '())))
+    count))
+
+(count-orbits "COM")
+#+end_src
+
+#+RESULTS:
+: 292387
+
+** Part B
+
+  The second half is a little more playful. To calculate the
+  er... orbital transfers... we find the paths from the root ~"COM"~
+  to the target planets. With those paths in hand, we find the first
+  element where they no longer agree, which is their least common
+  ancestor. From that, we count the transfers by adding the lengths of
+  the remaining parts of the paths, and subtract 2 (due to problem
+  description!).
+
+#+begin_src scheme :session :exports code
+;; call/cc for early exit
+(define (solar-path earth planet)
+  (call/cc
+   (lambda (path)
+     (let walk ((curr earth) (planets (list earth)))
+       (if (string=? curr planet)
+           (path (reverse planets))
+           (for-all (lambda (q)
+                      (walk q (cons q planets)))
+                    (hashtable-ref solar-map curr '())))))))
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+  Finally:
+
+#+begin_src scheme :session :exports both
+(define (orbital-transfers P Q)
+  (let ((ps (solar-path "COM" P))
+        (qs (solar-path "COM" Q)))
+    (let walk ((ps ps) (qs qs))
+      (if (string=? (car ps) (car qs))
+          (walk (cdr ps) (cdr qs))
+          (+ -2 (length ps) (length qs))))))
+
+(orbital-transfers "YOU" "SAN")
+#+end_src
+
+#+RESULTS:
+: 433
+
+
