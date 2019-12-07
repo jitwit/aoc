@@ -17,7 +17,7 @@ fuelB  =: 0:`(+$:@fuel)@.(0&<)
   description.
 
 #+begin_src j :session :exports both :tangle 1.ijs
-<"0 +/ (] ,. fuelB"0) fuel masses
+<"0 +/ (,. fuelB"0) fuel masses
 #+end_src
 
 #+RESULTS:

@@ -44,7 +44,7 @@
   Now, some solving. We count the orbits by starting at ~"COM"~, by
   keeping track of the depth while traversing the tree.
 
-#+begin_src scheme :session :exports both :tangle 6.ss
+#+begin_src scheme :session :exports both :tangle 6.ss :results output
 (define (count-orbits planet)
   (let ((count 0))
     (let walk ((p planet) (d 1))
@@ -54,13 +54,13 @@
                (children p)))
     count))
 
-(count-orbits "COM")
+(display-ln (count-orbits "COM"))
 #+end_src
 
 #+RESULTS:
 : 292387
 
-** TODO Part B
+** Part B
 
   The second half is a little more fun. To calculate the er... orbital
   transfers... we find the paths from the root ~"COM"~ to the target
@@ -82,14 +82,14 @@
 
   Last, transfers:
 
-#+begin_src scheme :session :exports both :tangle 6.ss
+#+begin_src scheme :session :exports both :tangle 6.ss :results output
 (define (orbital-transfers P Q)
   (let walk ((ps (solar-path P)) (qs (solar-path Q)))
     (if (string=? (car ps) (car qs))
         (walk (cdr ps) (cdr qs))
         (+ (length ps) (length qs)))))
 
-(orbital-transfers "SAN" "YOU")
+(display-ln (orbital-transfers "SAN" "YOU"))
 #+end_src
 
 #+RESULTS:
