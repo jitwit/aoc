@@ -1,13 +1,11 @@
 # -*- mode: org -*-
 #+title: [[https://adventofcode.com/2019/day/5][Day 5: Sunny with a Chance of Asteroids]]
 
-** Reading
-  
-  Intcode programs are given as a comma separated list of ints. The
-  some code in [[./../../code/][code/]] that makes getting a hold of this more
-  convenient. The puzzle input is downloaded based on the thread
-  parameters ~advent-year~ and ~advent-day~.
+** Setup
 
+  Intcode programs are comma separated lists of ints. To start, we
+  load some code and read the input.
+  
 #+begin_src scheme :session :exports code
 (load "~/code/advent/load.ss")
 (advent-year 19)
@@ -22,128 +20,27 @@
 
 ** Operating
 
-  The *intcode* program state will be represented as a vector. There
-  are two thread parameters ~in~ and ~out~ for communicating with an
-  instance.
+   Today, we give the machine an input value, run it to completion,
+   and read its output signal.
 
 #+begin_src scheme :session :exports code
-(define in
-  (make-parameter 1))
-
-(define out
-  (make-parameter 0))
-
-(define memory
-  (list->vector intcode))
-
-(define (ref ip opcode param)
-  (let ((mode (mod (quotient opcode (expt 10 (1+ param))) 10)))
-    (if (zero? mode)
-        (**ref (+ ip param))
-        (*ref (+ ip param)))))
-
-(define (*ref addr)
-  (vector-ref memory addr))
-
-(define (**ref addr)
-  (*ref (*ref addr)))
-
-(define (store! addr val)
-  (vector-set! memory addr val))
-
-(define reset!
-  (case-lambda
-    (() (set! memory (list->vector intcode)))
-    ;; for trying out the example inputs
-    ((intcode) (set! memory (list->vector intcode)))))
+(define (run-day5 intcode seed)
+  (let ((M (machine intcode 0)))
+    (M 'in seed)
+    (run-until-halt M)
+    (M 'out)))
 #+end_src
 
 #+RESULTS:
 : #<void>
 
-** Executing
+  Of course, the ~code/intcode.ss~ file is setup so that there's not
+  really anything to do here.
 
-  With that in hand, it is time to define a step of the
-  interpreter. It take an input pointer ~ip~, mutates ~memory~
-  according to the opcode referenced by it, and gives back a possibly
-  updated ~ip~.
-
-#+begin_src scheme :session :exports code
-(define (step ip)
-  (let ((op (*ref ip)))
-    (case (mod op 100)
-      ((1)
-       (store! (*ref (+ ip 3))
-               (+ (ref ip op 1)
-                  (ref ip op 2)))
-       (+ ip 4))
-      ((2)
-       (store! (*ref (+ ip 3))
-               (* (ref ip op 1)
-                  (ref ip op 2)))
-       (+ ip 4))
-      ((3)
-       (store! (*ref (+ ip 1))
-               (in))
-       (+ ip 2))
-      ((4)
-       (out (ref ip op 1))
-       (+ ip 2))
-      ((5)
-       (if (zero? (ref ip op 1))
-           (+ ip 3)
-           (ref ip op 2)))
-      ((6)
-       (if (zero? (ref ip op 1))
-           (ref ip op 2)
-           (+ ip 3)))
-      ((7)
-       (store! (*ref (+ ip 3))
-               (if (< (ref ip op 1)
-                      (ref ip op 2))
-                   1
-                   0))
-       (+ ip 4))
-      ((8)
-       (store! (*ref (+ ip 3))
-               (if (= (ref ip op 1)
-                      (ref ip op 2))
-                   1
-                   0))
-       (+ ip 4))
-      ((99) ip)
-      (else (error 'run "bad opcode" op)))))
-#+end_src
-
-#+RESULTS:
->
-
-  To run a program to completion, we wait until the ~ip~ does not
-  advance (opcode 99).
-
-#+begin_src scheme :session :exports code
-(define (run . intcode)
-  (apply reset! intcode)
-  (let loop ((ip 0))
-    (let ((ip* (step ip)))
-      (unless (= ip ip*)
-        (loop (step ip*))))))
-#+end_src
-
-#+RESULTS:
-: #<void>
-
-
-  Finally, we ~run~ and read ~out~.
-
-#+begin_src scheme :session :exports both :results value
-(cons
- (parameterize ((in 1))
-   (run)
-   (out))
- (parameterize ((in 5))
-   (run)
-   (out)))
+** Results
+  
+#+begin_src scheme :session :exports results :results value
+(cons (run-day5 intcode 1) (run-day5 intcode 5))
 #+end_src
 
 #+RESULTS:

@@ -66,3 +66,7 @@
     (put-term-code escape)
     (display object)
     (clear-term-code)))
+
+(define (digit-at i n)
+  (mod (quotient n (expt 10 (1+ i))) 10))
+
