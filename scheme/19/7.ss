@@ -5,16 +5,6 @@
 (define intcode
   (parse-advent comma-separated))
 
-;; allow N to step out of no-in lock and aggressively run M
-(define (feed M N)
-  (lambda ()
-    (let run ()
-      (case (M 'status)
-        ((out) (N 'in (M 'out)) (N 'step) (M 'step) (run))
-        ((no-in) 'blocked)
-        ((done) 'done)
-        (else (M 'step) (run))))))
-
 (define-syntax define-network
   (syntax-rules (=> <-)
     ((_ (A ...) ((x => y) ...) ((m <- seed) ...) (->? T) intcode)
@@ -24,7 +14,7 @@
          (m 'in seed) ...
          (let run ()
            (if (eq? 'done (T 'status))
-               (T 'dump)
+               (T 'out)
                (let ((action (pop! loop)))
                  (let ((result (action)))
                    (unless (eq? result 'done)
@@ -42,8 +32,8 @@
   (define best 0)
   (for-all (lambda (phase-settings)
              (let ((out (day7 phase-settings intcode)))
-               (when (< best (car out))
-                 (set! best (max best (car out))))))
+               (when (< best out)
+                 (set! best (max best out)))))
            (permutations phases))
   best)
 

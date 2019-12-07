@@ -13,3 +13,5 @@
   (map advent-file-path '("biblio.ss" "outils.ss" "style-sheet.ss" "intcode.ss")))
 
 (for-all load source-files)
+
+(import (intcode))
