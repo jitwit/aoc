@@ -14,7 +14,7 @@
 (define child-table (make-hashtable string-hash string=?))
 (define parent-table (make-hashtable string-hash string=?))
 
-(define (init)
+(define (build-trees)
   (for-all (lambda (pq)
              (let ((p (substring pq 0 3))
                    (q (substring pq 4 7)))
@@ -25,8 +25,6 @@
                                     (cons q qs))
                                   '())))
            (parse-advent lines-raw)))
-
-(init)
 
 (define (children planet)
   (hashtable-ref child-table planet '()))
@@ -43,7 +41,7 @@
   Now, some solving. We count the orbits by starting at ~"COM"~, by
   keeping track of the depth while traversing the tree.
 
-#+begin_src scheme :session :exports both :tangle 6.ss :results output
+#+begin_src scheme :session :exports code :tangle 6.ss
 (define (count-orbits planet)
   (let ((count 0))
     (let walk ((p planet) (d 1))
@@ -52,12 +50,9 @@
                  (walk q (1+ d)))
                (children p)))
     count))
-
-(display-ln (count-orbits "COM"))
 #+end_src
 
 #+RESULTS:
-: 292387
 
 ** Part B
 
@@ -71,9 +66,9 @@
 #+begin_src scheme :session :exports code :tangle 6.ss
 (define (solar-path planet)
   (let walk ((planet planet) (path '()))
-    (cond ((parent planet)
-           => (lambda (parent)
-                (walk parent (cons parent path))))
+    (cond ((parent planet) =>
+           (lambda (parent)
+             (walk parent (cons parent path))))
           (else path))))
 #+end_src
 
@@ -88,10 +83,18 @@
     (if (equal? (car ps) (car qs))
         (walk (cdr ps) (cdr qs))
         (+ (length ps) (length qs)))))
-
-(display-ln (orbital-transfers "SAN" "YOU"))
 #+end_src
 
 #+RESULTS:
 : 433
+
+** Result
+
+
+#+BEGIN_SRC scheme :session :exports both
+(build-trees)
+(cons (count-orbits "COM")
+      (orbital-transfers "SAN" "YOU"))
+#+END_SRC
+
 

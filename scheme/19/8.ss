@@ -37,10 +37,7 @@
   (lambda (row)
     (count (lambda (c) (char=? c char)) row)))
 
-(define layers
-  (sort-on R (count-char #\0)))
-
-(define part-a
-  (let ((row (car layers)))
+(define (part-a)
+  (let ((row (car (sort-on R (count-char #\0)))))
     (* ((count-char #\1) row)
        ((count-char #\2) row))))
