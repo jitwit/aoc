@@ -53,6 +53,7 @@
 #+end_src
 
 #+RESULTS:
+: #<void>
 
 ** Part B
 
@@ -86,15 +87,16 @@
 #+end_src
 
 #+RESULTS:
-: 433
 
 ** Result
 
 
 #+BEGIN_SRC scheme :session :exports both
 (build-trees)
-(cons (count-orbits "COM")
-      (orbital-transfers "SAN" "YOU"))
+(list (count-orbits "COM") (orbital-transfers "SAN" "YOU"))
 #+END_SRC
+
+#+RESULTS:
+: (292387 433)
 
 
