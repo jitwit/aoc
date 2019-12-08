@@ -34,8 +34,10 @@ partA =: (count&'1' * count&'2') @ (minimize count&'0')
    in the right shape (6x25), and finally make it readable.
 
 #+begin_src j :session :exports code
-partB =: [: {&' *' '1' = 6 25 $ color"1 @ |:
+partB =: ' J' {~ '1' = 6 25 $ color"1 @ |:
 #+end_src
+
+#+RESULTS:
 
 ** Reults
 
@@ -45,12 +47,12 @@ partB =: [: {&' *' '1' = 6 25 $ color"1 @ |:
 
 #+RESULTS:
 : ┌────┬─────────────────────────┐
-: │2064│*  *  **  *  * ****  **  │
-: │    │* *  *  * *  *    * *  * │
-: │    │**   *  * *  *   *  *  * │
-: │    │* *  **** *  *  *   **** │
-: │    │* *  *  * *  * *    *  * │
-: │    │*  * *  *  **  **** *  * │
+: │2064│J  J  JJ  J  J JJJJ  JJ  │
+: │    │J J  J  J J  J    J J  J │
+: │    │JJ   J  J J  J   J  J  J │
+: │    │J J  JJJJ J  J  J   JJJJ │
+: │    │J J  J  J J  J J    J  J │
+: │    │J  J J  J  JJ  JJJJ J  J │
 : └────┴─────────────────────────┘
 
 

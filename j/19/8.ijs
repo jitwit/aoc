@@ -7,6 +7,6 @@ minimize =: [ {~ [: (i. <./) ]
 color =: [: {. [ {~ [: I. '2'&~:
 
 partA =: (count&'1' * count&'2') @ (minimize count&'0')
-partB =: [: {&' *' '1' = 6 25 $ color"1 @ |:
+partB =: ' J' {~ '1' = 6 25 $ color"1 @ |:
 
 (partA;partB) layers
