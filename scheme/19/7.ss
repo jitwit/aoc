@@ -2,31 +2,34 @@
 (advent-year 19)
 (advent-day 7)
 
+(import (intcode))
+
 (define intcode
   (parse-advent comma-separated))
 
-(define-syntax define-network
-  (syntax-rules (=> <-)
-    ((_ (A ...) ((x => y) ...) ((m <- seed) ...) (->? T) intcode)
-     (let ((A (machine intcode 0)) ...)
-       (let ((machines (list A ...))
-             (loop (list (feed x y) ...)))
-         (m 'in seed) ...
-         (let run ()
-           (if (eq? 'done (T 'status))
-               (T 'out)
-               (let ((action (pop! loop)))
-                 (let ((result (action)))
-                   (unless (eq? result 'done)
-                     (set! loop `(,@loop ,action)))
-                   (run))))))))))
-
 (define (day7 phase-settings intcode)
+  (define-syntax define-network
+    (lambda (x)
+      (syntax-case x (=> <- >?)
+        ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (?> T) intcode)
+         #'(let ((A (machine intcode 0)) ...)
+             (let ((loop (list (feed x y) ...)))
+               (m 'in phase) ...
+               (let run ()
+                 (if (eq? 'done (T 'status))
+                     (T 'out)
+                     (let ((action (pop! loop)))
+                       (let ((result (action)))
+                         (unless (eq? result 'done)
+                           (set! loop `(,@loop ,action)))
+                         (run)))))))))))
   (let-values (((a b c d e) (apply values phase-settings)))
-    (define-network (A B C D E)
+    (define-network
+      (A B C D E)
       ((A => B) (B => C) (C => D) (D => E) (E => A))
       ((A <- a) (B <- b) (C <- c) (D <- d) (E <- e) (A <- 0))
-      (->? E) intcode)))
+      (>? E)
+      intcode)))
 
 (define (best-configuration phases)
   (define best 0)
@@ -42,3 +45,5 @@
 
 (define (partB)
   (best-configuration '(5 6 7 8 9)))
+(partA)
+

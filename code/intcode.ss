@@ -1,7 +1,10 @@
 (library (intcode)
-  (export machine run-until-halt feed)
-  (import (euler)
-          (chezscheme))
+  (export machine
+          define-network
+          run-until-halt
+          feed)
+  (import (chezscheme)
+          (euler))
 
   (define (digit-at i n)
     (mod (quotient n (expt 10 (1+ i))) 10))
@@ -78,6 +81,7 @@
         (else (run)))))
 
   ;; allow N to step out of no-in lock and aggressively run M
+
   (define (feed M N)
     (lambda ()
       (let run ()
@@ -86,5 +90,21 @@
           ((no-in) 'blocked)
           ((done) 'done)
           (else (M 'step) (run))))))
-
+  
+  (define-syntax define-network
+    (lambda (x)
+      (syntax-case x (=> <- >?)
+        ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (?> T) intcode)
+         #'(let ((A (machine intcode 0)) ...)
+             (let ((loop (list (feed x y) ...)))
+               (m 'in phase) ...
+               (let run ()
+                 (if (eq? 'done (T 'status))
+                     (T 'out)
+                     (let ((action (pop! loop)))
+                       (let ((result (action)))
+                         (unless (eq? result 'done)
+                           (set! loop `(,@loop ,action)))
+                         (run)))))))))))  
+  
   )
