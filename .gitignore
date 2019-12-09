@@ -1,3 +1,6 @@
 *~
 dist-newstyle/*
 *.html
+c/*
+code/secret.sh
+input/19/jnok/*

@@ -10,3 +10,8 @@
   (M 'in seed)
   (run-until-halt M)
   (M 'out))
+
+(define (partA)
+  (solve intcode 1))
+(define (partB)
+  (solve intcode 5))
