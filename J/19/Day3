@@ -58,6 +58,10 @@ crossings =: ((1+i.#wireA) ((<"1 wireA)}) arr) intersection (1+i.#wireB) ((<"1 w
 #+end_src
 
 #+RESULTS:
-: ┌─┬──┐
-: │2│30│
-: └─┴──┘
+: |index error
+: |   wireB=:+.,;>1    {::wires
+: 
+: |length error
+: |   crossings=:((1+i.#wireA)((<"1 wireA)    })arr)intersection(1+i.#wireB)((<"1 wireB)})arr
+: 
+: (7 $. crossings) ; (<./ (5 $. crossings))

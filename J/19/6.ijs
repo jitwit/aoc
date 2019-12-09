@@ -26,6 +26,6 @@ partA =: count_orbits orbit
 partB =: 'YOU' orbital_transfers 'SAN'
 
 partA;partB
-NB. 13 : '+/ (# &> y) * i. (# y)'
+
 
 

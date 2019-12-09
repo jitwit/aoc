@@ -23,11 +23,10 @@
                          (unless (eq? result 'done)
                            (set! loop `(,@loop ,action)))
                          (run)))))))))))
-  (let-values (((a b c d e) (apply values phase-settings)))
-    (define-network
-      (A B C D E)
+  (let-values (((p h a s e) (apply values phase-settings)))
+    (define-network (A B C D E)
       ((A => B) (B => C) (C => D) (D => E) (E => A))
-      ((A <- a) (B <- b) (C <- c) (D <- d) (E <- e) (A <- 0))
+      ((A <- p) (B <- h) (C <- a) (D <- s) (E <- e) (A <- 0))
       (>? E)
       intcode)))
 
@@ -45,5 +44,5 @@
 
 (define (partB)
   (best-configuration '(5 6 7 8 9)))
-(partA)
+
 
