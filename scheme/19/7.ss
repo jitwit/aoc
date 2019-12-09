@@ -2,8 +2,6 @@
 (advent-year 19)
 (advent-day 7)
 
-(import (intcode))
-
 (define intcode
   (parse-advent comma-separated))
 
@@ -12,7 +10,7 @@
     (lambda (x)
       (syntax-case x (=> <- >?)
         ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (?> T) intcode)
-         #'(let ((A (machine intcode 0)) ...)
+         #'(let ((A (cpu intcode)) ...)
              (let ((loop (list (feed x y) ...)))
                (m 'in phase) ...
                (let run ()
@@ -44,5 +42,3 @@
 
 (define (partB)
   (best-configuration '(5 6 7 8 9)))
-
-
