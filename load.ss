@@ -1,5 +1,9 @@
+
 (import (srfi :13)
 	(srfi :14)
+        (prefix (patricia) t:)
+        (prefix (patricia-set) s:)
+        (prefix (kd-tree) kd:)
         (sxml-mini)
 	(euler)
         (matchable))

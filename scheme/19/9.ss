@@ -2,155 +2,15 @@
 (advent-year 19)
 (advent-day 9)
 
-(import (prefix (patricia) t:))
-
-(define (digit-at i n)
-  (mod (quotient n (expt 10 (1+ i))) 10))
-
-(define (mode opcode param)
-  (case (digit-at param opcode)
-    ((0) 'position)
-    ((1) 'immediate)
-    ((2) 'relative)))
-
-(define (cpu intcode)
-  (define ip 0)
-  (define relative-base 0)
-  (define status 'ok)
-  (define cache1 `#(,@intcode))
-  (define size (vector-length cache1))
-  (define cache2 t:empty-tree)
-  (define in '())
-  (define out '())
-
-  (define (ip! dx)
-    (set! ip (+ ip dx)))
-
-  (define (rb! dx)
-    (set! relative-base (+ relative-base dx)))
-  
-  (define (store! addr val)
-    (if (< addr size)
-        (vector-set! cache1 addr val)
-        (set! cache2 (t:insert addr val cache2))))
-  
-  (define (ref addr)
-    (if (< addr size)
-        (vector-ref cache1 addr)
-        (t:lookup-with-default addr 0 cache2)))
-  
-  (define (val opcode param)
-    (case (mode opcode param)
-      ((position)
-       (ref (ref (+ ip param))))
-      ((immediate)
-       (ref (+ ip param)))
-      ((relative)
-       (ref (+ relative-base (ref (+ ip param)))))))
-
-  (define (addr opcode param)
-    (case (mode opcode param)
-      ((position)
-       (ref (+ ip param)))
-      ((relative)
-       (+ relative-base (ref (+ ip param))))
-      ((immediate)
-       (error 'machine-addr "spec says addr shouldn't be immediate" opcode param))))
-  
-  (define (dump)
-    (list
-     ;; 'cache1 cache1
-     ;; 'cache2 cache2
-     'ip ip
-     'rb relative-base
-     'in in
-     'out out
-     'status status))
-  
-  (define (step)
-    (let ((op (ref ip)))
-      (case (mod op 100)
-        ((1)
-         (store! (addr op 3)
-                 (+ (val op 1)
-                    (val op 2)))
-         (ip! 4))
-        ((2)
-         (store! (addr op 3)
-                 (* (val op 1)
-                    (val op 2)))
-         (ip! 4))
-        ((3)
-         (cond
-          ((null? in)
-           (set! status 'no-in))
-          (else
-           (set! status 'ok)
-           (store! (addr op 1) (pop! in))
-           (ip! 2))))
-        ((4)
-         (set! status 'out)
-         (push! (val op 1) out)
-         (ip! 2))
-        ((5)
-         (if (zero? (val op 1))
-             (ip! 3)
-             (set! ip (val op 2))))
-        ((6)
-         (if (zero? (val op 1))
-             (set! ip (val op 2))
-             (ip! 3)))
-        ((7)
-         (store! (addr op 3)
-                 (if (< (val op 1)
-                        (val op 2))
-                     1
-                     0))
-         (ip! 4))
-        ((8)
-         (store! (addr op 3)
-                 (if (= (val op 1)
-                        (val op 2))
-                     1
-                     0))
-         (ip! 4))
-        ((9)
-         (rb! (val op 1))
-         (ip! 2))
-        ((99) (set! status 'done))
-        (else (error 'intcode "bad opcode" instr)))))
-  (lambda (me . args)
-    (case me
-      ((step) (step))
-      ((in) (set! in `(,@in ,@args)))
-      ((out) (if (null? out) 'no-out (car out)))
-      ((status) status)
-      ((dump) (dump))
-      ((verbose)
-       (newline)
-       (display-ln (dump))
-       (display-ln (list 'instr (ref ip)))
-       (step)
-       (display-ln (dump))
-       (newline)))))
-
 (define eg '(109 1 204 -1 1001 100 1 100 1008 100 16 101 1006 101 0 99))
 (define eg2 '(1102 34915192 34915192 7 4 7 99 0))
 
 (define intcode
   (parse-advent comma-separated))
 
-(define (run-until-halt machine)
-  (let run ()
-    (machine 'step)
-    (case (machine 'status)
-      ((done) (machine 'dump))
-      (else (run)))))
-
-(define (run intcode seed)
+(define (solve intcode seed)
   (define M (cpu intcode))
   (M 'in seed)
-  (run-until-halt M))
+  (run-until-halt M)
+  (M 'out))
 
-(define (slow-step M)
-  (M 'verbose))
