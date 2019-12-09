@@ -245,3 +245,6 @@
 
 (define (vector-sum V)
   (vector-fold-right + 0 V))
+
+(define (digit-at i n)
+  (fxmod (fx/ n (expt 10 (1+ i))) 10))

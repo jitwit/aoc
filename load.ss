@@ -4,6 +4,7 @@
         (prefix (patricia) t:)
         (prefix (patricia-set) s:)
         (prefix (kd-tree) kd:)
+        (prefix (batched-queue) q:)
         (sxml-mini)
 	(euler)
         (matchable))

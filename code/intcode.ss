@@ -1,6 +1,3 @@
-(define (digit-at i n)
-  (mod (quotient n (expt 10 (1+ i))) 10))
-
 (define (mode opcode param)
   (case (digit-at param opcode)
     ((0) 'position)
@@ -12,8 +9,8 @@
   (define relative-base 0)
   (define status 'ok)
   (define cache1 `#(,@intcode))
-  (define size (vector-length cache1))
   (define cache2 t:empty-tree)
+  (define size (vector-length cache1))
   (define in '())
   (define out '())
 
@@ -51,12 +48,6 @@
       ((immediate)
        (error 'machine-addr "addr shouldn't be immediate" opcode param))))
   
-  (define (dump)
-    `(ip ,ip rb ,relative-base in ,in out ,out status ,status))
-
-  (define (mem)
-    `(cache1 ,cache1 cache2 ,cache2))
-  
   (define (step)
     (let ((op (ref ip)))
       (case (mod op 100)
@@ -74,6 +65,24 @@
         ((99) (set! status 'done))
         (else (error 'intcode "bad opcode" instr)))))
   
+  (define (dump)
+    `(ip ,ip rb ,relative-base in ,in out ,out status ,status))
+
+  (define (mem)
+    `(cache1 ,cache1 cache2 ,cache2))
+
+  (define (reset!)
+    (set! cache1 `#(,@intcode))
+    (set! cache2 t:empty-tree)
+    (set! ip 0)
+    (set! relative-base 0)
+    (set! in '())
+    (set! out '())
+    (set! status 'ok))
+
+  (define (swap! program)
+    (set! intcode program))
+  
   (lambda (me . args)
     (case me
       ((step) (step))
@@ -83,7 +92,18 @@
       ((dump) (dump))
       ((mem) (if (null? args) (mem) (map ref args)))
       ((set-mem!) (apply store! args))
+      ((swap!) (apply swap! args))
+      ((reset!) (reset!))
+      ((ip) ip)
+      ((rb) rb)
       (else (error 'cpu "unknown message" me)))))
+
+(define (run-until-halt machine)
+  (let run ()
+    (machine 'step)
+    (case (machine 'status)
+      ((done blocking-in) (machine 'dump))
+      (else (run)))))
 
 (define (feed M N)
   (lambda ()
@@ -96,13 +116,6 @@
 
 (define (feedback-loop machines)
   (map feed machines `(,@(cdr machines) ,(car machines))))
-
-(define (run-until-halt machine)
-  (let run ()
-    (machine 'step)
-    (case (machine 'status)
-      ((done blocking-in) (machine 'dump))
-      (else (run)))))
 
 (define (debug machine)
   (display-ln (machine 'dump))  
@@ -128,3 +141,13 @@
       ((blocking-in)
        (display-ln 'blocking-in))
       (else (run)))))
+
+(define (log-control-flow M cutoff)
+  (let run ((ips '()) (j 0))
+    (let ((ips* (cons (M 'ip) ips)))
+      (cond
+       ((or (= j cutoff) (eq? 'done (M 'status)))
+        (reverse ips*))
+       (else
+        (M 'step)
+        (run ips* (1+ j)))))))
