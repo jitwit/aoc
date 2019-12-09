@@ -9,7 +9,7 @@
   (define relative-base 0)
   (define status 'ok)
   (define cache1 `#(,@intcode))
-  (define cache2 t:empty-tree)
+  (define cache2 (make-eq-hashtable))
   (define size (vector-length cache1))
   (define in '())
   (define out '())
@@ -23,12 +23,12 @@
   (define (store! addr val)
     (if (< addr size)
         (vector-set! cache1 addr val)
-        (set! cache2 (t:insert addr val cache2))))
+        (hashtable-set! cache2 addr val)))
   
   (define (ref addr)
     (if (< addr size)
         (vector-ref cache1 addr)
-        (t:lookup-with-default addr 0 cache2)))
+        (hashtable-ref cache2 addr 0)))
   
   (define (val opcode param)
     (case (mode opcode param)
@@ -63,7 +63,12 @@
         ((8) (store! (addr op 3) (if (= (val op 1) (val op 2)) 1 0)) (ip! 4))
         ((9) (rb! (val op 1)) (ip! 2))
         ((99) (set! status 'done))
-        (else (error 'intcode "bad opcode" instr)))))
+        (else (error 'intcode "bad opcode" op)))))
+
+  (define (run)
+    (case status
+      ((done blocking-in) (void))
+      (else (step) (run))))
   
   (define (dump)
     `(ip ,ip rb ,relative-base in ,in out ,out status ,status))
@@ -73,7 +78,7 @@
 
   (define (reset!)
     (set! cache1 `#(,@intcode))
-    (set! cache2 t:empty-tree)
+    (set! cache2 (make-eq-hashtable))
     (set! ip 0)
     (set! relative-base 0)
     (set! in '())
@@ -86,8 +91,9 @@
   (lambda (me . args)
     (case me
       ((step) (step))
-      ((in) (set! in `(,@in ,@args)))
+      ((in) (set! in `(,@in ,@args)) (set! status 'ok))
       ((out) (if (null? out) 'no-out (car out)))
+      ((run) (run))
       ((status) status)
       ((dump) (dump))
       ((mem) (if (null? args) (mem) (map ref args)))
@@ -95,7 +101,7 @@
       ((swap!) (apply swap! args))
       ((reset!) (reset!))
       ((ip) ip)
-      ((rb) rb)
+      ((rb) relative-base)
       (else (error 'cpu "unknown message" me)))))
 
 (define (run-until-halt machine)
@@ -116,18 +122,6 @@
 
 (define (feedback-loop machines)
   (map feed machines `(,@(cdr machines) ,(car machines))))
-
-(define (debug machine)
-  (display-ln (machine 'dump))  
-  (let run ()
-    (machine 'step)
-    (display-ln (machine 'dump))
-    (case (machine 'status)
-      ((done)
-       (display-ln 'done))
-      ((blocking-in)
-       (display-ln 'blocking-in))
-      (else (run)))))
 
 (define (spew machine)
   (display-ln (machine 'dump))
@@ -151,3 +145,6 @@
        (else
         (M 'step)
         (run ips* (1+ j)))))))
+
+  
+  
