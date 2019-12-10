@@ -1,0 +1,68 @@
+# -*- mode: org -*-
+#+title: [[https://adventofcode.com/2019/day/10][Day 10: Monitoring Station]]
+
+** Reading
+
+   We lean on sparse arrays to get the indices of the asteroids. Once
+   the input is converted with ~=&#~, the indices come automatically as
+   nonzero entries (~4$.~). Finally, we convert indices to complex
+   numbers, as they provide easy angle calculations and arithmetic.
+
+#+begin_src j :session :exports code
+grid =: 'm' freads '../../input/19/10.in'
+
+locate =: [: (j.~/"1) 4 $. [: $. =&'#'
+asteroids =: locate grid
+#+end_src
+
+#+RESULTS:
+
+** Looking
+  
+   To solve part A, we equivalently find the point which when
+   connected to the others produces the most unique angles. We
+   accomplish this by making a subtraction table of the asteroids,
+   calculating all angles, and removing one of the 0s (to exclude self
+   in count).
+
+#+BEGIN_SRC j :session :exports code
+angles =: [: # [: ~. 1 {"1 [: *. 0 -.~ ]
+visible =: [: angles"1 [ -~/ ]
+
+partA =: >./ ] counts =. visible asteroids
+#+END_SRC
+
+#+RESULTS:
+
+** Vaporizing
+
+   The point found in part A is taken as the ~station~. The function
+   ~phi~ is to sort the points in the vaporization order. The
+   directions in the probem description are flipped, so instead of
+   starting facing upward and going clockwise, ~phi~ organizes facing
+   downward and anti-clockwise.
+
+   In the organized order, the index of the 199th unique angle is used
+   to find the solution. (It would otherwise be the 200th, but ~phi~
+   puts the first target at the end of the list).
+
+#+BEGIN_SRC j :session :exports both
+phi =: 1&{"1 @ *. @ *&0j_1
+vaporize =: (198 i.~ [: +/\ [: ~: phi) { (/: phi)
+station =: asteroids {~ counts i. partA
+partB =: (vaporize &. (-&station)) asteroids -. station
+#+END_SRC
+
+#+RESULTS:
+
+#+begin_src j :session :exports both
+partA;partB
+#+end_src
+
+#+RESULTS:
+: ┌───┬────┐
+: │256│17j7│
+: └───┴────┘
+
+
+
