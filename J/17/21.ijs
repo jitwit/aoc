@@ -33,4 +33,29 @@ NB.  reminders
 stack_sideways =: ,.
 stack_vertically =: ,
 
-NB. last step is to break apart and reassemble properly
+NB. chunks, split nxn grid into (n/2)x(n/2) grid of 2x2 blocks
+split =: 13 : ',./ (- x) ]\ y'
+spl =: [: ,./ ] ]\~ [: - [
+
+cnk =: 13 : '(x&spl &. |:) y'
+
+chunk =: ([: , ([: - [) ]\ [: |: [: ,./ ([: - [) ]\ [: |: ])
+
+slice =: - @ *: @ [ ]\ [: , ([: - [) ]\ [: |: [: ,./ ([: - [) ]\ [: |: ]
+expand2 =: match2 2&slice
+
+blowup =: 4 : 0
+g =. (x chunk y)
+(- (*: x)) ]\ g
+)
+
+run3 =: 3&chunk
+run2 =: [: match2 2&chunk
+
+start =: 3 3 $ 0 1 0 0 0 1 1 1 1
+step1 =: match3"1 (_9 [\ run3 start)
+NB. ,./ (> ( ( ,/ &.> ;/ (step2))))
+NB. ((,/ &.> ;/ (step2)))
+] step2 =: ( _2 ]\ (match2"1 (_4 ]\ 2 chunk step1)))
+] step3 =: ,./ (> ( ( ,/ &.> ;/ (step2))))
+

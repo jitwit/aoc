@@ -1,4 +1,3 @@
-
 (import (srfi :13)
 	(srfi :14)
         (prefix (patricia) t:)
@@ -15,6 +14,6 @@
   (string-append "~/code/advent/code/" file))
 
 (define source-files
-  (map advent-file-path '("biblio.ss" "outils.ss" "style-sheet.ss" "intcode.ss")))
+  (map advent-file-path '("biblio.ss" "outils.ss" "intcode.ss")))
 
 (for-all load source-files)

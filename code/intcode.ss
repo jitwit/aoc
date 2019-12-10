@@ -1,8 +1,8 @@
 (define (mode opcode param)
   (case (digit-at param opcode)
-    ((0) 'position)
     ((1) 'immediate)
-    ((2) 'relative)))
+    ((2) 'relative)
+    ((0) 'position)))
 
 (define (cpu intcode)
   (define ip 0)
@@ -21,41 +21,34 @@
     (set! relative-base (+ relative-base dx)))
   
   (define (store! addr val)
-    (if (< addr size)
+    (if (fx< addr size)
         (vector-set! cache1 addr val)
         (hashtable-set! cache2 addr val)))
   
   (define (ref addr)
-    (if (< addr size)
+    (if (fx< addr size)
         (vector-ref cache1 addr)
         (hashtable-ref cache2 addr 0)))
   
   (define (val opcode param)
-    (case (mode opcode param)
-      ((position)
-       (ref (ref (+ ip param))))
-      ((immediate)
-       (ref (+ ip param)))
-      ((relative)
-       (ref (+ relative-base (ref (+ ip param)))))))
+    (case (digit-at param opcode)
+      ((1) (ref (+ ip param)))
+      ((2) (ref (+ relative-base (ref (+ ip param)))))
+      ((0) (ref (ref (+ ip param))))))
 
   (define (addr opcode param)
-    (case (mode opcode param)
-      ((position)
-       (ref (+ ip param)))
-      ((relative)
-       (+ relative-base (ref (+ ip param))))
-      ((immediate)
-       (error 'machine-addr "addr shouldn't be immediate" opcode param))))
+    (case (digit-at param opcode)
+      ((2) (+ relative-base (ref (+ ip param))))
+      ((0) (ref (+ ip param)))
+      ((1) (error 'machine-addr "addr is immediate" opcode param))))
   
   (define (step)
     (let ((op (ref ip)))
-      (case (mod op 100)
+      (case (fxmod op 100)
         ((1) (store! (addr op 3) (+ (val op 1) (val op 2))) (ip! 4))
         ((2) (store! (addr op 3) (* (val op 1) (val op 2))) (ip! 4))
-        ((3) (cond
-              ((null? in) (set! status 'blocking-in))
-              (else (set! status 'ok) (store! (addr op 1) (pop! in)) (ip! 2))))
+        ((3) (if (null? in) (set! status 'blocking-in)
+                 (begin (set! status 'ok) (store! (addr op 1) (pop! in)) (ip! 2))))
         ((4) (set! status 'out) (push! (val op 1) out) (ip! 2))
         ((5) (if (zero? (val op 1)) (ip! 3) (set! ip (val op 2))))
         ((6) (if (zero? (val op 1)) (set! ip (val op 2)) (ip! 3)))
@@ -66,9 +59,10 @@
         (else (error 'intcode "bad opcode" op)))))
 
   (define (run)
+    (step)
     (case status
-      ((done blocking-in) (void))
-      (else (step) (run))))
+      ((done blocking-in out) (void))
+      (else (run))))
   
   (define (dump)
     `(ip ,ip rb ,relative-base in ,in out ,out status ,status))
@@ -114,11 +108,12 @@
 (define (feed M N)
   (lambda ()
     (let run ()
+      (M 'run)
       (case (M 'status)
-        ((out) (N 'in (M 'out)) (N 'step) (M 'step) (run))
+        ((out) (N 'in (M 'out)) (N 'step) (run))
         ((blocking-in) 'blocked)
         ((done) 'done)
-        (else (M 'step) (run))))))
+        (else (run))))))
 
 (define (feedback-loop machines)
   (map feed machines `(,@(cdr machines) ,(car machines))))
@@ -146,5 +141,6 @@
         (M 'step)
         (run ips* (1+ j)))))))
 
-  
-  
+
+
+

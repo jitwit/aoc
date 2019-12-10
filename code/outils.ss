@@ -68,5 +68,5 @@
     (clear-term-code)))
 
 (define (digit-at i n)
-  (mod (quotient n (expt 10 (1+ i))) 10))
+  (fxmod (fx/ n (expt 10 (fx1+ i))) 10))
 
