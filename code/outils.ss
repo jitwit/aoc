@@ -70,3 +70,8 @@
 (define (digit-at i n)
   (fxmod (fx/ n (expt 10 (fx1+ i))) 10))
 
+(define pi/2
+  (acos 0))
+
+(define 2pi
+  (* 4 (acos 0)))
