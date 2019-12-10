@@ -16,6 +16,22 @@
                             (enumerate grid)
                             grid)))))
 
+;; to make 0 clockwise pointing up, which is actually down because the
+;; coordinates are wonky.
+(define (phi z)
+  (let ((a (angle (* 0+i z))))
+    (if (< a 0) a (- a 2pi))))
+
+(define (split-ray alpha zs)
+  (drop-while (lambda (z) (equal? (angle z) alpha)) zs))
+
+(define (translating points center)
+  (sort-on (filter-map (lambda (z)
+                         (and (not (= z center))
+                              (- z center)))
+                       points)
+           phi))
+
 ;; translate points based on x
 (define (part-a)
   (define (visible x)
@@ -27,30 +43,14 @@
                                        (and (not (zero? z-x))
                                             (angle z-x))))
                                    points)))))
-  (car (last-pair (rank-on points visible))))
+  (maximum-on points visible))
 
 (define monitoring-station
   (cdr (part-a)))
 
-;; to make 0 clockwise pointing up, which is actually down because the
-;; coordinates are wonky.
-(define (phi z)
-  (let ((a (angle (* 0+i z))))
-    (if (< a 0) a (- a 2pi))))
-
-(define asteroids
-  (sort-on (filter-map (lambda (z)
-                         (and (not (= z monitoring-station))
-                              (- z monitoring-station)))
-                       points)
-           phi))
-
-(define (split-ray alpha zs)
-  (drop-while (lambda (z) (equal? (angle z) alpha)) zs))
-
 ;; problem asks for 200th of 303, so this just drops hidden points
 (define (part-b)
-  (let loop ((j 1) (zs asteroids))
+  (let loop ((j 1) (zs (translating points monitoring-station)))
     (let ((z (car zs)))
       (if (= j 200)
           (+ monitoring-station z)
