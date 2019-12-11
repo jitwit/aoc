@@ -93,7 +93,6 @@
 #+RESULTS:
 : #<void>
 
-
   And printing, starting with a pin ~0~.
 
 #+BEGIN_SRC scheme :session :export both

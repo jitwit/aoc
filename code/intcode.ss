@@ -81,6 +81,7 @@
       ((step) (step))
       ((in) (set! in `(,@in ,@args)) (set! status 'ok))
       ((out) (if (null? out) 'no-out (car out)))
+      ((read-out) (if (null? out) 'no-out (pop! out)))
       ((run) (run))
       ((status) status)
       ((mem) (if (null? args) (mem) (map ref args)))
