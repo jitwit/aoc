@@ -4,7 +4,9 @@
 
 (define points
   (let ((grid (map string->list
-                   (parse-advent lines-raw))))
+                   (with-input-from-file "../../J/19/gl.in" lines-raw)
+                   ;; (parse-advent lines-raw)
+                   )))
     (filter-map identity
                 (apply append
                        (map (lambda (i row)
