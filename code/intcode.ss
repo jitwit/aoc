@@ -53,9 +53,8 @@
         (else (error 'intcode "bad opcode" op)))))
 
   (define (run)
-    (step)
     (case status
-      ((done blocking-in out) (void))
+      ((done blocking-in) (void))
       (else (run))))
   
   (define (dump)
@@ -78,11 +77,11 @@
   
   (lambda (me . args)
     (case me
-      ((step) (step))
+      ((step) (set! status 'ok) (step) status)
       ((in) (set! in `(,@in ,@args)) (set! status 'ok))
       ((out) (if (null? out) 'no-out (car out)))
-      ((read-out) (if (null? out) 'no-out (pop! out)))
-      ((run) (run))
+      ((read-out) (let ((tmp (reverse out))) (set! out '()) tmp))
+      ((run) (set! status 'ok) (run))
       ((status) status)
       ((mem) (if (null? args) (mem) (map ref args)))
       ((ip) ip)
@@ -109,12 +108,18 @@
 (define (run M)
   (M 'run))
 
-(define (run-until-halt machine)
-  (let run ()
-    (machine 'step)
-    (case (machine 'status)
-      ((done blocking-in) (machine 'dump))
-      (else (run)))))
+(define (send-input M value)
+  (M 'in value))
+
+(define (run-until status M)
+  (let run ((s (step M)))
+    (if (memq s status) s (run (step M)))))
+
+(define (run-until-halt M)
+  (run-until '(done blocking-in) M))
+
+(define (done? m)
+  (eq? 'done (m 'status)))
 
 (define (feed M N)
   (lambda ()
