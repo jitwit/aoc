@@ -1,0 +1,233 @@
+# -*- mode: org -*-
+#+title: Intcode
+
+  There are many puzzles involving this year's assembly language. At
+  least with the early ones, the bulk of the work was implementing the
+  interpreter, so I'll write about all of them here. 
+
+** Interpreter
+
+  Intcode programs are run as local state cells that accept messages
+  that determine actions. The components are:
+
+  - instruction pointer ~ip~
+  - relative pointer ~relative-base~
+  - status (one of ~ok~, ~blocking-in~, ~out~, ~done~)
+  - first level of memory ~cache1~ which is initially the "source
+    code".
+  - second level of memory ~cache2~ implemented as a hashmap.
+  - values written in stored in a queue ~in~.
+  - output values stored in stack ~out~.
+  - The meat of it all is ~step~ which executes a single
+    instruction. When called from outside, the status is first
+    cleared. The rationale was to first pass output before resuming
+    execution for for [[./7.ss][Day7]].
+  - Various other inner procedures for examining state.
+
+#+begin_src scheme :exports code
+(define (cpu intcode)
+  (define ip 0)
+  (define relative-base 0)
+  (define status 'ok)
+  (define cache1 `#(,@intcode))
+  (define cache2 (make-eq-hashtable))
+  (define size (vector-length cache1))
+  (define in '())
+  (define out '())
+
+  (define (ip! dx)
+    (set! ip (+ ip dx)))
+
+  (define (rb! dx)
+    (set! relative-base (+ relative-base dx)))
+  
+  (define (store! addr val)
+    (if (fx< addr size)
+        (vector-set! cache1 addr val)
+        (hashtable-set! cache2 addr val)))
+  
+  (define (ref addr)
+    (if (fx< addr size)
+        (vector-ref cache1 addr)
+        (hashtable-ref cache2 addr 0)))
+  
+  (define (val opcode param)
+    (case (digit-at param opcode)
+      ((1) (ref (+ ip param)))
+      ((2) (ref (+ relative-base (ref (+ ip param)))))
+      ((0) (ref (ref (+ ip param))))))
+
+  (define (addr opcode param)
+    (case (digit-at param opcode)
+      ((2) (+ relative-base (ref (+ ip param))))
+      ((0) (ref (+ ip param)))
+      ((1) (error 'machine-addr "addr is immediate" opcode param))))
+  
+  (define (step)
+    (let ((op (ref ip)))
+      (case (fxmod op 100)
+        ((1) (store! (addr op 3) (+ (val op 1) (val op 2))) (ip! 4))
+        ((2) (store! (addr op 3) (* (val op 1) (val op 2))) (ip! 4))
+        ((3) (if (null? in) (set! status 'blocking-in)
+                 (begin (set! status 'ok) (store! (addr op 1) (pop! in)) (ip! 2))))
+        ((4) (set! status 'out) (push! (val op 1) out) (ip! 2))
+        ((5) (if (zero? (val op 1)) (ip! 3) (set! ip (val op 2))))
+        ((6) (if (zero? (val op 1)) (set! ip (val op 2)) (ip! 3)))
+        ((7) (store! (addr op 3) (if (< (val op 1) (val op 2)) 1 0)) (ip! 4))
+        ((8) (store! (addr op 3) (if (= (val op 1) (val op 2)) 1 0)) (ip! 4))
+        ((9) (rb! (val op 1)) (ip! 2))
+        ((99) (set! status 'done))
+        (else (error 'intcode "bad opcode" op)))))
+
+  (define (dump)
+    `(ip ,ip rb ,relative-base in ,in out ,out status ,status))
+
+  (define (mem)
+    `(cache1 ,cache1 cache2 ,cache2))
+
+  (define (reset!)
+    (set! cache1 `#(,@intcode))
+    (set! cache2 (make-eq-hashtable))
+    (set! ip 0)
+    (set! relative-base 0)
+    (set! in '())
+    (set! out '())
+    (set! status 'ok))
+
+  (define (swap! program)
+    (set! intcode program))
+  
+  (lambda (me . args)
+    (case me
+      ((step) (set! status 'ok) (step) status)
+      ((in) (set! in `(,@in ,@args)) (set! status 'ok))
+      ((out) (if (null? out) 'no-out (car out)))
+      ((read-out) (let ((tmp (reverse out))) (set! out '()) tmp))
+      ((status) status)
+      ((mem) (if (null? args) (mem) (map ref args)))
+      ((ip) ip)
+      ((rb) relative-base)
+      ((ref) (apply ref args))
+      ((swap!) (apply swap! args))
+      ((reset!) (reset!))
+      ((set-mem!) (apply store! args))
+      ((dump) (dump))
+      (else (error 'cpu "unknown message" me)))))
+#+end_src
+
+
+#+BEGIN_SRC scheme :session :exports none
+(load "~/code/advent/load.ss")
+#+END_SRC
+
+#+RESULTS:
+: #<void>
+
+** [[https://adventofcode.com/2019/day/5][Day 5: Sunny with a Chance of Asteroids]]
+  
+   Day 5 introduced parameter modes, which determine how to write and
+   read things, i/o, and branching. Most of that is handled above, and
+   the solution is very simply:
+
+#+begin_src scheme :session :exports both :results output
+(advent-year 19)
+(advent-day 5)
+
+(define intcode
+  (parse-advent comma-separated))
+
+(define (run5 seed)
+  (define M (cpu intcode))
+  (send-input M seed)
+  (run-until-halt M)
+  (get-output M))
+
+(display `((A ,(run5 1))
+           (B ,(run5 5))))
+#+end_src
+
+#+RESULTS:
+| A | 7265618 |
+| B | 7731427 |
+
+
+** [[https://adventofcode.com/2019/day/7][Day 7: Amplification Circuit]]
+  
+   Day 7 was much tricker, at least for me. Here, we need to connect
+   machines in a line and in a feed back loop, passing inputs and
+   outpus. After seeding them with various inputs and outputs we're
+   tasked to find the maximal seeds.
+
+   The strategy is to define connections as thunks and hold them in a
+   queue. A machine is run until it halts or expects input. Whenever
+   it produces output it is passed to the receiving machine, before
+   resuming execution. If a thunks sending machine is ~'done~, that
+   thunk is dropped. The process continues until the target machine is
+   done.
+
+#+begin_src scheme :session :exports code
+(advent-day 7)
+
+(define intcode
+  (parse-advent comma-separated))
+
+(define (feed M N)
+  (lambda ()
+    (let run ()
+      (case (step M)
+        ((out) (N 'in (M 'out)) (run))
+        ((blocking-in) 'blocked)
+        ((done) 'done)
+        (else (run))))))
+
+(define (run7 phase-settings intcode)
+  (define-syntax define-network
+    (lambda (x)
+      (syntax-case x (=> <- =?)
+        ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (?> T) intcode)
+         #'(let ((A (cpu intcode)) ...)
+             (let ((loop (list (feed x y) ...)))
+               (m 'in phase) ...
+               (let run ()
+                 (if (eq? 'done (T 'status))
+                     (T 'out)
+                     (let ((action (pop! loop)))
+                       (let ((result (action)))
+                         (unless (eq? result 'done)
+                           (set! loop `(,@loop ,action)))
+                         (run)))))))))))
+  (let-values (((p h a s e) (apply values phase-settings)))
+    (define-network (A B C D E)
+      ((A => B) (B => C) (C => D) (D => E) (E => A))
+      ((A <- p) (B <- h) (C <- a) (D <- s) (E <- e) (A <- 0))
+      (=? E)
+      intcode)))
+#+end_src
+
+#+RESULTS:
+: #<void>
+
+  As an aside, I don't think the syntax transformer is right. I think
+  the reason is that I don't understand the different expansion phases
+  and how capture works. It does seem to "work" when run from a
+  mutable top level... So I leave it for now.
+
+  Anyhow, finding the best result and printing:
+
+#+BEGIN_SRC scheme :session :exports both :results output
+(define (best-configuration phases)
+  (define best 0)
+  (for-all (lambda (phase-settings)
+             (let ((out (run7 phase-settings intcode)))
+               (when (< best out)
+                 (set! best (max best out)))))
+           (permutations phases))
+  best)
+
+(display `((A ,(best-configuration '(0 1 2 3 4)))
+           (B ,(best-configuration '(5 6 7 8 9)))))
+#+END_SRC
+
+#+RESULTS:
+| A |   116680 |
+| B | 89603079 |

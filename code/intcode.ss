@@ -105,8 +105,11 @@
 (define (send-input M value)
   (M 'in value))
 
-(define (get-output M)
+(define (read-output M)
   (M 'read-out))
+
+(define (get-output M)
+  (M 'out))
 
 (define (status M)
   (M 'status))
