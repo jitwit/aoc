@@ -5,12 +5,12 @@
 (define intcode
   (parse-advent comma-separated))
 
-(define (part-a)
+(define (partA)
   (define M (cpu intcode))
   (let-values (((_ visited) (painter M black)))
     (display-ln (vector-length (hashtable-cells visited)))))
 
-(define (part-b)
+(define (partB)
   (define M (cpu intcode))
   (let-values (((colors _) (painter M white)))
     (display-message colors)))
@@ -24,7 +24,7 @@
 (define (calculate-paint M color)
   (send-input M color)
   (run-until-halt M)
-  (let ((instructions (M 'read-out)))
+  (let ((instructions (get-output M)))
     (and (not (null? instructions)) instructions)))
 
 (define (painter M color)

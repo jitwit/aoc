@@ -11,7 +11,7 @@
 (define (solve intcode seed)
   (define M (cpu intcode))
   (M 'in seed)
-  (M 'run)
+  (run-until-halt M)
   (M 'out))
 
 (define (partA)

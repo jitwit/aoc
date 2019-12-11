@@ -5,6 +5,15 @@
 (define intcode
   (parse-advent comma-separated))
 
+(define (feed M N)
+  (lambda ()
+    (let run ()
+      (case (step M)
+        ((out) (N 'in (M 'out)) (N 'step) (run))
+        ((blocking-in) 'blocked)
+        ((done) 'done)
+        (else (run))))))
+
 (define (day7 phase-settings intcode)
   (define-syntax define-network
     (lambda (x)

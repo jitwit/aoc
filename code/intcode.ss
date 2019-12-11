@@ -52,11 +52,6 @@
         ((99) (set! status 'done))
         (else (error 'intcode "bad opcode" op)))))
 
-  (define (run)
-    (case status
-      ((done blocking-in) (void))
-      (else (run))))
-  
   (define (dump)
     `(ip ,ip rb ,relative-base in ,in out ,out status ,status))
 
@@ -81,12 +76,11 @@
       ((in) (set! in `(,@in ,@args)) (set! status 'ok))
       ((out) (if (null? out) 'no-out (car out)))
       ((read-out) (let ((tmp (reverse out))) (set! out '()) tmp))
-      ((run) (set! status 'ok) (run))
       ((status) status)
       ((mem) (if (null? args) (mem) (map ref args)))
       ((ip) ip)
-      ((ref) (apply ref args))
       ((rb) relative-base)
+      ((ref) (apply ref args))
       ((swap!) (apply swap! args))
       ((reset!) (reset!))
       ((set-mem!) (apply store! args))
@@ -111,6 +105,12 @@
 (define (send-input M value)
   (M 'in value))
 
+(define (get-output M)
+  (M 'read-out))
+
+(define (status M)
+  (M 'status))
+
 (define (run-until status M)
   (let run ((s (step M)))
     (if (memq s status) s (run (step M)))))
@@ -118,34 +118,11 @@
 (define (run-until-halt M)
   (run-until '(done blocking-in) M))
 
-(define (done? m)
-  (eq? 'done (m 'status)))
+(define (done? M)
+  (eq? 'done (status M)))
 
-(define (feed M N)
-  (lambda ()
-    (let run ()
-      (M 'run)
-      (case (M 'status)
-        ((out) (N 'in (M 'out)) (N 'step) (run))
-        ((blocking-in) 'blocked)
-        ((done) 'done)
-        (else (run))))))
-
-(define (feedback-loop machines)
-  (map feed machines `(,@(cdr machines) ,(car machines))))
-
-(define (spew machine)
-  (display-ln (machine 'dump))
-  (let run ()
-    (machine 'step)
-    (display-ln (machine 'mem))  
-    (display-ln (machine 'dump))
-    (case (machine 'status)
-      ((done)
-       (display-ln 'done))
-      ((blocking-in)
-       (display-ln 'blocking-in))
-      (else (run)))))
+(define (blocked? M)
+  (eq? 'blocking-in (status M)))
 
 (define (mode opcode param)
   (case (digit-at param opcode)
@@ -175,7 +152,7 @@
 (define (pretty-opcode M)
   (let* ((ip (M 'ip)) (op (M 'ref ip)))
     (case (mod op 100)
-      ((1) `(,ip (add  ,(pretty-mode op 1) ,(pretty-mode op 2) ,(pretty-mode op 3))))
+      ((1) `(,ip (add ,(pretty-mode op 1) ,(pretty-mode op 2) ,(pretty-mode op 3))))
       ((2) `(,ip (mul ,(pretty-mode op 1) ,(pretty-mode op 2) ,(pretty-mode op 3))))
       ((3) `(,ip (read ,(pretty-mode op 1))))
       ((4) `(,ip (out ,(pretty-mode op 1))))
@@ -190,10 +167,9 @@
   (let run ((ips '()) (j 0))
     (if (= j cutoff)
         (reverse ips)
-        (case (M 'status)
-          ((done) (reverse (cdr ips)))
-          ((blocking-in) (reverse ips))
-          (else (M 'step) (run (cons (M 'ip) ips) (1+ j)))))))
+        (case (step M)
+          ((done blocking-in) (reverse ips))
+          (else (run (cons (M 'ip) ips) (1+ j)))))))
 
 (define trace-control-flow
   (case-lambda
@@ -204,10 +180,9 @@
   (let run ((codes '()) (j 0))
     (if (= j cutoff)
         (reverse codes)
-        (case (M 'status)
-          ((done) (reverse (cdr codes)))
-          ((blocking-in) (reverse codes))
-          (else (M 'step) (run (cons (pretty-opcode M) codes) (1+ j)))))))
+        (case (step M)
+          ((done blocking-in) (reverse codes))
+          (else (run (cons (pretty-opcode M) codes) (1+ j)))))))
 
 (define trace-opcodes
   (case-lambda
