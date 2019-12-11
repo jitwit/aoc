@@ -93,6 +93,21 @@
       ((dump) (dump))
       (else (error 'cpu "unknown message" me)))))
 
+(define (dump-cache1 M)
+  (list-ref (M 'mem) 1))
+
+(define (dump-cache2 M)
+  (hashtable-cells (list-ref (M 'mem) 3)))
+
+(define (reset! M)
+  (M 'reset!))
+
+(define (step M)
+  (M 'step))
+
+(define (run M)
+  (M 'run))
+
 (define (run-until-halt machine)
   (let run ()
     (machine 'step)
@@ -125,16 +140,6 @@
       ((blocking-in)
        (display-ln 'blocking-in))
       (else (run)))))
-
-(define (log-control-flow M cutoff)
-  (let run ((ips '()) (j 0))
-    (let ((ips* (cons (M 'ip) ips)))
-      (cond
-       ((or (= j cutoff) (eq? 'done (M 'status)))
-        (reverse ips*))
-       (else
-        (M 'step)
-        (run ips* (1+ j)))))))
 
 (define (mode opcode param)
   (case (digit-at param opcode)
@@ -175,15 +180,41 @@
       ((9) `(,ip (rb ,(pretty-mode op 1))))
       ((99) `(,ip (return))))))
 
-(define (trace-opcodes M)
-  (let run ((codes '()))
-    (case (M 'status)
-      ((done) (reverse (cdr codes)))
-      ((blocking-in) (reverse codes))
-      (else (M 'step) (run (cons (pretty-opcode M) codes))))))
+(define (%trace-control-flow M cutoff)
+  (let run ((ips '()) (j 0))
+    (if (= j cutoff)
+        (reverse ips)
+        (case (M 'status)
+          ((done) (reverse (cdr ips)))
+          ((blocking-in) (reverse ips))
+          (else (M 'step) (run (cons (M 'ip) ips) (1+ j)))))))
 
-(define (dump-cache1 M)
-  (list-ref (M 'mem) 1))
+(define trace-control-flow
+  (case-lambda
+    ((M) (%trace-control-flow M -1))
+    ((M cutoff) (%trace-control-flow M cutoff))))
 
-(define (dump-cache2 M)
-  (hashtable-cells (list-ref (M 'mem) 3)))
+(define (%trace-opcodes M cutoff)
+  (let run ((codes '()) (j 0))
+    (if (= j cutoff)
+        (reverse codes)
+        (case (M 'status)
+          ((done) (reverse (cdr codes)))
+          ((blocking-in) (reverse codes))
+          (else (M 'step) (run (cons (pretty-opcode M) codes) (1+ j)))))))
+
+(define trace-opcodes
+  (case-lambda
+    ((M) (%trace-opcodes M -1))
+    ((M cutoff) (%trace-opcodes M cutoff))))
+
+(define (control-flow-graph trace)
+  (let ((n (length trace)))
+    (g:edges (map cons (list-head trace (1- n)) (cdr trace)))))
+
+(define (potential-loops trace)
+  (let* ((g (control-flow-graph trace))
+         (sccs (vector->list (hashtable-cells (g:scc g)))))
+    (filter (compose (curry < 1) length)
+            (group-with (lambda (x y) (= (cdr x) (cdr y)))
+                        (sort-on sccs cdr)))))
