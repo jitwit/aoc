@@ -115,9 +115,13 @@
       (else (error 'cpu "unknown message" me)))))
 #+end_src
 
+** Load
 
-#+BEGIN_SRC scheme :session :exports none
+  We bring in code and set the current year to 2019.
+
+#+BEGIN_SRC scheme :session :exports code
 (load "~/code/advent/load.ss")
+(advent-year 19)
 #+END_SRC
 
 #+RESULTS:
@@ -130,25 +134,23 @@
    the solution is very simply:
 
 #+begin_src scheme :session :exports both :results output
-(advent-year 19)
-(advent-day 5)
+(define intcode-5
+  (parameterize ((advent-day 5))
+    (parse-advent comma-separated)))
 
-(define intcode
-  (parse-advent comma-separated))
-
-(define (run5 seed)
-  (define M (cpu intcode))
+(define (run-intcode program seed)
+  (define M (cpu program))
   (send-input M seed)
   (run-until-halt M)
   (get-output M))
 
-(display `((A ,(run5 1))
-           (B ,(run5 5))))
+(display `((5A ,(run-intcode intcode-5 1))
+           (5B ,(run-intcode intcode-5 5))))
 #+end_src
 
 #+RESULTS:
-| A | 7265618 |
-| B | 7731427 |
+| 5A | 7265618 |
+| 5B | 7731427 |
 
 
 ** [[https://adventofcode.com/2019/day/7][Day 7: Amplification Circuit]]
@@ -166,10 +168,9 @@
    done.
 
 #+begin_src scheme :session :exports code
-(advent-day 7)
-
-(define intcode
-  (parse-advent comma-separated))
+(define intcode-7
+  (parameterize ((advent-day 7))
+    (parse-advent comma-separated)))
 
 (define (feed M N)
   (lambda ()
@@ -180,12 +181,12 @@
         ((done) 'done)
         (else (run))))))
 
-(define (run7 phase-settings intcode)
+(define (run7 phase-settings)
   (define-syntax define-network
     (lambda (x)
       (syntax-case x (=> <- =?)
-        ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (?> T) intcode)
-         #'(let ((A (cpu intcode)) ...)
+        ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (?> T))
+         #'(let ((A (cpu intcode-7)) ...)
              (let ((loop (list (feed x y) ...)))
                (m 'in phase) ...
                (let run ()
@@ -197,37 +198,131 @@
                            (set! loop `(,@loop ,action)))
                          (run)))))))))))
   (let-values (((p h a s e) (apply values phase-settings)))
-    (define-network (A B C D E)
+    (define-network
+      (A B C D E)
       ((A => B) (B => C) (C => D) (D => E) (E => A))
       ((A <- p) (B <- h) (C <- a) (D <- s) (E <- e) (A <- 0))
-      (=? E)
-      intcode)))
+      (=? E))))
 #+end_src
 
 #+RESULTS:
 : #<void>
 
-  As an aside, I don't think the syntax transformer is right. I think
-  the reason is that I don't understand the different expansion phases
-  and how capture works. It does seem to "work" when run from a
-  mutable top level... So I leave it for now.
+  As an aside, I don't think the syntax transformer is right. The
+  reason is that I don't understand the different expansion phases and
+  how capture works. It does "work" when run from a mutable top level
+  though... so I leave it for now.
 
   Anyhow, finding the best result and printing:
 
 #+BEGIN_SRC scheme :session :exports both :results output
 (define (best-configuration phases)
-  (define best 0)
-  (for-all (lambda (phase-settings)
-             (let ((out (run7 phase-settings intcode)))
-               (when (< best out)
-                 (set! best (max best out)))))
-           (permutations phases))
-  best)
+  (apply max (map run7 (permutations phases))))
 
-(display `((A ,(best-configuration '(0 1 2 3 4)))
-           (B ,(best-configuration '(5 6 7 8 9)))))
+(display `((7A ,(best-configuration '(0 1 2 3 4)))
+           (7B ,(best-configuration '(5 6 7 8 9)))))
 #+END_SRC
 
 #+RESULTS:
-| A |   116680 |
-| B | 89603079 |
+| 7A |   116680 |
+| 7B | 89603079 |
+
+** [[https://adventofcode.com/2019/day/9][Day 9: Sensor Boost]]
+
+  The main aspect to day 9's puzzle was adding the opaquely described
+  relative pointer. In fact, the function used in Day5 can be used
+  here!
+
+#+BEGIN_SRC scheme :session :exports both :results output
+(define intcode-9
+  (parameterize ((advent-day 9))
+    (parse-advent comma-separated)))
+
+(display `((9A ,(run-intcode intcode-9 1))
+           (9B ,(run-intcode intcode-9 2))))
+#+END_SRC
+
+#+RESULTS:
+| 9A | 3335138414 |
+| 9B |      49122 |
+
+** [[https://adventofcode.com/2019/day/11][Day 11: Space Police]]
+
+  Day 9's description promises the intocde spec is fully laid out. Day
+  11's puzzle puts it to use! An intcode instance is to paint a grid.
+  It takes as input the color of its current location and responds
+  accordingly. I like using complex numbers for grid problems, since
+  the coordinates are packed into one number, and rotations are
+  multiplicaiton.
+
+#+BEGIN_SRC scheme :session :exports code
+(define intcode-11
+  (parameterize ((advent-day 11))
+    (parse-advent comma-separated)))
+
+(define (turn-right dir) (* dir 0-i))
+(define (turn-left dir) (* dir 0+i))
+(define white 1)
+(define black 0)
+(define (white? color) (= color white))
+
+(define (calculate-paint M color)
+  (send-input M color)
+  (run-until-halt M)
+  (let ((instructions (read-output M)))
+    (and (not (null? instructions)) instructions)))
+
+(define (painter M color)
+  (define location 0)
+  (define direction 0+i)
+  (define visited (make-eqv-hashtable))
+  (define colors (make-eqv-hashtable))
+  (when (white? color)
+    (hashtable-set! colors location white))
+  (let run ()
+    (let ((instructions (calculate-paint M (hashtable-ref colors location black))))
+      (when instructions
+        (hashtable-set! visited location #t)
+        (if (white? (car instructions))
+            (hashtable-set! colors location white)
+            (hashtable-delete! colors location))
+        (if (white? (cadr instructions))
+            (set! direction (turn-right direction))
+            (set! direction (turn-left direction)))
+        (set! location (+ location direction))
+        (run))))
+  (assert (done? M))
+  (values colors visited))
+#+END_SRC
+
+#+RESULTS:
+: #<void>
+
+  First part asks how many colors squares are painted when seeded with
+  black.
+
+#+BEGIN_SRC scheme :session :exports both :results output
+(let-values (((_ visited) (painter (cpu intcode-11) black)))
+  (display (list 'A (vector-length (hashtable-cells visited)))))
+#+END_SRC
+
+#+RESULTS:
+| A | 2883 |
+
+
+  Second part asks for a message that gets painted when seeded with
+  white.
+
+#+BEGIN_SRC scheme :session :exports code
+(define (display-message colors)
+  (let ((zs (map conjugate (vector->list (hashtable-keys colors)))))
+    (advent-ssvg (zs->ssvg zs) "Day11.svg")))
+
+(let-values (((colors _) (painter (cpu intcode-11) white)))
+    (display-message colors))
+#+END_SRC
+
+#+caption registration identifier
+[[../../output/Day11.svg][Day11.svg]]
+
+
