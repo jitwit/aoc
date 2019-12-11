@@ -198,4 +198,4 @@
          (sccs (vector->list (hashtable-cells (g:scc g)))))
     (filter (compose (curry < 1) length)
             (group-with (lambda (x y) (= (cdr x) (cdr y)))
-                        (sort-on sccs cdr)))))
+                        (sort-on cdr sccs)))))

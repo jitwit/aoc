@@ -7,11 +7,12 @@
 
 (define (solve intcode seed)
   (define M (cpu intcode))
-  (M 'in seed)
+  (send-input M seed)
   (run-until-halt M)
   (M 'out))
 
 (define (partA)
   (solve intcode 1))
+
 (define (partB)
   (solve intcode 5))

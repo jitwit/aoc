@@ -15,6 +15,6 @@
   (string-append "~/code/advent/code/" file))
 
 (define source-files
-  (map advent-file-path '("biblio.ss" "outils.ss" "intcode.ss")))
+  (map advent-file-path '("biblio.ss" "outils.ss" "intcode.ss" "svg.ss")))
 
 (for-all load source-files)

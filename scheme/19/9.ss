@@ -16,5 +16,6 @@
 
 (define (partA)
   (solve intcode 1))
+
 (define (partB)
   (solve intcode 2))

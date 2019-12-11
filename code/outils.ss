@@ -15,15 +15,6 @@
     (system (string-append "open " tmp))
     (delete-file tmp)))
 
-(define (intersperse sep xs)
-  (let ((xs (fold-right (lambda (x y)
-                          (cons* sep x y))
-                        '()
-                        xs)))
-    (if (or (null? xs) (null? (cdr xs)))
-        '()
-        (cdr xs))))
-
 ;;;; Colorize terminal outputs
 (define foreground-color-table
   '((default . 39)
@@ -70,8 +61,18 @@
 (define (digit-at i n)
   (fxmod (fx/ n (expt 10 (fx1+ i))) 10))
 
-(define pi/2
-  (acos 0))
+(define (Re/Im z)
+  (values (real-part z) (imag-part z)))
 
-(define 2pi
-  (* 4 (acos 0)))
+(define (bounding-box-C zs) ;; assume zs nonempty
+  (define-values (x-lo y-lo) (Re/Im (car zs)))
+  (define x-hi x-lo)
+  (define y-hi y-lo)
+  (for-all (lambda (z)
+             (define-values (z-re z-im) (Re/Im z))
+             (set! x-lo (min x-lo z-re))
+             (set! x-hi (max x-hi z-re))
+             (set! y-lo (min y-lo z-im))
+             (set! y-hi (max y-hi z-im)))
+           (cdr zs))
+  (values x-lo x-hi y-lo y-hi))

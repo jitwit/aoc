@@ -3,10 +3,7 @@
 (advent-day 10)
 
 (define points
-  (let ((grid (map string->list
-                   (with-input-from-file "../../J/19/gl.in" lines-raw)
-                   ;; (parse-advent lines-raw)
-                   )))
+  (let ((grid (map string->list (parse-advent lines-raw))))
     (filter-map identity
                 (apply append
                        (map (lambda (i row)
@@ -28,34 +25,22 @@
   (drop-while (lambda (z) (equal? (angle z) alpha)) zs))
 
 (define (translating points center)
-  (sort-on (filter-map (lambda (z)
-                         (and (not (= z center))
-                              (- z center)))
-                       points)
-           phi))
+  (rank-on (lambda (z) (phi (- z center))) (remv center points)))
 
-;; translate points based on x
-(define (part-a)
+(define (partA)
   (define (visible x)
-    (length
-     (group-with equal?
-                 (sort <
-                       (filter-map (lambda (z)
-                                     (let ((z-x (- z x)))
-                                       (and (not (zero? z-x))
-                                            (angle z-x))))
-                                   points)))))
+    (length (group-with eqv? (sort <
+                                   (map (lambda (z)
+                                          (phi (- z x)))
+                                        (remv x points))))))
   (maximum-on points visible))
 
 (define monitoring-station
-  (cdr (part-a)))
+  (cdr (partA)))
 
 ;; problem asks for 200th of 303, so this just drops hidden points
-(define (part-b)
-  (let loop ((j 1) (zs (translating points monitoring-station)))
-    (let ((z (car zs)))
-      (if (= j 200)
-          (+ monitoring-station z)
-          (let ((zs* (split-ray (angle z) (cdr zs))))
-            (loop (1+ j) zs*))))))
-
+(define (partB)
+  (list-ref (group-with (lambda (u v)
+                          (eqv? (car u) (car v)))
+                        (translating points monitoring-station))
+            199))

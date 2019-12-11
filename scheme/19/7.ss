@@ -9,7 +9,7 @@
   (lambda ()
     (let run ()
       (case (step M)
-        ((out) (N 'in (M 'out)) (N 'step) (run))
+        ((out) (N 'in (M 'out)) (run))
         ((blocking-in) 'blocked)
         ((done) 'done)
         (else (run))))))

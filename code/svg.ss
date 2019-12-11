@@ -1,0 +1,50 @@
+
+(define (zs->ssvg zs)
+  (define-values (x0 x1 y0 y1)
+    (bounding-box-C zs))
+  (define n (length zs))
+  (define dx (- x1 x0))
+  (define dy (- y1 y0))
+  (define slack (* 1/5 (min dx dy)))
+  (define (draw-point z)
+    (define-values (x y) (Re/Im z))
+    `(circle (@ (cx ,x)
+                (cy ,y)
+                (r 1/2)
+                (fill "green"))
+             " "))
+  `(svg (@ (view-box (,(- x0 slack)
+                      ,(- y0 slack)
+                      ,(+ x1 slack)
+                      ,(+ y1 slack)))
+           (xmlns "http://www.w3.org/2000/svg"))
+        ,@(map draw-point zs)))
+
+(define (number->svg x)
+  (number->string
+   (if (exact? x)
+       (exact->inexact x)
+       x)))
+
+(define advent-svg-stylesheet
+  `((cx . ,(lambda (_ x)
+             `(cx ,(number->svg x))))
+    (cy . ,(lambda (_ y)
+             `(cy ,(number->svg y))))
+    (r . ,(lambda (_ r)
+            `(r ,(number->svg r))))
+    (view-box . ,(lambda (_ atts)
+                   `(viewBox ,(apply string-append
+                                     (intersperse " " (map number->svg atts))))))
+    (*text* . ,(lambda (tag str) str))
+    (*default* . ,(lambda x x))))
+
+(define (advent-ssvg ssvg file)
+  (let ((file (string-append "~/code/advent/output/" file)))
+    (when (file-exists? file)
+      (delete-file file))
+    (with-output-to-file file
+      (lambda ()
+        (send-reply
+         (sxml->html (pre-post-order ssvg advent-svg-stylesheet)))))
+    (system (string-append "open " file))))
