@@ -51,5 +51,5 @@
 
 (define (display-message colors)
   (let ((zs (map conjugate (vector->list (hashtable-keys colors)))))
-    (advent-ssvg (zs->ssvg zs) "Day11.svg")))
+    (run-ssvg (zs->ssvg zs) "Day11.svg")))
 

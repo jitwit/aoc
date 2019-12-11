@@ -2,42 +2,40 @@
 (advent-year 19)
 (advent-day 8)
 
-(define rows
-  (string->list (car
-                 (parse-advent lines-raw)
-                 ;;
-                 ;; (with-input-from-file "8.in" lines-raw)
-                 )))
+(define encoded-image
+  (string->list (car (parse-advent lines-raw))))
 
-(define R
-  (n-tuples (* 6 25) rows))
+(define layers
+  (n-tuples (* 6 25) encoded-image))
 
-(define R*
-  (apply map list R))
+(define (color-pixel layers)
+  (fold-left (lambda (color x)
+               (case color
+                 ((#\0 #\1) color)
+                 (else x)))
+             #\2
+             layers))
 
-(define (step color x)
-  (case color
-    ((#\0 #\1) color)
-    (else x)))
-
-(define img
-  (map (lambda (row)
-         (fold-left step #\2 row))
-       R*))
-
-(define (part-b)
-  (for-each (lambda (x)
-              (display-ln (list->string (map (lambda (x)
-                                               x ;; (if (char=? x #\0) #\space #\*)
-                                               )
-                                             x))))
-            (n-tuples 25 img)))
-
-(define (count-char char)
-  (lambda (row)
-    (count (lambda (c) (char=? c char)) row)))
+(define (counting thing xs)
+  (count (curry eqv? thing) xs))
 
 (define (part-a)
-  (let ((row (car (sort-on R (count-char #\0)))))
-    (* ((count-char #\1) row)
-       ((count-char #\2) row))))
+  (let ((row (maximum-on layers (compose - (curry counting #\0)))))
+    (* (counting #\1 row) (counting #\2 row))))
+
+(define (part-b)
+  (let ((decoded
+         (apply append
+                (map (lambda (j row)
+                       (map (lambda (i pixel)
+                              (and (eqv? #\1 pixel)
+                                   (make-rectangular i j)))
+                            (iota 25)
+                            row))
+                     (iota 6)
+                     (n-tuples 25 (map color-pixel (apply map list layers)))))))
+    (run-ssvg (zs->ssvg (filter number? decoded)) "Day8.svg")))
+
+
+
+
