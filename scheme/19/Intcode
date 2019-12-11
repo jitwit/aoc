@@ -322,7 +322,9 @@
     (display-message colors))
 #+END_SRC
 
-#+caption registration identifier
-[[../../output/Day11.svg][Day11.svg]]
+#+RESULTS:
+: #t
 
+#+caption registration identifier
+[[file:~/code/advent/output/Day11.svg][Day11]]
 
