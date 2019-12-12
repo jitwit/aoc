@@ -14,3 +14,5 @@ while. -. z-:y do. n=.n+1 [ z=.step z end. n
 (energy step ^: 1000 moons); *./ period&moons"0 i.3
 timex '(energy step ^: 1000 moons); *./ period&moons"0 i.3'
 
+NB. timex '(energy step ^: 1000 moons); *./ period_&moons"0 i.3'
+

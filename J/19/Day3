@@ -12,9 +12,8 @@
 #+begin_src j :session :exports code :tangle 3.ijs
 require 'tables/csv'
 
-parse =: makenum@:}.*{&0j1 1 0j_1 _1@:I.@:E.&'URDL'@:{.
+parse =: makenum@:}.*{&0j1 1 0j_1 _1@:('URDL'&i.)@:{.
 input=: parse &.> readcsv '../../input/19/3.in'
-eg=: parse &.> readcsv '../../scheme/19/3.in'
 #+end_src
 
 #+RESULTS:
@@ -29,7 +28,7 @@ eg=: parse &.> readcsv '../../scheme/19/3.in'
 #+BEGIN_SRC j :session :exports code :tangle 3.ijs
 steps =: [ + ((%|) * 1+i.@|) @: -~
 unwind =: [: steps/&.> 2 <\ ]
-wires =: ,. ,; &.> <"1 unwind"1 ,. ([: +/\ 0&, @: >)"1 eg
+wires =: ,. ,; &.> <"1 unwind"1 ,. ([: +/\ 0&, @: >)"1 input
 #+END_SRC
 
 #+RESULTS:
@@ -42,7 +41,7 @@ wires =: ,. ,; &.> <"1 unwind"1 ,. ([: +/\ 0&, @: >)"1 eg
   wires. The two paths will be intersected by adding times if both
   entries are nonzero.
 
-#+begin_src j :session :exports both :tangle 3.ijs
+#+begin_src j :session :exports both
 wireA =: +.,;>0{::wires
 wireB =: +.,;>1{::wires
 
@@ -58,10 +57,3 @@ crossings =: ((1+i.#wireA) ((<"1 wireA)}) arr) intersection (1+i.#wireB) ((<"1 w
 #+end_src
 
 #+RESULTS:
-: |index error
-: |   wireB=:+.,;>1    {::wires
-: 
-: |length error
-: |   crossings=:((1+i.#wireA)((<"1 wireA)    })arr)intersection(1+i.#wireB)((<"1 wireB)})arr
-: 
-: (7 $. crossings) ; (<./ (5 $. crossings))

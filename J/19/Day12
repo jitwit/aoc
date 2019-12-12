@@ -9,21 +9,10 @@
   between that moon and the others. Position is bumped by adding it to
   the bumped velocity.
 
-#+BEGIN_SRC j :session :exports both
+#+BEGIN_SRC j :session :exports code
 moons =: (|: 4 3 $ 3 2 _6 _13 18 10 _8 _1 13 5 10 4) ,. (3 4 $ 0)
-'example';] eg =: (|: 4 3 $ _1 0 2 2 _10 _7 4 _8 8 3 5 _1) ,. (3 4 $ 0)
-#+END_SRC
+eg =: (|: 4 3 $ _1 0 2 2 _10 _7 4 _8 8 3 5 _1) ,. (3 4 $ 0)
 
-#+RESULTS:
-: ┌───────┬────────────────────┐
-: │example│_1   2  4  3 0 0 0 0│
-: │       │ 0 _10 _8  5 0 0 0 0│
-: │       │ 2  _7  8 _1 0 0 0 0│
-: └───────┴────────────────────┘
-
-  Is the starting state for one of the examples.
-
-#+BEGIN_SRC j :session :exports both
 ('position';(4{."1 eg)) ,: ('velocity';(4}."1 eg))
 #+END_SRC
 
@@ -116,5 +105,5 @@ NB. actual solution: *./ period&moons"0 i.3
 #+RESULTS:
 : 2772
 
-  It takes around ~0.65~ s to find the answer on the actual input
+  It takes around ~0.68~ s to find the answer on the actual input
   ~moons~.
