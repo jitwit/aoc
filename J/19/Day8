@@ -1,6 +1,6 @@
 # -*- mode: org -*-
 #+title: [[https://adventofcode.com/2019/day/8][Day 8: Space Image Format]]
- 
+
 ** Setup
 
   Split into 100 (150=6x25) "layers."
@@ -9,6 +9,8 @@
 input =: 1!:1 < '../../input/19/8.in'
 layers =: _1 }. _150 [\ input
 #+end_src
+
+#+RESULTS:
 
   Select index where the ~minimimum~ is found. ~color~ finds indices
   that aren't transparent and selects first such.
@@ -19,6 +21,8 @@ minimize =: [ {~ [: (i. <./) ]
 color =: [: {. [ {~ [: I. '2'&~: 
 #+end_src
 
+#+RESULTS:
+
 ** Part A
 
    Select the row with the fewest '0's, multiply by the # of '1's and
@@ -27,6 +31,8 @@ color =: [: {. [ {~ [: I. '2'&~:
 #+begin_src j :session :exports code
 partA =: (count&'1' * count&'2') @ (minimize count&'0')
 #+end_src
+
+#+RESULTS:
 
 ** Part B
 

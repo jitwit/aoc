@@ -5,22 +5,6 @@
   Solutions to advent of code problems in ~scheme~, ~J~, and
   ~haskell~.
 
-** Scheme
-   
-*** 2019
-
-   - [[./scheme/19/Intcode][Intcode (Days 2, 5, 7, 9, 11)]]
-   - [[./scheme/19/Day6][Day 6: Universal Orbit Map]]
-   - [[./scheme/19/Day5][Day 5: Sunny with a Chance of Asteroids]]
-
-*** 2017
-
-   - [[./scheme/17/Day24][Day 24: Electromagnetic Moat]]
-
-*** 2015
-
-   - [[./scheme/15/Day7][Day 7: Some Assembly Required]]
-
 ** J
 
 *** 2019
@@ -36,5 +20,21 @@
 *** 2015
 
    - [[./J/15/Day1][Day 1: Not Quite Lisp]]
+
+** Scheme
+   
+*** 2019
+
+   - [[./scheme/19/Intcode][Intcode (Days 2, 5, 7, 9, 11)]]
+   - [[./scheme/19/Day6][Day 6: Universal Orbit Map]]
+   - [[./scheme/19/Day5][Day 5: Sunny with a Chance of Asteroids]]
+
+*** 2017
+
+   - [[./scheme/17/Day24][Day 24: Electromagnetic Moat]]
+
+*** 2015
+
+   - [[./scheme/15/Day7][Day 7: Some Assembly Required]]
 
 
