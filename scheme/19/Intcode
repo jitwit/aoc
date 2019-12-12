@@ -1,9 +1,8 @@
 # -*- mode: org -*-
 #+title: Intcode
 
-  There are many puzzles involving this year's assembly language. At
-  least with the early ones, the bulk of the work was implementing the
-  interpreter, so I'll write about all of them here. 
+  There are many puzzles involving this year's assembly language. So
+  many that I'll write about them in one place. 
 
 ** Interpreter
 
@@ -115,9 +114,11 @@
       (else (error 'cpu "unknown message" me)))))
 #+end_src
 
-** Load
+  The complete implementation of the interpreter is above, though the
+  supporting functions are omitted. They can be found inside
+  [[./../../code/intcode.ss][intcode.ss]].
 
-  We bring in code and set the current year to 2019.
+** Load
 
 #+BEGIN_SRC scheme :session :exports code
 (load "~/code/advent/load.ss")
@@ -129,9 +130,9 @@
 
 ** [[https://adventofcode.com/2019/day/5][Day 5: Sunny with a Chance of Asteroids]]
   
-   Day 5 introduced parameter modes, which determine how to write and
-   read things, i/o, and branching. Most of that is handled above, and
-   the solution is very simply:
+   Day 5 introduced parameter modes (which determine how to write and
+   read things), i/o, and branching. That is handled above, so what
+   remains is very simply:
 
 #+begin_src scheme :session :exports both :results output
 (define intcode-5
@@ -155,17 +156,17 @@
 
 ** [[https://adventofcode.com/2019/day/7][Day 7: Amplification Circuit]]
   
-   Day 7 was much tricker, at least for me. Here, we need to connect
-   machines in a line and in a feed back loop, passing inputs and
+   Day 7 was tricker, at least for me. Here, we need to connect
+   machines first in a feed back loop, passing inputs and
    outpus. After seeding them with various inputs and outputs we're
-   tasked to find the maximal seeds.
+   asked to find the maximum output.
 
    The strategy is to define connections as thunks and hold them in a
-   queue. A machine is run until it halts or expects input. Whenever
-   it produces output it is passed to the receiving machine, before
-   resuming execution. If a thunks sending machine is ~'done~, that
-   thunk is dropped. The process continues until the target machine is
-   done.
+   queue. In these thunks, the input machine is run until it halts or
+   it needs input. Whenever it produces output it is passed to the
+   receiving machine, before resuming execution. If a thunk's sending
+   machine is ~'done~, that thunk is dropped. The process continues
+   until the target machine is done.
 
 #+begin_src scheme :session :exports code
 (define intcode-7
@@ -326,5 +327,5 @@
 : #t
 
 #+caption registration identifier
-[[file:~/code/advent/output/Day11.svg][Day11]]
+[[./../../output/Day11.svg][Day11]]
 
