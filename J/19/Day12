@@ -116,4 +116,5 @@ NB. actual solution: *./ period&moons"0 i.3
 #+RESULTS:
 : 2772
 
-  It takes around ~0.7~ s to find the answer on the actual input ~moons~.
+  It takes around ~0.65~ s to find the answer on the actual input
+  ~moons~.
