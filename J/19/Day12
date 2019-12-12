@@ -33,7 +33,7 @@ eg =: (|: 4 3 $ _1 0 2 2 _10 _7 4 _8 8 3 5 _1) ,. (3 4 $ 0)
 #+BEGIN_SRC j :session :exports both
 dv =: [: ([: +/ [: * [ -/ [) 4&{.    NB. position difference table, signum, sum
 dp =: 4 |.!. 0 ]                     NB. shift velocity for add with pos, zeroing in
-step =: ] + dp"1 + [: (] ,. ]) dv"1  NB. adding it all together
+step =: ] + (4|.!.0])"1 + [: (],.]) ([: ([:+/[:*[-/[) 4&{.)"1 NB. put it all together
 (; step) eg
 #+END_SRC
 
@@ -105,5 +105,5 @@ NB. actual solution: *./ period&moons"0 i.3
 #+RESULTS:
 : 2772
 
-  It takes around ~0.68~ s to find the answer on the actual input
+  It takes around ~615~ ms to find the answer on the actual input
   ~moons~.
