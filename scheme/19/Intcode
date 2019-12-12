@@ -186,7 +186,7 @@
   (define-syntax define-network
     (lambda (x)
       (syntax-case x (=> <- =?)
-        ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (?> T))
+        ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (=? T))
          #'(let ((A (cpu intcode-7)) ...)
              (let ((loop (list (feed x y) ...)))
                (m 'in phase) ...
@@ -200,9 +200,9 @@
                          (run)))))))))))
   (let-values (((p h a s e) (apply values phase-settings)))
     (define-network
-      (A B C D E)
-      ((A => B) (B => C) (C => D) (D => E) (E => A))
-      ((A <- p) (B <- h) (C <- a) (D <- s) (E <- e) (A <- 0))
+      (P H A S E)
+      ((P => H) (H => A) (A => S) (S => E) (E => P))
+      ((P <- p) (H <- h) (A <- a) (S <- s) (E <- e) (P <- 0))
       (=? E))))
 #+end_src
 
@@ -304,11 +304,11 @@
 
 #+BEGIN_SRC scheme :session :exports both :results output
 (let-values (((_ visited) (painter (cpu intcode-11) black)))
-  (display (list 'A (vector-length (hashtable-cells visited)))))
+  (display (list '11A (vector-length (hashtable-cells visited)))))
 #+END_SRC
 
 #+RESULTS:
-| A | 2883 |
+| 11A | 2883 |
 
 
   Second part asks for a message that gets painted when seeded with
