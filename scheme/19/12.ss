@@ -53,22 +53,14 @@
        state))
 
 (define (period axis)
-  (define seen (make-hashtable equal-hash equal?))
-  (let loop ((i 0) (state state0))
+  (define axis0 (isolate axis state0))
+  (let loop ((i 1) (state (evolve state0)))
     (let ((current (isolate axis state)))
-      (or (and (hashtable-ref seen current #f)
-               i)
-          (begin
-            (hashtable-set! seen current #t)
-            (loop (1+ i) (evolve state)))))))
+      (if (equal? current axis0)
+          i
+          (loop (1+ i) (evolve state))))))
 
 (define (part-b)
   (apply lcm (map period '(0 1 2))))
 
-;; i from 0 to 3, j is 0 or 1, k from 0 to 2
-(define (%isolate moon pos/vel x/y/z)
-  (lambda (ms)
-    (vector-ref (list-ref (list-ref ms moon)
-                          pos/vel)
-                x/y/z)))
 
