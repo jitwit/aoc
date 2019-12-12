@@ -11,12 +11,12 @@
 
 #+BEGIN_SRC j :session :exports both
 moons =: (|: 4 3 $ 3 2 _6 _13 18 10 _8 _1 13 5 10 4) ,. (3 4 $ 0)
-'EXAMPLE';] eg =: (|: 4 3 $ _1 0 2 2 _10 _7 4 _8 8 3 5 _1) ,. (3 4 $ 0)
+'example';] eg =: (|: 4 3 $ _1 0 2 2 _10 _7 4 _8 8 3 5 _1) ,. (3 4 $ 0)
 #+END_SRC
 
 #+RESULTS:
 : ┌───────┬────────────────────┐
-: │EXAMPLE│_1   2  4  3 0 0 0 0│
+: │example│_1   2  4  3 0 0 0 0│
 : │       │ 0 _10 _8  5 0 0 0 0│
 : │       │ 2  _7  8 _1 0 0 0 0│
 : └───────┴────────────────────┘
@@ -24,16 +24,16 @@ moons =: (|: 4 3 $ 3 2 _6 _13 18 10 _8 _1 13 5 10 4) ,. (3 4 $ 0)
   Is the starting state for one of the examples.
 
 #+BEGIN_SRC j :session :exports both
-('POSITION';(4{."1 eg)) ,: ('VELOCITY';(4}."1 eg))
+('position';(4{."1 eg)) ,: ('velocity';(4}."1 eg))
 #+END_SRC
 
 #+RESULTS:
 : ┌────────┬────────────┐
-: │POSITION│_1   2  4  3│
+: │position│_1   2  4  3│
 : │        │ 0 _10 _8  5│
 : │        │ 2  _7  8 _1│
 : ├────────┼────────────┤
-: │VELOCITY│0 0 0 0     │
+: │velocity│0 0 0 0     │
 : │        │0 0 0 0     │
 : │        │0 0 0 0     │
 : └────────┴────────────┘
@@ -109,12 +109,11 @@ while. -. z-:y do. n=. n+1 [z=. step z end. n
   the solution is be presented on the small example:
 
 #+BEGIN_SRC j :session :exports both
-*./ ([: period_rec eg&wrap)"0 i.3
+period_rec (eg; step eg)
 NB. actual solution: *./ period&moons"0 i.3
 #+END_SRC
 
 #+RESULTS:
 : 2772
-
 
   It takes around ~0.7~ s to find the answer on the actual input ~moons~.
