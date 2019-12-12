@@ -85,34 +85,22 @@ energy step ^: 1000 moons
 * Period
 
   Now the trickier part. We seek the period of the system, which is
-  promised to be rather large. The cool thing with J is we can use the
-  same functions from above on different dimensions (the way it's
-  written does fix it to work with 4 moons, though).
+  promised to be rather large.
 
-#+BEGIN_SRC j :session :exports both
-(step eg) ; step (1 8 $ 2 { eg)
-#+END_SRC
+  The axis are independent, so we can speed things up by only looking
+  at one dimension at a time. The overall period is the least common
+  multiple of the individual ones.
 
-#+RESULTS:
-: ┌─────────────────────┬──────────────────┐
-: │ 2  3  1 2  3 1 _3 _1│1 _4 5 0 _1 3 _3 1│
-: │_1 _7 _7 2 _1 3  1 _3│                  │
-: │ 1 _4  5 0 _1 3 _3  1│                  │
-: └─────────────────────┴──────────────────┘
+#+BEGIN_SRC j :session :exports code
+period_rec =: (1 + [: $: 0&({::);[: step 1&({::))`1:@.(0&({::)-:1&({::))
+wrap =: [: (];step) 1 8 $ {~
 
-  The axis are independent, so we can probably speed things up by only
-  looking at one dimension at a time. The overall period is then
-  simply the least common multiple of the individual ones.
-
-#+BEGIN_SRC j :session :exports both
 period =: 4 : 0
-y =. 1 8 $ x { y
-z =. step y
-i =. 1
+z =. step y [ i =. 1 [ y =. 1 8 $ x { y
 while. -. z -: y
 do.
   z =. step z
-  i =. 1+i
+  i =. i + 1
 end.
 i
 )
@@ -122,12 +110,16 @@ i
 
 ** PartB
 
-  And because I still haven't figured out org timeout with J, the
-  solution will be presented on the small example.
+  And because I still haven't figured out org timeout issues with J,
+  the solution is be presented on the small example:
 
 #+BEGIN_SRC j :session :exports both
-*./ period&eg"0 i.3
+*./ ([: period_rec eg&wrap)"0 i.3
+NB. actual solution: *./ ([: period moons&wrap)"0 i.3
 #+END_SRC
 
 #+RESULTS:
 : 2772
+
+
+  It takes around ~0.7~ s to find the answer on the actual input ~moons~.
