@@ -61,7 +61,7 @@ step =: ] + dp"1 + [: (] ,. ]) dv"1  NB. adding it all together
   of the two.
 
 #+BEGIN_SRC j :session exports both
-energy =: [: +/ [: 4&{. [: (] * 4&|.) [: +/ |
+energy =: [: +/ [: (_4&{. * 4&{.) [: +/ |
 (; energy) (step ^: 10) eg
 #+END_SRC
 
@@ -96,12 +96,8 @@ period_rec =: (1 + [: $: 0&({::);[: step 1&({::))`1:@.(0&({::)-:1&({::))
 wrap =: [: (];step) 1 8 $ {~
 
 period =: 4 : 0
-z =. step y [ i =. 1 [ y =. 1 8 $ x { y
-while. -. z -: y
-do.
-  z =. step z [ i =. i + 1
-end.
-i
+n=. 1 [z=. step ]y=. 1 8 $ x{y
+while. -. z-:y do. n=. n+1 [z=. step z end. n
 )
 #+END_SRC
 
