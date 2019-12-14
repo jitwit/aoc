@@ -77,7 +77,7 @@
       ((out) (if (null? out) 'no-out (car out)))
       ((read-out) (let ((tmp (reverse out))) (set! out '()) tmp))
       ((status) status)
-      ((mem) (if (null? args) (mem) (map ref args)))
+      ((mem) (if (null? args) (mem) (apply ref args)))
       ((ip) ip)
       ((rb) relative-base)
       ((ref) (apply ref args))
@@ -92,6 +92,12 @@
 
 (define (dump-cache2 M)
   (hashtable-cells (list-ref (M 'mem) 3)))
+
+(define (read-memory M addr)
+  (M 'mem addr))
+
+(define (store! M addr val)
+  (M 'set-mem! addr val))
 
 (define (reset! M)
   (M 'reset!))

@@ -76,3 +76,9 @@
              (set! y-hi (max y-hi z-im)))
            (cdr zs))
   (values x-lo x-hi y-lo y-hi))
+
+(define (sign x)
+  (cond
+   ((< 0 x) 1)
+   ((< x 0) -1)
+   (else 0)))

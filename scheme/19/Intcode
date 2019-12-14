@@ -103,7 +103,7 @@
       ((out) (if (null? out) 'no-out (car out)))
       ((read-out) (let ((tmp (reverse out))) (set! out '()) tmp))
       ((status) status)
-      ((mem) (if (null? args) (mem) (map ref args)))
+      ((mem) (if (null? args) (mem) (apply ref args)))
       ((ip) ip)
       ((rb) relative-base)
       ((ref) (apply ref args))

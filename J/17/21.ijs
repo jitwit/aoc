@@ -25,37 +25,7 @@ exp3 =: 1&{:: ;~ ([: keys3 0&{::)
 rules2 =: exp2"1 r2
 rules3 =: exp3"1 r3
 
-match =: 0 1 {:: ] {~ [: I. (e. 0&({::))"1
-match2 =: 3 3&$ @ match&rules2
-match3 =: 4 4&$ @ match&rules3
-
-NB.  reminders
-stack_sideways =: ,.
-stack_vertically =: ,
-
-NB. chunks, split nxn grid into (n/2)x(n/2) grid of 2x2 blocks
-split =: 13 : ',./ (- x) ]\ y'
-spl =: [: ,./ ] ]\~ [: - [
-
-cnk =: 13 : '(x&spl &. |:) y'
-
-chunk =: ([: , ([: - [) ]\ [: |: [: ,./ ([: - [) ]\ [: |: ])
-
-slice =: - @ *: @ [ ]\ [: , ([: - [) ]\ [: |: [: ,./ ([: - [) ]\ [: |: ]
-expand2 =: match2 2&slice
-
-blowup =: 4 : 0
-g =. (x chunk y)
-(- (*: x)) ]\ g
-)
-
-run3 =: 3&chunk
-run2 =: [: match2 2&chunk
-
-start =: 3 3 $ 0 1 0 0 0 1 1 1 1
-step1 =: match3"1 (_9 [\ run3 start)
-NB. ,./ (> ( ( ,/ &.> ;/ (step2))))
-NB. ((,/ &.> ;/ (step2)))
-] step2 =: ( _2 ]\ (match2"1 (_4 ]\ 2 chunk step1)))
-] step3 =: ,./ (> ( ( ,/ &.> ;/ (step2))))
+match =: 0 1 {:: ] {~ [: I. (e. 0&{::)"1
+match2 =: match&rules2
+match3 =: match&rules3
 
