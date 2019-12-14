@@ -123,6 +123,26 @@
 #+BEGIN_SRC scheme :session :exports code
 (load "~/code/advent/load.ss")
 (advent-year 19)
+
+(define intcode-5
+  (parameterize ((advent-year 19) (advent-day 5))
+    (parse-advent comma-separated)))
+
+(define intcode-7
+  (parameterize ((advent-year 19) (advent-day 7))
+    (parse-advent comma-separated)))
+
+(define intcode-9
+  (parameterize ((advent-year 19) (advent-day 9))
+    (parse-advent comma-separated)))
+
+(define intcode-11
+  (parameterize ((advent-year 19) (advent-day 11))
+    (parse-advent comma-separated)))
+
+(define intcode-13
+  (parameterize ((advent-year 19) (advent-day 13))
+    (parse-advent comma-separated)))
 #+END_SRC
 
 #+RESULTS:
@@ -135,10 +155,6 @@
    remains is very simply:
 
 #+begin_src scheme :session :exports both :results output
-(define intcode-5
-  (parameterize ((advent-day 5))
-    (parse-advent comma-separated)))
-
 (define (run-intcode program seed)
   (define M (cpu program))
   (send-input M seed)
@@ -169,10 +185,6 @@
    until the target machine is done.
 
 #+begin_src scheme :session :exports code
-(define intcode-7
-  (parameterize ((advent-day 7))
-    (parse-advent comma-separated)))
-
 (define (feed M N)
   (lambda ()
     (let run ()
@@ -235,10 +247,6 @@
   here!
 
 #+BEGIN_SRC scheme :session :exports both :results output
-(define intcode-9
-  (parameterize ((advent-day 9))
-    (parse-advent comma-separated)))
-
 (display `((9A ,(run-intcode intcode-9 1))
            (9B ,(run-intcode intcode-9 2))))
 #+END_SRC
@@ -257,10 +265,6 @@
   multiplicaiton.
 
 #+BEGIN_SRC scheme :session :exports code
-(define intcode-11
-  (parameterize ((advent-day 11))
-    (parse-advent comma-separated)))
-
 (define (turn-right dir) (* dir 0-i))
 (define (turn-left dir) (* dir 0+i))
 (define white 1)
@@ -328,4 +332,85 @@
 
 #+caption registration identifier
 [[./../../output/Day11.svg][Day11]]
+
+** [[https://adventofcode.com/2019/day/13][Day 13: Care Package]]
+
+  Another Intcode. Today's runs an arcade game. The screen is a grid,
+  which is updated based on triples of output. If the triple starts
+  with ~-1, 0~ then the third number is the score instead.
+
+#+BEGIN_SRC scheme :session :exports code
+(define empty 0)
+(define (empty? x) (= empty x))
+(define wall 1)
+(define (wall? x) (= wall x))
+(define block 2)
+(define (block? x) (= block x))
+(define horizontal-paddle 3)
+(define (horizontal-paddle? x) (= horizontal-paddle x))
+(define ball 4)
+(define (ball? x) (= ball x))
+
+(define (paint screen machine)
+  (define score)
+  (let loop ((instructions (read-output machine)))
+    (match instructions
+      ((-1 0 x instructions ...)
+       (set! score x)
+       (loop instructions))
+      ((x y pixel instructions ...)
+       (hashtable-set! screen (make-rectangular x y) pixel)
+       (loop instructions))
+      (else score))))
+
+(define (locate object screen)
+  (filter-map (lambda (z.o)
+                (and (= (cdr z.o) object)
+                     (car z.o)))
+              (vector->list (hashtable-cells screen))))
+
+(define (ball-location screen)
+  (car (locate ball screen)))
+
+(define (paddle-location screen)
+  (car (locate horizontal-paddle screen)))
+
+(define (update screen machine)
+  (run-until-halt machine)
+  (paint screen machine))
+#+END_SRC
+
+#+RESULTS:
+
+  The first part asks how many blocks there are initially. The second
+  asks what the score is after all of them have been cleared.
+
+  It may be possible to actually write it so that you play the game by
+  hand, but I figured it's be easier to just program what inputs to
+  send based on the positions of the ball and the paddle.
+
+#+BEGIN_SRC scheme :session :exports both :results output
+(define (day13A)
+  (define m (cpu intcode-13))
+  (define screen (make-eqv-hashtable))
+  (update screen m)
+  (length (locate block screen)))
+
+(define (day13B)
+  (define m (cpu intcode-13))
+  (define screen (make-eqv-hashtable))
+  (store! m 0 2)
+  (let run ()
+    (let ((score (update screen m)))
+      (if (done? m)
+          score
+          (let ((b (real-part (ball-location screen)))
+                (p (real-part (paddle-location screen))))
+            (send-input m (sign (- b p)))
+            (run))))))
+
+(display `((13A ,(day13A))
+           (13B ,(day13B))))
+#+END_SRC
+
 
