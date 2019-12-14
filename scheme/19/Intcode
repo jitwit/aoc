@@ -351,33 +351,35 @@
 (define ball 4)
 (define (ball? x) (= ball x))
 
-(define (paint screen machine)
-  (define score)
+(define *ball-x*)
+(define *paddle-x*)
+(define *score*)
+(define *screen13* (make-eqv-hashtable))
+
+(define (paint machine)
   (let loop ((instructions (read-output machine)))
     (match instructions
-      ((-1 0 x instructions ...)
-       (set! score x)
+      ((-1 0 score instructions ...)
+       (set! *score* score)
        (loop instructions))
       ((x y pixel instructions ...)
-       (hashtable-set! screen (make-rectangular x y) pixel)
+       (when (ball? pixel)
+         (set! *ball-x* x))
+       (when (horizontal-paddle? pixel)
+         (set! *paddle-x* x))
+       (hashtable-set! *screen13* (make-rectangular x y) pixel)
        (loop instructions))
-      (else score))))
+      (else (void)))))
 
-(define (locate object screen)
+(define (locate object)
   (filter-map (lambda (z.o)
                 (and (= (cdr z.o) object)
                      (car z.o)))
-              (vector->list (hashtable-cells screen))))
+              (vector->list (hashtable-cells *screen13*))))
 
-(define (ball-location screen)
-  (car (locate ball screen)))
-
-(define (paddle-location screen)
-  (car (locate horizontal-paddle screen)))
-
-(define (update screen machine)
+(define (update machine)
   (run-until-halt machine)
-  (paint screen machine))
+  (paint machine))
 #+END_SRC
 
 #+RESULTS:
@@ -386,29 +388,25 @@
   The first part asks how many blocks there are initially. The second
   asks what the score is after all of them have been cleared.
 
-  It may be possible to actually write it so that you play the game by
-  hand, but I figured it's be easier to just program what inputs to
-  send based on the positions of the ball and the paddle.
+  It's possible to actually write it so that one can play the game by
+  hand, but I figured it's be easier to just send inputs based on the
+  positions of the ball and the paddle.
 
 #+BEGIN_SRC scheme :session :exports both :results output
 (define (day13A)
   (define m (cpu intcode-13))
-  (define screen (make-eqv-hashtable))
-  (update screen m)
-  (length (locate block screen)))
+  (update m)
+  (length (locate block)))
 
 (define (day13B)
   (define m (cpu intcode-13))
-  (define screen (make-eqv-hashtable))
   (store! m 0 2)
   (let run ()
-    (let ((score (update screen m)))
-      (if (done? m)
-          score
-          (let ((b (real-part (ball-location screen)))
-                (p (real-part (paddle-location screen))))
-            (send-input m (sign (- b p)))
-            (run))))))
+    (update m)
+    (unless (done? m)
+      (send-input m (sign (- *ball-x* *paddle-x*)))
+      (run)))
+  ,*score*)
 
 (display `((13A ,(day13A))
            (13B ,(day13B))))
