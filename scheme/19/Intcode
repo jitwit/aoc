@@ -389,7 +389,7 @@
   asks what the score is after all of them have been cleared.
 
   It's possible to actually write it so that one can play the game by
-  hand, but I figured it's be easier to just send inputs based on the
+  hand, but I figured it's easier to just send inputs based on the
   positions of the ball and the paddle.
 
 #+BEGIN_SRC scheme :session :exports both :results output
