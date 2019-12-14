@@ -5,16 +5,6 @@
 (define intcode
   (parse-advent comma-separated))
 
-(define (partA)
-  (define M (cpu intcode))
-  (let-values (((_ visited) (painter M black)))
-    (display-ln (vector-length (hashtable-cells visited)))))
-
-(define (partB)
-  (define M (cpu intcode))
-  (let-values (((colors _) (painter M white)))
-    (display-message colors)))
-
 (define (turn-right dir) (* dir 0-i))
 (define (turn-left dir) (* dir 0+i))
 (define white 1)
@@ -24,7 +14,7 @@
 (define (calculate-paint M color)
   (send-input M color)
   (run-until-halt M)
-  (let ((instructions (get-output M)))
+  (let ((instructions (read-output M)))
     (and (not (null? instructions)) instructions)))
 
 (define (painter M color)
@@ -49,7 +39,14 @@
   (assert (done? M))
   (values colors visited))
 
+(define (partA)
+  (let-values (((_ visited) (painter (cpu intcode) black)))
+    (vector-length (hashtable-cells visited))))
+
 (define (display-message colors)
   (let ((zs (map conjugate (vector->list (hashtable-keys colors)))))
     (run-ssvg (zs->ssvg zs) "Day11.svg")))
 
+(define (partB)
+  (let-values (((colors _) (painter (cpu intcode) white)))
+    (display-message colors)))

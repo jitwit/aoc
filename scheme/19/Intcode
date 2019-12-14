@@ -1,8 +1,9 @@
 # -*- mode: org -*-
 #+title: Intcode
 
-  There are many puzzles involving this year's assembly language. So
-  many that I'll write about them in one place. 
+* Intcode
+
+  There are many puzzles involving this year's assembly language. 
 
 ** Interpreter
 
