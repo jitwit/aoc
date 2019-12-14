@@ -381,6 +381,7 @@
 #+END_SRC
 
 #+RESULTS:
+: #<void>
 
   The first part asks how many blocks there are initially. The second
   asks what the score is after all of them have been cleared.
@@ -412,5 +413,9 @@
 (display `((13A ,(day13A))
            (13B ,(day13B))))
 #+END_SRC
+
+#+RESULTS:
+| 13A |   326 |
+| 13B | 15988 |
 
 
