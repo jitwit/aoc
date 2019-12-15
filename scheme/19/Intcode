@@ -1,5 +1,7 @@
 # -*- mode: org -*-
 #+title: Intcode
+#+LaTeX_HEADER: \usepackage{kpfonts}
+#+LaTeX_HEADER: \usepackage[T1]{fontenc}
 
 * Intcode
 
@@ -222,10 +224,10 @@
 #+RESULTS:
 : #<void>
 
-  As an aside, I don't think the syntax transformer is right. The
-  reason is that I don't understand the different expansion phases and
-  how capture works. It does "work" when run from a mutable top level
-  though... so I leave it for now.
+  As an aside, the syntax transformer isn't right. The reason is that
+  I don't understand the different expansion phases and how capture
+  works. It does "work" when run from a mutable top level though... so
+  I leave it for now.
 
   Anyhow, finding the best result and printing:
 

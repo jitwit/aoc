@@ -5,6 +5,7 @@
         (prefix (kd-tree) kd:)
         (prefix (batched-queue) q:)
         (prefix (alga) g:)
+        (vector)
         (sxml-mini)
         (euler)
         (matchable))
@@ -15,6 +16,6 @@
   (string-append "~/code/advent/code/" file))
 
 (define source-files
-  (map advent-file-path '("biblio.ss" "outils.ss" "intcode.ss" "svg.ss")))
+  (map advent-file-path '("biblio.ss" "outils.ss" "graph.ss" "intcode.ss" "svg.ss")))
 
 (for-all load source-files)
