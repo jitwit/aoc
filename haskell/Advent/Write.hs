@@ -4,6 +4,8 @@ module Advent.Write
   ( AdventDoc (..)
   , Solution (..)
   , output
+  , reportA
+  , reportB
   ) where
 
 import Text.PrettyPrint.ANSI.Leijen as PP hiding ((<$>))
@@ -12,6 +14,9 @@ data Solution a b = A a | B b | AB a b
 
 class AdventDoc a where
   report :: a -> Doc
+
+instance AdventDoc () where
+  report = report . show
 
 instance AdventDoc Int where
   report = int
@@ -36,3 +41,9 @@ instance (AdventDoc a, AdventDoc b) => AdventDoc (Solution a b) where
 
 output :: AdventDoc a => a -> IO ()
 output = putDoc . (<>line) . report
+
+reportA :: AdventDoc a => a -> Solution a ()
+reportA = A
+
+reportB :: AdventDoc b => b -> Solution () b
+reportB = B

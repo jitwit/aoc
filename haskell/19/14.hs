@@ -2,9 +2,8 @@
 
 import Algebra.Graph.AdjacencyMap.Algorithm
 import Algebra.Graph.AdjacencyMap
-import Data.Map.Lens
 import Control.Lens
-import Data.Map (Map)
+import Data.Map (Map,fromList)
 import Text.Trifecta
 import Data.Either
 import Advent
@@ -20,7 +19,8 @@ main = do
 
 solve :: [Recipe Chemical] -> Solution Int Int
 solve rules = AB (fuel 1) (bin 1 (10^12)) where
-  chemicals = chemical_order rules; factory = nano_factory rules
+  chemicals = chemical_order rules
+  factory = nano_factory rules & at "ORE" ?~ (0,0,[])
   fuel = produce_fuel chemicals factory
   bin lo hi | hi < lo = hi
             | fuel m <= 10^12 = bin (m+1) hi
@@ -29,12 +29,12 @@ solve rules = AB (fuel 1) (bin 1 (10^12)) where
 
 produce_fuel :: [Chemical] -> NanoFactory Chemical -> Int -> Int
 produce_fuel chemicals factory n = final ^?! ix "ORE" . _1 where
-  start = factory & at "ORE" ?~ (0,0,[]) & ix "FUEL" . _1 .~ n
-  final = foldl consume_rule start chemicals where
-    consume_rule factory chemical =
-      let (need,make,xs) = factory ^?! ix chemical
-          times = (need+make-1)`div`make
-       in foldl (\f (n,c) -> f & ix c . _1 +~ n * times) factory xs
+  start = factory & ix "FUEL" . _1 .~ n
+  final = foldl produce start chemicals where
+    produce factory chemical = foldl update factory xs where
+      update f (n,c) = f & ix c . _1 +~ n * times
+      (need,make,xs) = factory ^?! ix chemical
+      times = (need+make-1)`div`make
 
 chemical_order :: Ord a => [Recipe a] -> [a]
 chemical_order = fromRight (error "oops") . topSort . graph_of_recipes
@@ -44,8 +44,7 @@ graph_of_recipes = edges . (edges_of_recipe =<<) where
   edges_of_recipe (Recipe ingredients (_,out)) = (out,) . snd <$> ingredients
 
 nano_factory :: Ord a => [Recipe a] -> NanoFactory a
-nano_factory rules = shifted_rules & toMapOf (folded.ifolded) where
-  shifted_rules = [ (c,(0,n,is)) | Recipe is (n,c) <- rules ]
+nano_factory rules = fromList [ (c,(0,n,is)) | Recipe is (n,c) <- rules ]
 
 parse_rules :: TokenParsing m => m [Recipe Chemical]
 parse_rules = sepBy parse_rule newline <* eof where
