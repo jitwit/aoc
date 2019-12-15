@@ -7,6 +7,7 @@ module Advent
   , input_ints2d
     -- parsing ish
   , ints_of_bytes
+  , puzzle_file
   , module Advent.Write
   ) where
 
