@@ -59,8 +59,7 @@
 (define (partB)
   (let ((chemicals (topological-sort 'FUEL chemical-ingredients)))
     (let bin ((lo 1) (hi (inexact->exact 1e12)))
-      (if (< hi lo)
-          hi
+      (if (< hi lo) hi
           (let ((fuel (ash (+ lo hi) -1)))
             (let ((ore (produce chemicals fuel)))
               (if (<= ore 1e12)

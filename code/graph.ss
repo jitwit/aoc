@@ -38,6 +38,8 @@
     (define seen (hashtable-for-object v))
     (define parents (hashtable-for-object v))
     (define distances (hashtable-for-object v))
+    (hashtable-set! seen v #t)
+    (hashtable-set! distances v 0)
     (let bfs ((Q (q:consq (cons 0 v) q:empty)))
       (unless (q:empty? Q)
         (let ((d.v (q:headq Q)))
@@ -55,11 +57,12 @@
 
 (define (bfs-path u v adjacent) ;;...
   (let ((table (bfs-result-parents (bfs u adjacent))))
-    (let retrace ((v v) (path (list v)))
-      (let ((w (hashtable-ref table v #f)))
-        (if (or (not w) (equal? u w))
-            (cons u path)
-            (retrace w (cons v path)))))))
+    (let retrace ((v v) (path '()))
+      (let ((p-v (hashtable-ref table v #f)))
+        (and p-v
+             (if (equal? p-v u)
+                 (cons* u v path)
+                 (retrace p-v (cons v path))))))))
 
 (define (bfs-distance u v adjacent)
   (hashtable-ref (bfs-result-distances (bfs u adjacent)) v -1))
