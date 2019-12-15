@@ -41,8 +41,7 @@
               ('idk (push! z new))
               ('wall (void))
               ('open (push! z options))
-              ('tank (push! z options)))
-            )
+              ('tank (push! z options))))
           (news loc))
   (if (null? new)
       (random-element options)
@@ -54,7 +53,6 @@
       (let ((z (next)))
         (m 'in (dir->instr (- z loc)))
         (run-until-halt m)
-        ;;        (display-ln (m 'dump))
         (match (read-output m)
           ((0) (hashtable-set! g z 'wall))
           ((1) (hashtable-set! g z 'open) (set! loc z))
@@ -115,10 +113,7 @@
          (set! q (q:tailq q))
          (unless (hashtable-ref seen z #f)
            (set! dist (max d dist))
-
            (hashtable-set! seen z #t)
-           ;;
-           
            (for-all (lambda (z)
                       (match (hashtable-ref g z 'idk)
                         ('wall (void))

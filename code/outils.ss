@@ -82,3 +82,19 @@
    ((< 0 x) 1)
    ((< x 0) -1)
    (else 0)))
+
+(define (eq-hashtable-copy H)
+  (define H* (make-eq-hashtable))
+  (hash-table-for-each H
+                       (lambda (x y)
+                         (hashtable-set! H* x y)))
+  H*)
+
+(define (eqv-hashtable-copy H)
+  (define H* (make-eqv-hashtable))
+  (vector-for-each (lambda (x.y)
+                     (match x.y
+                       ((x . y)
+                        (hashtable-set! H* x y))))
+                   (hashtable-cells H))
+  H*)
