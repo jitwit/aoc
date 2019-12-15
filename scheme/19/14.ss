@@ -27,16 +27,6 @@
               (map cadr (cdr entry))))
         (else '())))
 
-(define (topological-sort)
-  (define seen (make-hash-table))
-  (define chemicals '())
-  (let dfs ((x 'FUEL))
-    (unless (hashtable-ref seen x #f)
-      (hashtable-set! seen x #t)
-      (for-all dfs (chemical-ingredients x))
-      (push! x chemicals)))
-  chemicals)
-
 (define (update-requirements chemical requirements)
   (match (lookup-recipe chemical)
     ((produces . ingredients)
@@ -63,11 +53,11 @@
   (hashtable-ref requirements 'ORE #f))
 
 (define (partA)
-  (let ((chemicals (topological-sort)))
+  (let ((chemicals (topological-sort 'FUEL chemical-ingredients)))
     (produce chemicals 1)))
 
 (define (partB)
-  (let ((chemicals (topological-sort)))
+  (let ((chemicals (topological-sort 'FUEL chemical-ingredients)))
     (let bin ((lo 1) (hi (inexact->exact 1e12)))
       (if (< hi lo)
           hi

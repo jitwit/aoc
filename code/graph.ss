@@ -1,13 +1,15 @@
 
 (define (hashtable-for-object v)
   (cond ;; ...
-   ((complex? v) (make-eqv-hashtable))
-   ((inexact? v) (make-eqv-hashtable))
    ((list? v) (make-hashtable equal-hash equal?))
-   ((integer? v) (make-eq-hashtable v))
-   ((symbol? v) (make-eq-hashtable v))
+   ((symbol? v) (make-eq-hashtable))
    ((string? v) (make-hashtable string-hash string=?))
    ((vector? v) (make-hashtable equal-hash equal?))
+   ((number? v)
+    (cond
+     ((complex? v) (make-eqv-hashtable))
+     ((integer? v) (make-eq-hashtable v))
+     ((inexact? v) (make-eqv-hashtable))))
    (else (make-hashtable equal-hash equal?))))
 
 (define-record-type dfs-result
@@ -29,7 +31,7 @@
                    (dfs w))
                  (adjacent v))
         (push! v exit-order)))
-    (make-dfs-result parents)))
+    (make-dfs-result parents exit-order)))
 
 (define bfs
   (lambda (v adjacent)
@@ -51,10 +53,19 @@
                             (adjacent v)))))))
     (make-bfs-result parents distances)))
 
+(define (bfs-path u v adjacent) ;;...
+  (let ((table (bfs-result-parents (bfs u adjacent))))
+    (let retrace ((v v) (path (list v)))
+      (let ((w (hashtable-ref table v #f)))
+        (if (or (not w) (equal? u w))
+            (cons u path)
+            (retrace w (cons v path)))))))
+
 (define (bfs-distance u v adjacent)
-  (hashtable-ref (bfs-result-distances (bfs u adjacent))
-                 v
-                 -1))
+  (hashtable-ref (bfs-result-distances (bfs u adjacent)) v -1))
+
+(define (topological-sort v adjacent)
+  (dfs-result-order (dfs v adjacent)))
 
 ;; (define topological-sort
 ;;   (lambda (G)
