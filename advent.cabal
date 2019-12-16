@@ -24,28 +24,19 @@ common ds
     unordered-containers,
     vector
 
-common kmettverse
-  default-language: Haskell2010
-  build-depends: comonad, contravariant, lens
-
-common reading
+common io
  default-language: Haskell2010
- build-depends: bytestring, filepath, trifecta
-
-common writing
-  default-language: Haskell2010
-  build-depends: ansi-wl-pprint, JuicyPixels
+ build-depends: bytestring, filepath, trifecta, ansi-wl-pprint, JuicyPixels
 
 library
-  import: base, ds, reading, writing
+  import: base, ds, io
   hs-source-dirs:
     haskell
   exposed-modules:
     Advent,
-    Advent.Loeb,
     Advent.Write
   build-depends:
-    
+
 executable 19-1
   import: base
   main-is:             1.hs
@@ -54,16 +45,8 @@ executable 19-1
   default-language:    Haskell2010
 
 executable 19-14
-  import: base, ds, writing, reading
+  import: base, ds, io
   main-is:             14.hs
   build-depends:       advent
   hs-source-dirs:      haskell/19
   default-language:    Haskell2010
-
-executable 19-16
-  import: base, ds, writing, reading
-  main-is:             16.hs
-  build-depends:       advent
-  hs-source-dirs:      haskell/19
-  default-language:    Haskell2010
-

@@ -5,9 +5,12 @@ clean :
 	find . -name "*.html" -exec rm {} \;
 	find . -name "*.tex" -exec rm {} \;
 	find . -name "*.pdf" -exec rm {} \;
+
+very-clean :
+	make clean
 	rm -rf dist-newstyle
 
 haskell :
 	cabal build
 
-.PHONY : clean haskell
+.PHONY : clean haskell very-clean
