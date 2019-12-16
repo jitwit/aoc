@@ -67,14 +67,14 @@
     (set! out '())
     (set! status 'ok))
 
-  (define (copy! cache1* cache2* ip* rb* in* out* status*)
+  (define (copy! cache1* cache2* ip* rb* in* out*)
     (set! ip ip*)
     (set! relative-base rb*)
     (set! cache1 (vector-copy cache1*))
     (set! cache2 (eq-hashtable-copy cache2*))
     (set! in in*)
     (set! out out*)
-    (set! status status*))
+    (set! status 'ok))
 
   (lambda (me . args)
     (case me
@@ -108,8 +108,7 @@
       (M 'ip)
       (M 'rb)
       (M 'peek-in)
-      (M 'peek-out)
-      (M 'status))
+      (M 'peek-out))
   M*)
 
 (define (dump-cache1 M)

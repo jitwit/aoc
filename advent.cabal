@@ -60,3 +60,10 @@ executable 19-14
   hs-source-dirs:      haskell/19
   default-language:    Haskell2010
 
+executable 19-16
+  import: base, ds, writing, reading
+  main-is:             16.hs
+  build-depends:       advent
+  hs-source-dirs:      haskell/19
+  default-language:    Haskell2010
+

@@ -13,9 +13,6 @@
 (define moved 1)
 (define oxygen-system 2)
 
-(define (news z)
-  `(,(+ z 1) ,(- z 1) ,(+ z 0+i) ,(+ z 0-i)))
-
 (define (dir->instr z)
   (match z
     (1 east)
@@ -25,7 +22,6 @@
 
 (define g (make-eqv-hashtable))
 (define m (cpu intcode))
-(define loc 0)
 (define *tank*)
 
 (define (random-element lst)
@@ -37,22 +33,22 @@
   (define j 0)
   (define frontier (make-eqv-hashtable))
   (define (next loc)
-    (define options '())
+    (define old '())
     (define new '())
     (for-all (lambda (z)
                (hashtable-delete! frontier z)
                (match (hashtable-ref g z 'idk)
                  ('idk (push! z new))
                  ('wall (void))
-                 ('open (push! z options))
-                 ('tank (push! z options))))
-             (news loc))
+                 ('open (push! z old))
+                 ('tank (push! z old))))
+             (grid4 loc))
     (for-all (lambda (z)
                (hashtable-set! frontier z loc))
              new)
-    (if (null? new)
-        (random-element options)
-        (random-element new)))
+    (if (pair? new)
+        (random-element new)
+        (random-element old)))
   (let walk ()
     (inc! j)
     (let ((loc* (next loc)))
@@ -80,14 +76,14 @@
           max))
 
 (define (solve)
-  ;; seeds, 6 fast 7 slow. 13 nice
+  ;; seeds, 6 fast 7 slow. 13 nice, 16
   (random-walk)
   (display-ln (list (partA) (partB))))
 
 (define (map-adjacent z)
   (filter (lambda (z)
             (memq (hashtable-ref g z 'idk) '(open tank)))
-          (news z)))
+          (grid4 z)))
 
 (define (showme loc)
   (define-values (xlo xhi ylo yhi)

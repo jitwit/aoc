@@ -157,26 +157,15 @@
      (format #t "part-b: ~a~%" (time (part-b parsed-input))))))
 
 ;;;; Grid
-(define (grid-adjacent i j)
-  (let ((j-1 (1- j))
-	(j+1 (1+ j))
-	(i-1 (1- i))
-	(i+1 (1+ i)))
-    `((,i-1 ,j-1)
-      (,i-1 ,j)
-      (,i-1 ,j+1)
-      (,i ,j-1)
-      (,i ,j+1)
-      (,i+1 ,j-1)
-      (,i+1 ,j)
-      (,i+1 ,j+1))))
 
 ;;; North East West South
-(define (news i j)
-  `((,(1- i) ,j)
-    (,i ,(1- j))
-    (,i ,(1+ j))
-    (,(1+ i) ,j)))
+(define (grid4 z)
+  `(,(+ z 1) ,(- z 1) ,(+ z 0+i) ,(+ z 0-i)))
+
+(define (grid8 z)
+  `(,(+ z 1) ,(+ z 1+i) ,(+ z 0+i)
+    ,(+ z 1-i) ,(- z 1)
+    ,(+ z -1-i) ,(+ z 0-i) ,(+ z 1-i)))
 
 (define (matrix m n)
   (let ((v (make-vector m)))
