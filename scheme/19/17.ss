@@ -1,0 +1,57 @@
+(load "~/code/advent/load.ss")
+(advent-year 19)
+(advent-day 17)
+
+(define intcode
+  (parse-advent comma-separated))
+
+(define (on? x)
+  (char=? x #\#))
+
+(define (gref xs i j)
+  (string-ref (list-ref xs i) j))
+
+(define (solveA)
+  (define m (cpu intcode))
+  (run-until-halt m)
+  (let* ((g (m 'peek-out))
+         (s (string-tokenize (list->string (map integer->char g))))
+         (h (length s))
+         (w (string-length (car s)))
+         (xs '()))
+    (do ((i 1 (1+ i)))
+        ((= i (1- h)))
+      (do ((j 1 (1+ j)))
+          ((= j (1- w)))
+        (when (and (on? (gref s i j))
+                   (on? (gref s (1- i) j))
+                   (on? (gref s (1+ i) j))
+                   (on? (gref s i (1+ j)))
+                   (on? (gref s i (1- j))))
+          (push! (* i j) xs))))
+    (for-each display-ln s)
+    (display-ln (apply + xs))))
+
+(define (solveB)
+  (define m (cpu intcode))
+  (define (>=> m s)
+    (apply m 'in (map char->integer (string->list s))))
+  (define plan
+    "A,B,A,B,C,B,C,A,C,C\n")
+  (define A
+    "R,12,L,10,L,10\n")
+  (define B
+    "L,6,L,12,R,12,L,4\n")
+  (define C
+    "L,12,R,12,L,6\n")
+  (define vid?
+    "n\n")
+  (store! m 0 2)
+  (>=> m plan)
+  (>=> m A)
+  (>=> m B)
+  (>=> m C)
+  (>=> m vid?)
+  (run-until-halt m)
+  (get-output m))
+
