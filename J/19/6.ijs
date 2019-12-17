@@ -1,5 +1,5 @@
 require 'tables/dsv'
-input =: ')' readdsv < '../../input/19/6.in'
+input =: ')' readdsv < '~/code/advent/input/19/6.in'
 
 orbits =: > , input
 planets =: ~. orbits

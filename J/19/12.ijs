@@ -4,8 +4,10 @@ step=: ] + (4|.!.0])"1 + [: (],.]) ([: ([:+/[:*[-/[) 4&{.)"1
 energy=: [: +/ [: (_4&{.*4&{.) [: +/|
 
 period=: 4 : 0
-n=.1[ z=.step] y=. 1 8 $ x{y
-while. -. z-:y do. n=.n+1 [ z=.step z end. n
+n=.1 [ z=.step ] y=. 1 8 $ x{y
+while. -. z -: y 
+do. n=.n+1 [ z=.step z 
+end. n
 )
 
 energy step ^: 1000 moons

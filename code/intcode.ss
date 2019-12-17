@@ -135,6 +135,9 @@
 (define (send-input M value)
   (M 'in value))
 
+(define (send-input* M values)
+  (apply M 'in values))
+
 (define (read-output M)
   (M 'read-out!))
 
@@ -149,6 +152,9 @@
     (if (memq s status) s (run (step M)))))
 
 (define (run-until-halt M)
+  (run-until '(done blocking-in) M))
+
+(define (halt M)
   (run-until '(done blocking-in) M))
 
 (define (done? M)

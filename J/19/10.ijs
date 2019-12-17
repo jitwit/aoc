@@ -1,4 +1,4 @@
-grid =: 'm' freads '../../input/19/10.in'
+grid =: 'm' freads '~/code/advent/input/19/10.in'
 NB. grid =: 'm' freads 'tiny.in'
 
 locate =: [: (j.~/"1) 4 $. [: $. =&'#'

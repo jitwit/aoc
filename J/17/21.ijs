@@ -23,8 +23,8 @@ rules2 =: exp2"1 r2
 rules3 =: exp3"1 r3
 
 match =: 0 1 {:: ] {~ [: I. (e. 0&{::)"1
-NB. match2 =: match&rules2
-NB. match3 =: match&rules3
+match2 =: match&rules2
+match3 =: match&rules3
 
 start=:0 1 0 0 0 1 1 1 1
 iter1=:start match rules3
@@ -34,20 +34,5 @@ d2=: -@[ ]\ ]
 it2=: 4 4 $ iter1
 plz=: |:"2 (2&d2"2 (|:"2 (,."3 (2 2 2 2 $ iter1))))
 
-
-ixk=: 4 : 0
-M=. y
-k=. x
-n2=. -: # M
-r0=. 2 * <. k % n2
-c0=. 2 * n2 | k
-ixa=.n2*r0+c0
-ixb=.(n2*r0)+c0+1
-ixc=.n2*((r0+1)+c0)
-ixd=.(n2*(r0+1))+c0+1
-n2;k;2 2 $ ixa,ixb,ixc,ixd
-)
-
-ixk&it2"0 (i.4) 
 NB. row2=: 2 * <. @: % NB. 2x2
 NB. col2=: 2 * |

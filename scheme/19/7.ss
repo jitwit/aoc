@@ -30,7 +30,6 @@
                          (unless (eq? result 'done)
                            (set! loop `(,@loop ,action)))
                          (run)))))))))))
-  
   (let-values (((p h a s e) (apply values phase-settings)))
     (define-network (A B C D E)
       ((A => B) (B => C) (C => D) (D => E) (E => A))

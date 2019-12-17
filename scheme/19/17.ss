@@ -34,24 +34,19 @@
 
 (define (solveB)
   (define m (cpu intcode))
-  (define (>=> m s)
-    (apply m 'in (map char->integer (string->list s))))
-  (define plan
-    "A,B,A,B,C,B,C,A,C,C\n")
-  (define A
-    "R,12,L,10,L,10\n")
-  (define B
-    "L,6,L,12,R,12,L,4\n")
-  (define C
-    "L,12,R,12,L,6\n")
-  (define vid?
-    "n\n")
+  (define (=>= m s)
+    (send-input* m `(,@(map char->integer (string->list s))
+                     ,(char->integer #\newline))))
+  (define plan "A,B,A,B,C,B,C,A,C,C")
+  (define A "R,12,L,10,L,10")
+  (define B "L,6,L,12,R,12,L,4")
+  (define C "L,12,R,12,L,6")
+  (define vid? "n")
   (store! m 0 2)
-  (>=> m plan)
-  (>=> m A)
-  (>=> m B)
-  (>=> m C)
-  (>=> m vid?)
+  (=>= m plan)
+  (=>= m A)
+  (=>= m B)
+  (=>= m C)
+  (=>= m vid?)
   (run-until-halt m)
   (get-output m))
-
