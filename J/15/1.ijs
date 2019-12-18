@@ -1,5 +1,4 @@
-
-floors =: <:+:'('&=1!:1<'../../input/15/1.in'
+floors =: <:+:'('&=freads<'~/code/advent/input/15/1.in'
 
 santas_trip =: +/\0,floors
 
