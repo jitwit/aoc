@@ -146,6 +146,19 @@
 (define intcode-13
   (parameterize ((advent-year 19) (advent-day 13))
     (parse-advent comma-separated)))
+
+(define intcode-15
+  (parameterize ((advent-year 19) (advent-day 15))
+    (parse-advent comma-separated)))
+
+(define intcode-17
+  (parameterize ((advent-year 19) (advent-day 17))
+    (parse-advent comma-separated)))
+
+(define intcode-19
+  (parameterize ((advent-year 19) (advent-day 19))
+    (parse-advent comma-separated)))
+
 #+END_SRC
 
 #+RESULTS:
@@ -224,10 +237,10 @@
 #+RESULTS:
 : #<void>
 
-  As an aside, the syntax transformer isn't right. The reason is that
-  I don't understand the different expansion phases and how capture
-  works. It does "work" when run from a mutable top level though... so
-  I leave it for now.
+  The syntax transformer isn't right. The reason is that I don't
+  understand the different expansion phases and how capture works. It
+  does "work" when run from a mutable top level though... so I leave
+  it for now.
 
   Anyhow, finding the best result and printing:
 
@@ -333,7 +346,7 @@
 #+RESULTS:
 : #t
 
-#+caption registration identifier
+#+caption: registration identifier
 [[./../../output/Day11.svg][Day11]]
 
 ** [[https://adventofcode.com/2019/day/13][Day 13: Care Package]]
@@ -419,4 +432,120 @@
 | 13A |   326 |
 | 13B | 15988 |
 
+** [[https://adventofcode.com/2019/day/17][Day 17: Set and Forget]]
 
+#+BEGIN_SRC scheme :session :exports both :results output
+(define (on? x)
+  (char=? x #\#))
+
+(define (gref xs i j)
+  (string-ref (list-ref xs i) j))
+
+(define (solveA)
+  (define m (cpu intcode-17))
+  (run-until-halt m)
+  (let* ((g (m 'peek-out))
+         (s (string-tokenize (list->string (map integer->char g))))
+         (h (length s))
+         (w (string-length (car s)))
+         (xs '()))
+    (do ((i 1 (1+ i)))
+        ((= i (1- h)))
+      (do ((j 1 (1+ j)))
+          ((= j (1- w)))
+        (when (and (on? (gref s i j))
+                   (on? (gref s (1- i) j))
+                   (on? (gref s (1+ i) j))
+                   (on? (gref s i (1+ j)))
+                   (on? (gref s i (1- j))))
+          (push! (* i j) xs))))
+    (for-each display-ln s)
+    (display-ln (apply + xs))))
+
+(define (solveB)
+  (define m (cpu intcode-17))
+  (define (=>= m s)
+    (send-input* m `(,@(map char->integer (string->list s))
+                     ,(char->integer #\newline))))
+  (define plan "A,B,A,B,C,B,C,A,C,C")
+  (define A "R,12,L,10,L,10")
+  (define B "L,6,L,12,R,12,L,4")
+  (define C "L,12,R,12,L,6")
+  (define vid? "n")
+  (store! m 0 2)
+  (=>= m plan)
+  (=>= m A)
+  (=>= m B)
+  (=>= m C)
+  (=>= m vid?)
+  (run-until-halt m)
+  (get-output m))
+
+(solveA)
+(display-ln (solveB))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+..............###########................
+..............#.........#................
+..............#.........#................
+..............#.........#................
+..............#.........#................
+..............#.........#................
+..............#############..............
+........................#.#..............
+........................#.#..............
+........................#.#..............
+............^############.#..............
+..........................#..............
+..........................#..............
+..........................#..............
+..........................#..............
+..........................#..............
+..........................#..............
+..........................#..............
+..........................#####..........
+..............................#..........
+..............................#...#######
+..............................#...#.....#
+..............................#...#.....#
+..............................#...#.....#
+..............................#...#.....#
+..............................#...#.....#
+..............................#...#.....#
+..............................#...#.....#
+....#######...................#...#.....#
+..........#...................#...#.....#
+..........#.............#####.###########
+..........#.............#...#.....#......
+..........#...........#############......
+..........#...........#.#...#............
+..........#...........#.#...#............
+..........#...........#.#...#............
+..........#...........#############......
+..........#.............#...#.....#......
+..........#.............#...#.....#......
+..........#.............#...#.....#......
+..........#############.#...#.....#......
+......................#.#...#.....#......
+............#############...#############
+............#.........#...........#.....#
+............#.........#...........#.....#
+............#.........#...........#.....#
+..........#############...........#.....#
+..........#.#.....................#.....#
+#############.....................#######
+#.........#..............................
+#.........#..............................
+#.........#..............................
+#.........#..............................
+#.........#..............................
+#.........#..............................
+#.........#..............................
+#.........#..............................
+#.........#..............................
+###########..............................
+8084
+1119775
+#+end_example

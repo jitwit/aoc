@@ -25,7 +25,7 @@
                 (let-values (((x y) (apply values bridge)))
                   (t:insert-with s:union y (s:singleton x)
                                  (t:insert-with s:union x (s:singleton y) T))))
-              t:empty-tree
+              t:empty
               (n-tuples 2
                         (parse-advent
                          (input-chars-transform-parse
