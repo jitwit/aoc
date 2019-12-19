@@ -5,7 +5,8 @@
 (define intcode
   (parse-advent comma-separated))
 
-(define tractor (cpu intcode))
+(define tractor
+  (cpu intcode))
 
 (define (check x y)
   (= 1 (beam x y)))
@@ -19,8 +20,7 @@
 (define (partA)
   (define on 0)
   (do ((x 0 (1+ x)))
-      ((= x 50)
-       on)
+      ((= x 50) on)
     (do ((y 0 (1+ y)))
         ((= y 50))
       (when (check x y)
