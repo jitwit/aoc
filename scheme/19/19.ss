@@ -26,35 +26,20 @@
       (when (check x y)
         (inc! on)))))
 
-(define (showme r)
-  (do ((y 0 (1+ y)))
-      ((= y r))
-    (do ((x 0 (1+ x)))
-        ((= x r) (newline))
-      (if (check x y)
-          (display #\O)
-          (display #\space)))))
-
 (define (random-y x)
   (let ((y (random (* x 2))))
     (if (check x y)
         y
         (random-y x))))
 
-(define (random-x y)
-  (let ((x (random y)))
-    (if (check x y)
-        x
-        (random-x y))))
-
 (define (bisect lo hi predicate) ;; first where predicate true, assuming such a point can be found
-  (let cut ((lo lo) (hi hi))
+  (let bi ((lo lo) (hi hi))
     (if (< hi lo)
         lo
         (let ((m (ash (+ lo hi) -1)))
           (if (predicate m)
-              (cut lo (1- m))
-              (cut (1+ m) hi))))))
+              (bi lo (1- m))
+              (bi (1+ m) hi))))))
 
 (define (range-y x)
   (define y0 (random-y x))
