@@ -1,6 +1,6 @@
 load '~/code/advent/code/biblio.ijs'
 
-digits=: _1 }. 0 "."0 advent_input 19 16
+digits=: }: 0 "."0 advent_input 19 16
 unbase10=: 10&#:^:_1
 
 NB. part A

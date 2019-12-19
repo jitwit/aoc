@@ -15,7 +15,6 @@ orgn =: /: phi
 
 partA =: >./ ] counts =. visible ] asteroids =. locate grid
 station =: asteroids {~ counts i. partA
-station0 =: 3j8
 partB =: (vaporize &. (-&station)) (asteroids -. station)
 
 partA;station;partB
