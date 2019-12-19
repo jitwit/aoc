@@ -2,7 +2,6 @@ require 'tables/dsv'
 
 input =: 0 2{"1 ' ' readdsv < '~/code/advent/input/17/21.in'
 NB. '~/code/advent/J/17/21.in'
-NB. 
 
 clean =: {~ ([: I. 2 > '#.'&i.)
 rules =: (=&'#' @ clean) &.> input
@@ -37,9 +36,9 @@ match3 =: 4 4 $ match&rules3
 start=:3 3 $ 0 1 0 0 0 1 1 1 1
 
 NB. focus on (n/x)*(n/x)*x*x squares
-focus=:13 : '|:"_2 (x ]\"_1 (|:"_1 (x[\y)))'
-iter2=:13 : 'unfocus ((match2 @ ,)"_2 (_2 focus y))'
-iter3=:13 : 'unfocus ((match3 @ ,)"_2 (_3 focus y))'
+focus=: [: |:"_2 [ ]\"_1 [: |:"_1 [\
+iter2=: [: unfocus [: (match2@,"_2) _2 focus ]
+iter3=: [: unfocus [: (match3@,"_2) _3 focus ]
 unfocus=: 13 : ',/ (,./"_1 y)'
 iter=: iter2`iter3@.(2&|@#)
 NB. ,./"_1 might do trick to patch back up
