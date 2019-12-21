@@ -15,5 +15,5 @@ while. -. good y do. y=. bump y end.
 )
 
 NB. rather slow, so commented out
-NB. ]passwordA=: next_password input
+]passwordA=: next_password input
 NB. ]passwordB=: next_password (bump&.letter) passwordA
