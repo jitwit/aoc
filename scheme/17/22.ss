@@ -30,7 +30,7 @@
   (do ((i 0 (1+ i)))
       ((= i n) a)
     (when (zero? (mod i 100000))
-      (format #t "~,2ff% ~a~%" (/ i n 1/100) a))
+      (format #t "~,2f% ~a~%" (/ i n 1/100) a))
     (case (hashtable-ref m loc 'clean)
       ((infected)
        (set! dir (turn-right dir))
