@@ -71,8 +71,8 @@ end.
   sequencing them is equivalent to multiplying the matrices. The whole
   transformation can be reduced to a single matrix, the result of
   multiplying the instruction matrices in reverse. Finally, we extract
-  the first row, as the matrix form was just a way to easily compose
-  them. As it turns out, the numbers are indeed rather large!
+  the relevant coefficients. As it turns out, the numbers are indeed
+  rather large!
 
 #+BEGIN_SRC j :session :exports both
 ]'a b'=: 0{ (+/ .*)/ x:|.parse"1 shuffle
