@@ -1,0 +1,122 @@
+# -*- mode: org -*-
+#+title: [[https://adventofcode.com/2019/day/22][Day 22: Slam Shuffle]]
+
+
+** Loading
+
+  We read the input instructions as a space separated dsv for
+  convenience. We also name our modulii ~Ma~ and ~Mb~, as well as ~n~
+  for how many repetitions to do (in reverse). The ~x~'s are sprinkled
+  to get exact precision for working with what turn out to be rather
+  large integers.
+
+#+begin_src j :session :exports both
+load 'tables/dsv'
+4{.]shuffle=:makenum' 'readdsv<'~/code/advent/input/19/22.in'
+Ma=:10007 [ Mb=:119315717514047x
+#+end_src
+
+#+RESULTS:
+: ┌────┬─────┬─────────┬─────┐
+: │deal│with │increment│15   │
+: ├────┼─────┼─────────┼─────┤
+: │cut │_4394│         │     │
+: ├────┼─────┼─────────┼─────┤
+: │deal│with │increment│9    │
+: ├────┼─────┼─────────┼─────┤
+: │deal│into │new      │stack│
+: └────┴─────┴─────────┴─────┘
+
+** Parsing
+
+  Parse each line into a matrix that describes how to shuffle the
+  deck. How do the shuffles correspond to transformations on ~Z/MZ~?
+
+  - increment. distribute cards evenly spaced, kind of like winding
+    around the deck: ~increment(x)=n*x (mod M)~
+  - cut. shift index by a constant: ~cut(x)=x-n (mod M)~
+  - new stack. reverse the deck: ~stack(x)=-1-x (mod M)~
+
+#+begin_src j :session :exports both
+parse=: 3 : 0
+select. 2 {:: y
+case. '' do. 2 2 $ 1 , (-1{::y) , 0 1
+case. 'increment' do. 2 2 $ (3{::y) , 0 0 1
+case. 'new' do. 2 2 $ _1 _1 0 1
+end.
+)
+(,.(<@parse"1)) (4{.shuffle)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+┌────┬─────┬─────────┬─────┬──────┐
+│deal│with │increment│15   │15 0  │
+│    │     │         │     │ 0 1  │
+├────┼─────┼─────────┼─────┼──────┤
+│cut │_4394│         │     │1 4394│
+│    │     │         │     │0    1│
+├────┼─────┼─────────┼─────┼──────┤
+│deal│with │increment│9    │9 0   │
+│    │     │         │     │0 1   │
+├────┼─────┼─────────┼─────┼──────┤
+│deal│into │new      │stack│_1 _1 │
+│    │     │         │     │ 0  1 │
+└────┴─────┴─────────┴─────┴──────┘
+#+end_example
+
+** Shuffling
+
+  The point of getting the instructions in this form is that
+  sequencing them is equivalent to multiplying the matrices. The whole
+  transformation can be reduced to a single matrix, the result of
+  multiplying the instruction matrices in reverse. Finally, we extract
+  the first row, as the matrix form was just a way to easily compose
+  them. As it turns out, the numbers are indeed rather large!
+
+#+BEGIN_SRC j :session :exports both
+]'a b'=: 0{ (+/ .*)/ x:|.parse"1 shuffle
+#+END_SRC
+
+#+RESULTS:
+: 6945364672106222601370513213752934000383492096000000000000 1670761206531900978952538229230271007672165522370202412103129
+
+** Following
+
+  For part A, we follow the 2019th card in a deck of size 10007.
+
+#+BEGIN_SRC j :session :exports both
+Ma | b+a*2019
+#+END_SRC
+
+#+RESULTS:
+: 4485
+
+  For part B, we want to know what card ends up at the 2020th
+  position, after doing the shuffle a bunch of times. The key to this
+  part is that given a shuffle ~ax+b~, two shuffles of it is
+  ~a(ax+b)+b~, and so on. ~n~ shuffles gives
+  ~a^n*x+(a^(n-1)+...+a+1)*b~, which can be computed nicely by
+  remarking the ~a~'s form a geometric sequence, and that the quotient
+  in the resulting term ~(a^n-1)/(a-1)*b~ can be calculated by
+  computing the modular inverse of ~a-1~.
+
+  I initially misread the task and assumed we followed the 2020th card
+  like the 2019th from part A. What we actually need to know is which
+  card becomes 2020th. To do the shuffle in reverse, instead of doing
+  it 101741582076661 times, we do it ~Mb-101741582076661-1~ times.
+
+  The last thing needed is ~invMod~, which I believe isn't directly
+  built in to any of J's number theoretic verbs, but can be computed
+  natrually with Euler's totient ~phi~ (or ~5&p:~ in J) and his
+  iteration on Fermat's Little Theorem, that ~a^phi(m)=a (mod m)~.
+
+#+BEGIN_SRC j :session :exports both
+invMod =: 4 : 'x y&|@^ <: 5 p: y'"0
+an=: a Mb&|@^]n=: <:Mb-101741582076661x
+Mb | (b*(an-1)*(a-1)invMod Mb) + an*2020
+#+END_SRC
+
+#+RESULTS:
+: 91967327971097
+

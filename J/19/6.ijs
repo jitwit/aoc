@@ -26,6 +26,3 @@ partA =: count_orbits orbit
 partB =: 'YOU' orbital_transfers 'SAN'
 
 partA;partB
-
-
-

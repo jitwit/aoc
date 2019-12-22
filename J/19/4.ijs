@@ -5,4 +5,4 @@ digits =: 10&#.^:_1
 goodA =: 0&e.@~:*.]-:/:~
 goodB =: (_4&e.+.2&e.)@(-_1&|.)@I.@~:*.]-:/:~
 <"0 (] ,. (goodA ,. goodB) @: digits"0) eg
-([: +/ (goodA , goodB) @: digits"0) input
+([: <"0 [: +/ (goodA , goodB) @: digits"0) input
