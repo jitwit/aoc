@@ -11,7 +11,7 @@
 
 (define (spring-it program)
   (define M (cpu intcode))
-  (apply M 'in (map char->integer (string->list (stmts->string program))))
+  (apply M 'in program)
   (run-until-halt M)
   (showme M))
 
@@ -23,7 +23,7 @@
            (when (eq? (condition-who e) 'integer->char)
              (woot (car (condition-irritants e)))))
        (lambda ()
-         (spring-it program))))))
+         (spring-it (map char->integer (string->list (stmts->string program)))))))))
 
 (define (stmt->string stmt)
   (let ((pieces (intersperse " " (map symbol->string stmt))))
