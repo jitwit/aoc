@@ -5,10 +5,9 @@
 ** Loading
 
   We read the input instructions as a space separated dsv for
-  convenience. We also name our modulii ~Ma~ and ~Mb~, as well as ~n~
-  for how many repetitions to do (in reverse). The ~x~'s are sprinkled
-  to get exact precision for working with what turn out to be rather
-  large integers.
+  convenience. We also name our modulii ~Ma~ and ~Mb~. The ~x~'s are
+  sprinkled to get exact precision for working with what turn out to
+  be rather large integers.
 
 #+begin_src j :session :exports both
 load 'tables/dsv'
@@ -108,13 +107,12 @@ Ma | b+a*2019
 
   The last thing needed is ~invMod~, which I believe isn't directly
   built in to any of J's number theoretic verbs, but can be computed
-  natrually with Euler's totient ~phi~ (or ~5&p:~ in J) and his
-  iteration on Fermat's Little Theorem, that ~a^phi(m)=a (mod m)~.
+  with Fermat's Little Theorem, that ~a^p=a (mod p)~, ie
+  ~a^(p-2)=a^-1 (mod p)~.
 
 #+BEGIN_SRC j :session :exports both
-invMod =: 4 : 'x y&|@^ <: 5 p: y'"0
 an=: a Mb&|@^]n=: <:Mb-101741582076661x
-Mb | (b*(an-1)*(a-1)invMod Mb) + an*2020
+Mb | (an*2020)+ b*(<:an)*(<:a) Mb&|@^ (Mb-2)
 #+END_SRC
 
 #+RESULTS:
