@@ -3,10 +3,46 @@
 (import (scmutils base)
         (scmutils generic))
 
-(define prog
+(define shuffle
   (map (lambda (s)
          (with-input-from-string s input))
+       ;;        (with-input-from-file "jle.in" lines-raw)
        (parse-advent lines-raw)))
+
+(define M ;; 10007
+  119315717514047)
+(define reps
+  101741582076661)
+(define (p x)
+  (simplify (fold-right permute x (reverse shuffle))))
+
+;; ax+b, a(ax+b)+b => a*a*x + a*b + b
+;; a*a lot * x + ... ~ a^n*x + (a^(n-1) + ... + a + 1)*b => geometric!
+(define (iter x n)
+  (let ((b (modulo (p 0) M))
+        (a (modulo (- (p 1) (p 0)) M)))
+    (let ((a^n (expt-mod a n M)))
+      (modulo (+ (* x a^n)
+                 (* b (- 1 a^n) (inverse-modulo (- 1 a) M)))
+              M))))
+
+(define (permute stmt ix)
+  (match stmt
+    (('cut n)
+     (- ix n)) ;; shift by n
+    (('deal 'with 'increment n)
+     (* ix n)) ;; distribute by n
+    (('deal 'into 'new 'stack)
+     (- -1 ix)) ;; reverse (-1 for 0-indexing reasons)
+    ))
+
+(define (part-a)
+  (set! M 10007)
+  (iter 2019 1))
+
+(define (part-b)
+  (set! M 119315717514047)
+  (iter 2020 (mod (- -1 reps) M)))
 
 (define (number->j n)
   (if (< n 0)
@@ -22,47 +58,6 @@
     (('deal 'into 'new 'stack)
      " |. ")))
 
-(define M
-  ;; 10007
-  119315717514047
-  )
-(define reps
-  101741582076661)
-(define (p x)
-  (simplify
-   (fold-right permute x (reverse prog))))
-
-(define (iter x n)
-  (let ((b (modulo 1670761206531900978952538229230271007672165522370202412103129 M))
-        (a (modulo 6945364672106222601370513213752934000383492096000000000000 M)))
-    (let ((a^n (expt-mod a n M)))
-      (modulo (+ (* x a^n)
-                 (* b (- a^n 1) (inverse-modulo (- a 1) M)))
-              M))))
-
-(define (olditer x)
-  (let ((b (modulo 1670761206531900978952538229230271007672165522370202412103129 M))
-        (a (modulo 6945364672106222601370513213752934000383492096000000000000 M)))
-    (modulo (+ (* a x) b) M)))
-
-;; ax+b, a(ax+b)+b => a*a*x + a*b + b
-;; a*a lot * x + 
-(define (permute stmt ix)
-  (match stmt
-    (('cut n)
-     (- ix n))
-    (('deal 'with 'increment n)
-     (* ix n)
-     ;; (modulo (* ix n) M)
-     )
-    (('deal 'into 'new 'stack)
-     (- -1 ix)
-     ;; (modulo (- -1 ix) M)
-     )))
-
-(define (part-b)
-  (iter 2020 (mod (- -1 reps) M)))
-
 (define (scheme->J prog)
   (apply string-append
          (intersperse " "
@@ -70,7 +65,7 @@
                        (cons "i.10007"
                              (map scheme->j prog))))))
 
-(define (order)
+(define (order) ;; nooope
   (define pro (reverse prog))
   ;;  (define ps '(2020))
   (do ((i 1 (1+ i))
