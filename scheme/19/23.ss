@@ -3,10 +3,12 @@
 (define prog
   (parse-advent comma-separated))
 
+(define cat6-size 50)
+
 (define (cat6-network)
-  (define V (make-vector 50))
+  (define V (make-vector cat6-size))
   (do ((i 0 (1+ i)))
-      ((= i 50) V)
+      ((= i cat6-size) V)
     (let ((nic (cpu prog)))
       (send-input nic i)
       (run-until-halt nic)
@@ -19,8 +21,9 @@
   (vector-for-each (lambda (nic) (send-input nic -1)) network))
 
 (define (collect-packets network)
+  (run-network network)
   (let scan ((i 0) (packets '()))
-    (if (= i 50)
+    (if (= i cat6-size)
         packets
         (scan (1+ i) (append (read-output (vector-ref network i)) packets)))))
 
@@ -40,7 +43,6 @@
                 (send z))
                (() (void))))))
      (let loop ()
-       (run-network network)
        (send-packets (collect-packets network))
        (loop)))))
 
@@ -69,11 +71,10 @@
                ((255 x y Q ...)
                 (set! nat (list x y))
                 (send Q))
-               ((a x y Q ...)
-                (send-input* (vector-ref network a) (list x y))
+               ((addr x y Q ...)
+                (send-input* (vector-ref network addr) (list x y))
                 (send Q))
                (() (check-idle))))))
      (let loop ()
-       (run-network network)
        (send-packets (collect-packets network))
        (loop)))))
