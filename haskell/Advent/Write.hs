@@ -6,6 +6,7 @@ module Advent.Write
   , output
   , reportA
   , reportB
+  , reportAB
   ) where
 
 import Text.PrettyPrint.ANSI.Leijen as PP hiding ((<$>))
@@ -47,3 +48,6 @@ reportA = A
 
 reportB :: AdventDoc b => b -> Solution () b
 reportB = B
+
+reportAB :: (AdventDoc a, AdventDoc b) => a -> b -> IO ()
+reportAB = (output .) . AB

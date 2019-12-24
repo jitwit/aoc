@@ -7,18 +7,18 @@ import Data.Ix
 import Control.Monad
 import Linear
 
-newtype ZA = ZA (V2 Int) deriving (Ord,Eq)
-newtype ZB = ZB (V3 Int) deriving (Ord,Eq)
-za = (ZA .) . V2
-zb = ((ZB .) .) . V3
-type Planet p = Map p Int
-
 main = do
   worldB <- space0 <$> input_string 19 24
   let worldA = za_of_zb worldB
       partA = biodiversity (firstRepeated worldA)
       partB = size $ (iterate evolve worldB) !! 200
-  output $ AB partA partB
+  reportAB partA partB
+
+newtype ZA = ZA (V2 Int) deriving (Ord,Eq)
+newtype ZB = ZB (V3 Int) deriving (Ord,Eq)
+za = (ZA .) . V2
+zb = ((ZB .) .) . V3
+type Planet p = Map p Int
 
 evolve :: PlanetCoordinate p => Planet p -> Planet p
 evolve s = fromList [ (z,1) | z <- zs, 1 == live_die (ref z s) (ref z c) ]
@@ -38,7 +38,7 @@ class Ord p => PlanetCoordinate p where
   neighbors :: p -> [p] 
 
 instance PlanetCoordinate ZA where
-  neighbors z = [ za x y | (x,y) <- zs, inRange (0,4) x, inRange (0,4) y ]
+  neighbors z = [ za x y | (x,y) <- zs, and (inRange (0,4) <$> [x,y]) ]
     where ZA (V2 x y) = z; zs = [(x-1,y),(x+1,y),(x,y-1),(x,y+1)]
 
 instance PlanetCoordinate ZB where
@@ -55,7 +55,6 @@ instance PlanetCoordinate ZB where
             | y == 1 = [ zb (l+1) 0 y | y <- [0..4] ]
             | x == 3 = [ zb (l+1) x 4 | x <- [0..4] ]
             | y == 3 = [ zb (l+1) 4 y | y <- [0..4] ]
-            | otherwise = error "oops"
 
 space0 :: String -> Planet ZB
 space0 s = fromList bugs where
