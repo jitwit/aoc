@@ -5,7 +5,7 @@ let
   inherit (nixpkgs) pkgs;
 
   f = { mkDerivation, ansi-wl-pprint, array, base, bytestring
-      , containers, filepath, fingertree, groups, hashable, JuicyPixels
+      , containers, filepath, fingertree, groups, hashable, lens, linear, JuicyPixels
       , MemoTrie, psqueues, stdenv, trifecta, unordered-containers
       , vector
       }:
@@ -17,7 +17,7 @@ let
         isExecutable = true;
         libraryHaskellDepends = [
           ansi-wl-pprint array base bytestring containers filepath fingertree
-          groups hashable JuicyPixels MemoTrie psqueues trifecta
+          groups hashable lens linear JuicyPixels MemoTrie psqueues trifecta
           unordered-containers vector
         ];
         executableHaskellDepends = [ base ];

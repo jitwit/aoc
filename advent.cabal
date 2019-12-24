@@ -19,6 +19,7 @@ common ds
     groups,
     hashable,
     lens,
+    linear,
     MemoTrie,
     psqueues,
     unordered-containers,
@@ -47,6 +48,13 @@ executable 19-1
 executable 19-14
   import: base, ds, io
   main-is:             14.hs
+  build-depends:       advent
+  hs-source-dirs:      haskell/19
+  default-language:    Haskell2010
+
+executable 19-24
+  import: base, ds, io
+  main-is:             24.hs
   build-depends:       advent
   hs-source-dirs:      haskell/19
   default-language:    Haskell2010
