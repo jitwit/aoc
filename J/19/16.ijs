@@ -21,5 +21,4 @@ load 'viewmat'
 pal=.3 3 $ 0 0 100 0 100 100 200 150 150
 pal viewmat base_mat 128
 savemat_jviewmat_'~/code/advent/output/Day16.png'
-NB. closeall_jviewmat_''
 )

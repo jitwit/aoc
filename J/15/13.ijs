@@ -11,7 +11,8 @@ NB. (0{::y);(_1}.>{: y);((<:+:'gain'-:2{::y)*(3{::y))
 pairs=: 0 1{"1 situations [ scores=: 2{"1 situations
 score=: scores {~ [: I. -:"1&pairs
 
-happiness=: ([:+/[:score"1((,.) 1&|.))+([:+/[:score"1((,.) 1&|.))@|.
+happy_1way=:[:+/[:score"1((,.) 1&|.)
+happiness=: happy_1way+happy_1way@|.
 
 ]partA=:>./ happiness"_1 (i.@! A. i.) 8
 ]partB=:>./ happiness"_1 (i.@! A. i.) 9
