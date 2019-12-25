@@ -16,9 +16,11 @@ main = do
 
 newtype ZA = ZA (V2 Int) deriving (Ord,Eq)
 newtype ZB = ZB (V3 Int) deriving (Ord,Eq)
-za = (ZA .) . V2
-zb = ((ZB .) .) . V3
 type Planet p = Map p Int
+za = (ZA .) . V2
+{-# inline za #-}
+zb = ((ZB .) .) . V3
+{-# inline zb #-}
 
 evolve :: PlanetCoordinate p => Planet p -> Planet p
 evolve s = fromList [ (z,1) | z <- zs, 1 == live_die (ref z s) (ref z c) ]
@@ -35,21 +37,23 @@ firstRepeated p = aux mempty p where
              | otherwise = aux (insert p seen) (evolve p)
 
 class Ord p => PlanetCoordinate p where
-  neighbors :: p -> [p] 
+  neighbors :: p -> [p]
 
 instance PlanetCoordinate ZA where
+  {-# inline neighbors #-}
   neighbors z = [ za x y | (x,y) <- zs, and (inRange (0,4) <$> [x,y]) ]
     where ZA (V2 x y) = z; zs = [(x-1,y),(x+1,y),(x,y-1),(x,y+1)]
 
 instance PlanetCoordinate ZB where
+  {-# inline neighbors #-}
   neighbors z = correct =<< [(x-1,y),(x+1,y),(x,y-1),(x,y+1)] where
     ZB (V3 l x y) = z
     correct = \case
-      ((-1), _) -> [zb (l-1) 2 1]
-      (_, (-1)) -> [zb (l-1) 1 2]
-      (5, _) -> [zb (l-1) 2 3]
-      (_, 5) -> [zb (l-1) 3 2]
-      (2, 2) -> lowered
+      (-1,_) -> [zb (l-1) 2 1]
+      (_,-1) -> [zb (l-1) 1 2]
+      (5,_) -> [zb (l-1) 2 3]
+      (_,5) -> [zb (l-1) 3 2]
+      (2,2) -> lowered
       (x,y) -> [zb l x y]
     lowered | x == 1 = [ zb (l+1) x 0 | x <- [0..4] ]
             | y == 1 = [ zb (l+1) 0 y | y <- [0..4] ]
@@ -66,9 +70,10 @@ za_of_zb = fromList . map transform . keys where
 
 ref :: PlanetCoordinate p => p -> Planet p -> Int
 ref z s = maybe 0 id (s !? z)
+{-# inline ref #-}
 
 live_die 1 1 = 1
 live_die 0 1 = 1
 live_die 0 2 = 1
 live_die _ _ = 0
-
+{-# inline live_die #-}
