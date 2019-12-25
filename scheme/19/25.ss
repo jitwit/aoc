@@ -67,7 +67,7 @@
 
 (define (move-randomly engine message)
   (let ((doors (cdr (parse-doors message))))
-    (if (null? doors)
+    (if (null? doors) ;; shouldn't happen but does? idk, had too much to drink
         (put-cmd engine (random-element '("north" "east" "west" "south")))
         (put-cmd engine (random-element doors)))))
 
@@ -116,7 +116,6 @@
   (run-until-halt engine)
   (cdr (parse-inventory (get-msg engine))))
 
-
 (define (drunken-engine engine items iters size)
   (display-ln (list "ITEMS:" (map list items))) (newline)
   (call/cc
@@ -125,14 +124,14 @@
                 (display-ln (list "trying:" (map list combo)))
                 (drink! engine combo iters)
                 (when (done? engine)
-                  (win (parse-win (get-msg engine)))))
+                  (win (cons (parse-win (get-msg engine)) combo))))
               (combinations items size))
      (newline) (display-ln (list "FAIL!" size)) (newline)
      (drunken-engine engine items iters (1+ size)))))
 
 (define (drunken-walk engine iters)
   (let ((items (find-available-items engine iters)))
-    (drunken-engine engine items 666 4)))
+    (drunken-engine engine items 666 0)))
 
 (define (read-cmd)
   (let loop ((xs '()) (x (read)))
