@@ -4,9 +4,8 @@
 (advent-year 19)
 
 (define program
-  (with-input-from-file "25.in" comma-separated)
-  ;;  (parse-advent comma-separated)
-  )
+  ;; (with-input-from-file "25.in" comma-separated)
+  (parse-advent comma-separated))
 
 (define engine (cpu program))
 
@@ -117,18 +116,23 @@
   (run-until-halt engine)
   (cdr (parse-inventory (get-msg engine))))
 
-(define (drunken-walk engine iters size)
-  (let ((items (find-available-items engine 666)))
-    (display-ln (list "found:" (map list items))) (newline)
-    (call/cc
-     (lambda (win)
-       (for-all (lambda (combo)
-                  (display-ln (list "trying:" (map list combo)))
-                  (drink! engine combo iters)
-                  (when (done? engine)
-                    (win (parse-win (get-msg engine)))))
-                (combinations items size))
-       (drunken-walk engine iters (1+ size))))))
+
+(define (drunken-engine engine items iters size)
+  (display-ln (list "ITEMS:" (map list items))) (newline)
+  (call/cc
+   (lambda (win)
+     (for-all (lambda (combo)
+                (display-ln (list "trying:" (map list combo)))
+                (drink! engine combo iters)
+                (when (done? engine)
+                  (win (parse-win (get-msg engine)))))
+              (combinations items size))
+     (newline) (display-ln (list "FAIL!" size)) (newline)
+     (drunken-engine engine items iters (1+ size)))))
+
+(define (drunken-walk engine iters)
+  (let ((items (find-available-items engine iters)))
+    (drunken-engine engine items 666 4)))
 
 (define (read-cmd)
   (let loop ((xs '()) (x (read)))
