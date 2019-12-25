@@ -1,67 +1,33 @@
 (load "~/code/advent/load.ss")
 
-(define program (parse-advent comma-separated))
+(advent-day 25)
+(advent-year 19)
+
+(define program
+  (with-input-from-file "25.in" comma-separated)
+  ;;  (parse-advent comma-separated)
+  )
 
 (define engine (cpu program))
 
-(define (put-msg m)
+(define (get-msg m)
   (list->string (map integer->char (read-output m))))
 
 (define (put-cmd m cmd)
   (send-input* m `(,@(map char->integer (string->list cmd)) 10)))
 
-(define (dump! m)
-  (list->string
-   (map integer->char
-        (filter (lambda (x) (<= 10 x 128))
-                (vector->list
-                 (dump-cache1 m))))))
-
 (define bad-items
-  '((infinite loop) (escape pod) (molten lava) (photons) (giant electromagnet)))
+  '("infinite loop" "escape pod" "molten lava" "photons" "giant electromagnet"))
 
-(define items
-  '((ornament) (cake) (easter egg) (hypercube) (hologram) (fuel cell) (dark matter) (klein bottle)))
-
-(define (test-items)
-  (random-element (combinations items 4)))
+;; for my input.
+(define winning-items
+  '("easter egg" "hologram" "dark matter" "klein bottle"))
 
 (define (cmd->string symbols)
   (apply string-append (intersperse " " (map symbol->string symbols))))
 
 (define (random-element lst)
   (list-ref lst (random (length lst))))
-
-(define (pickup! m items)
-  (for-all (lambda (item)
-             (put-cmd m (cmd->string (append '(take) item))))
-           items))
-
-(define (move! m)
-  (put-cmd m (cmd->string (random-element '((north) (east) (west) (south))))))
-
-(define (crawl n items)
-  (let loop ((n n))
-    (unless (or (done? engine) (zero? n))
-      (run-until-halt engine)
-      ;;       (read-output engine)
-      (pickup! engine items)
-      (run-until-halt engine)
-      (move! engine)
-      (run-until-halt engine)
-      (loop (1- n)))))
-
-(define (crawl! n k)
-  (define quit? #f)
-  (do ((its (combinations items k) (cdr its)))
-      ((or (done? engine) (null? its)))
-    (display-ln (list (length its) (car its)))
-    (reset! engine)
-    (time
-     (crawl n (car its)))))
-
-(define winning-items
-  '((easter egg) (hologram) (dark matter) (klein bottle)))
 
 (define (abbrev cmd)
   (case cmd
@@ -73,23 +39,108 @@
     ((i) 'inv)
     (else cmd)))
 
+(define (parse-objects type prompt message)
+  (let ((lines (member prompt (with-input-from-string message lines-raw))))
+    (if (not lines)
+        (list type)
+        (let loop ((lines (cdr lines)) (items '()))
+          (match lines
+            (("" _ ...)
+             (cons type (reverse items)))
+            ((item lines ...)
+             (loop lines (cons (substring item 2 (string-length item)) items))))))))
+
+(define (parse-doors message)
+  (parse-objects 'door "Doors here lead:" message))
+
+(define (parse-items message)
+  (parse-objects 'items "Items here:" message))
+
+(define (parse-inventory message)
+  (parse-objects 'inventory "Items in your inventory:" message))
+
+(define (parse-win message)
+  (with-input-from-string (car (string-tokenize message char-set:digit)) read))
+
+(define (parse-state message)
+  (list (parse-doors message)
+        (parse-items message)))
+
+(define (move-randomly engine message)
+  (let ((doors (cdr (parse-doors message))))
+    (if (null? doors)
+        (put-cmd engine (random-element '("north" "east" "west" "south")))
+        (put-cmd engine (random-element doors)))))
+
+(define (pickup-items engine message)
+  (cond ((parse-items message) =>
+         (lambda (items)
+           (for-all (lambda (item)
+                      (put-cmd engine (string-append "take " item))
+                      (run-until-halt engine))
+                    (lset-difference string=? (cdr items) bad-items))))))
+
+(define (pickup-specific-items engine target-items message)
+  (cond ((parse-items message) =>
+         (lambda (items)
+           (for-all (lambda (item)
+                      (put-cmd engine (string-append "take " item)))
+                    (lset-intersection string=? (cdr items) target-items))))))
+
+(define (explore-mode engine message)
+  (pickup-items engine message)
+  (move-randomly engine message))
+
+(define (drink-mode engine items message)
+  (pickup-specific-items engine items message)
+  (move-randomly engine message))
+
+(define (explore! engine iters)
+  (reset! engine)
+  (do ((i 0 (1+ i)))
+      ((or (done? engine) (= i iters)))
+    (unless (done? engine)
+      (run-until-halt engine)
+      (explore-mode engine (get-msg engine)))))
+
+(define (drink! engine items iters)
+  (reset! engine)
+  (do ((i 0 (1+ i)))
+      ((or (done? engine) (= i iters)))
+    (unless (done? engine)
+      (drink-mode engine items (get-msg engine))
+      (run-until-halt engine))))
+
+(define (find-available-items engine iters)
+  (explore! engine iters)
+  (put-cmd engine "inv")
+  (run-until-halt engine)
+  (cdr (parse-inventory (get-msg engine))))
+
+(define (drunken-walk engine iters size)
+  (let ((items (find-available-items engine 666)))
+    (display-ln (list "found:" (map list items))) (newline)
+    (call/cc
+     (lambda (win)
+       (for-all (lambda (combo)
+                  (display-ln (list "trying:" (map list combo)))
+                  (drink! engine combo iters)
+                  (when (done? engine)
+                    (win (parse-win (get-msg engine)))))
+                (combinations items size))
+       (drunken-walk engine iters (1+ size))))))
+
 (define (read-cmd)
   (let loop ((xs '()) (x (read)))
     (if (or (eof-object? x) (eq? x 'g))
         (cmd->string (map abbrev (reverse xs)))
         (loop (cons x xs) (read)))))
 
-(define history '())
-(define histories '())
-
-(define (save-history)
-  (push! history histories))
-
 (define (game)
   (let loop ()
     (unless (done? engine)
       (run-until-halt engine)
-      (display-ln (put-msg engine))
+      (display-ln (get-msg engine))
       (let ((cmd (read-cmd)))
         (push! cmd history)
         (unless (string=? cmd "quit")
