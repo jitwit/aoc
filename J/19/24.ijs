@@ -15,4 +15,4 @@ pal=. (, 255&-) ? 1 3 $ 256
 pal viewmat ,"2 life ^: (i.y) ? 5 5 $ 2
 )
 
-visualize 50
+visualize 66
