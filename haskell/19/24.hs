@@ -25,8 +25,12 @@ zb = ((ZB .) .) . V3
 evolve :: PlanetCoordinate p => Planet p -> Planet p
 evolve s = fromList [ (z,1) | z <- zs, 1 == live_die (ref z s) (ref z c) ]
   where c = count s; zs = toList $ keysSet s <> keysSet c
+        {-# inline c #-}
+        {-# inline zs #-}
         count = fromListWith (+) . (keys >=> spread)
+        {-# inline count #-}
         spread z = (,1) <$> neighbors z
+        {-# inline spread #-}
 
 biodiversity :: Planet ZA -> Int
 biodiversity p = sum [ 2^(5*y+x) | x <- [0..4], y <- [0..4], ref (za x y) p == 1 ]
@@ -47,6 +51,8 @@ instance PlanetCoordinate ZA where
 instance PlanetCoordinate ZB where
   {-# inline neighbors #-}
   neighbors z = correct =<< [(x-1,y),(x+1,y),(x,y-1),(x,y+1)] where
+    {-# inline correct #-}
+    {-# inline lowered #-}
     ZB (V3 l x y) = z
     correct = \case
       (-1,_) -> [zb (l-1) 2 1]

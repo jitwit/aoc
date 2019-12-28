@@ -10,4 +10,4 @@ do. n=.n+1 [ z=.step z
 end. n
 )
 
-(energy step ^: 1000 moons);*./ period&moons"0 i.3
+(energy step ^: 1000 moons); *./ period&moons"0 i.3

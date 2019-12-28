@@ -16,6 +16,3 @@ happiness=: happy_1way+happy_1way@|.
 
 ]partA=:>./ happiness"_1 (i.@! A. i.) 8
 ]partB=:>./ happiness"_1 (i.@! A. i.) 9
-
-
-

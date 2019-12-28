@@ -9,6 +9,9 @@ minimize =: [ {~ [: (i. <./) ]
 partA =: (count&'1' * count&'2') @ (minimize count&'0')
 partB =: ' J' {~ '1' = 6 25 $ ([: {. [ {~ [: I. '2'&~:)"1 @ |:
 
-(partA;partB) layers
+solve =: 3 : 0
+if. IFQT do. ((,: 255&-) (?3#256)) viewmat partB y end.
+(partA;partB) y
+)
 
-viewmat partB layers
+solve layers

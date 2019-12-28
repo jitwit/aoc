@@ -5,7 +5,8 @@
 
 (define program
   ;; (with-input-from-file "25.in" comma-separated)
-  (parse-advent comma-separated))
+  (parse-advent comma-separated)
+  )
 
 (define engine (cpu program))
 
@@ -131,7 +132,7 @@
 
 (define (drunken-walk engine iters)
   (let ((items (find-available-items engine iters)))
-    (drunken-engine engine items 666 0)))
+    (drunken-engine engine items 666 4)))
 
 (define (read-cmd)
   (let loop ((xs '()) (x (read)))
