@@ -1,0 +1,75 @@
+# -*- mode: org -*-
+#+title: [[https://adventofcode.com/2019/day/6][Day 6: Universal Orbit Map]]
+
+** Loading
+  
+   The list of planets is oddly delimited by ')', but no problem. We
+   also pepper bindings for things, in pursuit of ease:
+   - ~orbits~ is just the input dsv
+   - ~planets~ is the unique ids
+   - ~S~ is the orbits, but classified by integer index in ~planets~
+   - ~P~ is a table of parents. An entry ~p q~ of P indicates that ~p~
+     orbits around ~q~
+   - ~R~ is the set of roots, which should just be /COM/
+
+#+begin_src j :session :exports code
+require 'tables/dsv'
+input =: ')' readdsv < '~/code/advent/input/19/6.in'
+
+R=: (i.#planets)-.]P=:1{"1]S=: >planets&i.&.>input[planets=: ~.]orbits=: >,input
+#+end_src
+
+#+RESULTS:
+
+** Arbory
+
+   Basically, we're given a list of relationships that form a
+   tree. Each planet orbits around a single other planet
+   directly. Everything indirectly orbits around /COM/.
+
+   Both parts of the task can be solved using paths to /COM/. Part A
+   is really just asking for the sum over planets of their
+   depths. PartB is asking for the shortest path between two planets,
+   which can be found using their least common ancestor. The least
+   common ancestor can be found by looking at the paths to
+   /COM/. Thus, the following function is the main driver:
+
+#+begin_src j :session :exports code
+path=: (,~[:$:[:0&{[:{&S P&i.)`[@.(e.&R) M.
+#+end_src
+
+   If we reach /COM/, return just it, otherwise keep building the list
+   by following parents.
+
+#+BEGIN_SRC j :session :exports both
+]partA=: +/ <: #@path"0 i.#planets
+#+END_SRC
+
+#+RESULTS:
+: 292387
+
+   We subtract one (~<:~) because we consider the root to be depth 0.
+
+** Geonology
+
+   We can find the least common ancestor by comparing paths from the
+   root. Given two planets and their paths to root, the last node
+   where the paths agree is the lca.
+
+   The paths are compared by juxtaposing them via ~,:~ then squashing
+   them via ~=/~. The first index where they disagree gives us one
+   more than the depth of the lca. This off by one measurement turns
+   out to be convenient for finding the number of *orbital-transfers*,
+   which is slightly (2*1) different from the more intuitive shortest
+   path interpretation.
+
+#+BEGIN_SRC j :session :exports code
+orbital_transfers=: (+&(<:@#) - +:@([:{.[:I.-.@=/@,:))&path
+#+END_SRC
+
+   In short, ~orbital_transfers~ is the depth of two planets, minus
+   twice the 1 plus the depth of their lca.
+
+#+BEGIN_SRC j :session :exports both
+]partB=: 'YOU' orbital_transfers&(planets&i.) 'SAN'
+#+END_SRC
