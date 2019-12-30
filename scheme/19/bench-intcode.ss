@@ -6,11 +6,7 @@
   (format #t "~%~a ~a~%" src-file input)
   (collect-maximum-generation)
   (time
-   (begin
-     (define M (cpu src))
-     (apply M 'in input)
-     (run-until-halt M)
-     (read-output M))))
+   (apply run-intcode src input)))
 
 (define (sum-primes-ic n)
   (bench-intcode "sum-primes.intcode" n))

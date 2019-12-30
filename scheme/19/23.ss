@@ -30,7 +30,7 @@
         packets
         (scan (1+ i) (append (read-output (vector-ref network i)) packets)))))
 
-(define (runA)
+(define (partA)
   (call/cc
    (lambda (done)
      (define network (cat6-network program))
@@ -49,7 +49,7 @@
        (send-packets (collect-packets network))
        (loop)))))
 
-(define (runB)
+(define (partB)
   (call/cc
    (lambda (done)
      (define network (cat6-network program))
@@ -58,7 +58,7 @@
      (define (check-idle)
        (define idle? #t)
        (vector-for-each (lambda (nic)
-                          (unless (null? (nic 'peek-in))
+                          (unless (null? (get-input nic))
                             (set! idle? #f)))
                         network)
        (when idle?
