@@ -16,7 +16,7 @@ output_pat =: 3 : 0
 if. IFQT
 do. pal=. |: 256 | (3 3 $ 0 85 170) + ? 3 # 256
     pal viewmat base_mat y
-    savemat_jviewmat_'~/code/advent/output/Day16.png'
+    savemat_jviewmat_'~/code/advent/J/19/Day16.png'
 end.
 )
 output_pat 128

@@ -43,7 +43,7 @@ output_pat =: 3 : 0
 load 'viewmat'
 pal=.3 3 $ 0 0 100 0 100 100 200 150 150
 pal viewmat base_mat 128
-savemat_jviewmat_'~/code/advent/output/Day16.png'
+savemat_jviewmat_'~/code/advent/J/19/Day16.png'
 NB. closeall_jviewmat_''
 )
 #+END_SRC
@@ -51,4 +51,4 @@ NB. closeall_jviewmat_''
 #+RESULTS:
 
 #+caption: base pattern matrix
-[[./../../output/Day16.png][Base pattern matrix]]
+[[file:Day16.png][Base pattern matrix]]
