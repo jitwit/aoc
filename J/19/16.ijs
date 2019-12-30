@@ -1,6 +1,6 @@
 load '~/code/advent/code/biblio.ijs viewmat'
 
-digits=: }: 0 "."0 advent_input 19 16
+digits=: }: 0 "."0 freads advent_input 19 16
 unbase10=: 10&#:^:_1
 
 base_pat=: 13 : '}. (>:x) $ , y&$"0 ] 0 1 0 _1'
@@ -19,4 +19,4 @@ do. pal=. |: 256 | (3 3 $ 0 85 170) + ? 3 # 256
     savemat_jviewmat_'~/code/advent/J/19/Day16.png'
 end.
 )
-output_pat 128
+NB. output_pat 128
