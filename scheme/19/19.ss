@@ -2,11 +2,11 @@
 (advent-year 19)
 (advent-day 19)
 
-(define intcode
+(define program
   (parse-advent comma-separated))
 
 (define tractor
-  (cpu intcode))
+  (intcode program))
 
 (define (check x y)
   (= 1 (beam x y)))

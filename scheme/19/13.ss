@@ -1,6 +1,6 @@
 (load "~/code/advent/load.ss")
 
-(define intcode-13
+(define program
   (parameterize ((advent-year 19) (advent-day 13))
     (parse-advent comma-separated)))
 
@@ -41,12 +41,12 @@
               (vector->list (hashtable-cells *screen13*))))
 
 (define (partA)
-  (define m (cpu intcode-13))
+  (define m (intcode program))
   (paint m)
   (length (locate block)))
 
 (define (partB)
-  (define m (cpu intcode-13))
+  (define m (intcode program))
   (store! m 0 2)
   (let run ()
     (paint m)

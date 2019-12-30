@@ -2,7 +2,7 @@
 (advent-year 19)
 (advent-day 11)
 
-(define intcode
+(define program
   (parse-advent comma-separated))
 
 (define (turn-right dir) (* dir 0-i))
@@ -40,7 +40,7 @@
   (values colors visited))
 
 (define (partA)
-  (let-values (((_ visited) (painter (cpu intcode) black)))
+  (let-values (((_ visited) (painter (intcode program) black)))
     (vector-length (hashtable-cells visited))))
 
 (define (display-message colors)
@@ -48,5 +48,5 @@
     (run-ssvg (zs->ssvg zs) "Day11.svg")))
 
 (define (partB)
-  (let-values (((colors _) (painter (cpu intcode) white)))
+  (let-values (((colors _) (painter (intcode program) white)))
     (display-message colors)))

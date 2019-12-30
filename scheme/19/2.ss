@@ -2,7 +2,7 @@
 (advent-year 19)
 (advent-day 2)
 
-(define intcode
+(define program
   (parse-advent comma-separated))
 
 (define (solve intcode a b)

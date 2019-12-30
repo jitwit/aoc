@@ -1,17 +1,17 @@
 (load "~/code/advent/load.ss")
 
-(define intcode
+(define program
   (parameterize ((advent-day 21) (advent-year 19))
     (parse-advent comma-separated)))
 
-(define m (cpu intcode))
+(define m (intcode program))
 
 (define (showme M)
   (for-all (compose display integer->char) (read-output M)))
 
-(define (spring-it program)
-  (define M (cpu intcode))
-  (apply M 'in program)
+(define (spring-it plan)
+  (define M (intcode program))
+  (apply M 'in plan)
   (run-until-halt M)
   (showme M))
 

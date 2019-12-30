@@ -1,50 +1,50 @@
-Chez Scheme Transcript [Sat Dec 28 13:38:22 2019]
+Chez Scheme Transcript [Sat Dec 28 14:17:12 2019]
 
 sum-primes.intcode (100000)
 (time (begin (define M ...) ...))
-    no collections
-    0.271635116s elapsed cpu time
-    0.274550000s elapsed real time
-    2989712 bytes allocated
+    1 collection
+    0.230171720s elapsed cpu time, including 0.002411237s collecting
+    0.230746000s elapsed real time, including 0.002420000s collecting
+    2990544 bytes allocated, including 7886688 bytes reclaimed
 
 sum-primes.intcode (2000000)
 (time (begin (define M ...) ...))
     9 collections
-    6.786623355s elapsed cpu time, including 0.087207043s collecting
-    6.793412000s elapsed real time, including 0.087336000s collecting
-    57636128 bytes allocated, including 9690720 bytes reclaimed
+    7.374858383s elapsed cpu time, including 0.147168576s collecting
+    7.392678000s elapsed real time, including 0.147492000s collecting
+    57636000 bytes allocated, including 11800064 bytes reclaimed
 
 ackermann.intcode (3 6)
 (time (begin (define M ...) ...))
     no collections
-    0.132514529s elapsed cpu time
-    0.132940000s elapsed real time
+    0.128192723s elapsed cpu time
+    0.129291000s elapsed real time
     106960 bytes allocated
 
 divmod.intcode (1024 3)
 (time (begin (define M ...) ...))
     no collections
-    0.000532276s elapsed cpu time
-    0.000533000s elapsed real time
+    0.000495619s elapsed cpu time
+    0.000500000s elapsed real time
     24816 bytes allocated
 
 isqrt.intcode (130)
 (time (begin (define M ...) ...))
     no collections
-    0.000158670s elapsed cpu time
-    0.000157000s elapsed real time
+    0.000196943s elapsed cpu time
+    0.000205000s elapsed real time
     2224 bytes allocated
 
 factor.intcode (2147483647)
 (time (begin (define M ...) ...))
     no collections
-    1.221295531s elapsed cpu time
-    1.223945000s elapsed real time
+    1.239890497s elapsed cpu time
+    1.242048000s elapsed real time
     3065696 bytes allocated
 
 factor.intcode (19201644899)
 (time (begin (define M ...) ...))
     1 collection
-    3.137867707s elapsed cpu time, including 0.003896828s collecting
-    3.140054000s elapsed real time, including 0.003903000s collecting
-    8153264 bytes allocated, including 4265280 bytes reclaimed
+    3.293490049s elapsed cpu time, including 0.008968443s collecting
+    3.300037000s elapsed real time, including 0.009094000s collecting
+    8153264 bytes allocated, including 2917488 bytes reclaimed

@@ -1,15 +1,18 @@
 (load "~/code/advent/load.ss")
 
-(define prog
+(advent-day 23)
+(advent-year 19)
+
+(define program
   (parse-advent comma-separated))
 
 (define cat6-size 50)
 
-(define (cat6-network)
+(define (cat6-network program)
   (define V (make-vector cat6-size))
   (do ((i 0 (1+ i)))
       ((= i cat6-size) V)
-    (let ((nic (cpu prog)))
+    (let ((nic (intcode program)))
       (send-input nic i)
       (run-until-halt nic)
       (vector-set! V i nic))))
@@ -30,7 +33,7 @@
 (define (runA)
   (call/cc
    (lambda (done)
-     (define network (cat6-network))
+     (define network (cat6-network program))
      (define (send-packets Q)
        (if (null? Q)
            (feed--1 network)
@@ -49,7 +52,7 @@
 (define (runB)
   (call/cc
    (lambda (done)
-     (define network (cat6-network))
+     (define network (cat6-network program))
      (define nat-y #f)
      (define nat #f)
      (define (check-idle)

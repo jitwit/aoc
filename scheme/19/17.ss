@@ -2,7 +2,7 @@
 (advent-year 19)
 (advent-day 17)
 
-(define intcode
+(define programy
   (parse-advent comma-separated))
 
 (define (on? x)
@@ -12,7 +12,7 @@
   (string-ref (list-ref xs i) j))
 
 (define (solveA)
-  (define m (cpu intcode))
+  (define m (intcode program))
   (run-until-halt m)
   (let* ((g (m 'peek-out))
          (s (string-tokenize (list->string (map integer->char g))))
@@ -33,8 +33,8 @@
     (display-ln (apply + xs))))
 
 (define (solveB)
-  (define m (cpu intcode))
-  (define (=>= m s)
+  (define m (intcode program))
+  (define (send-command m s)
     (send-input* m `(,@(map char->integer (string->list s))
                      ,(char->integer #\newline))))
   (define plan "A,B,A,B,C,B,C,A,C,C")
@@ -43,10 +43,10 @@
   (define C "L,12,R,12,L,6")
   (define vid? "n")
   (store! m 0 2)
-  (=>= m plan)
-  (=>= m A)
-  (=>= m B)
-  (=>= m C)
-  (=>= m vid?)
+  (send-command m plan)
+  (send-command m A)
+  (send-command m B)
+  (send-command m C)
+  (send-command m vid?)
   (run-until-halt m)
   (get-output m))

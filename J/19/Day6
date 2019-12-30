@@ -3,8 +3,8 @@
 
 ** Loading
   
-   The list of planets is oddly delimited by ')', but no problem. We
-   also pepper bindings for things, in pursuit of ease:
+   The list of planets is delimited by ')', but no problem. We also
+   pepper bindings for things, while loading relationships:
    - ~orbits~ is just the input dsv
    - ~planets~ is the unique ids
    - ~S~ is the orbits, but classified by integer index in ~planets~
@@ -38,8 +38,11 @@ R=: (i.#planets)-.]P=:1{"1]S=: >planets&i.&.>input[planets=: ~.]orbits=: >,input
 path=: (,~[:$:[:0&{[:{&S P&i.)`[@.(e.&R) M.
 #+end_src
 
+#+RESULTS:
+
    If we reach /COM/, return just it, otherwise keep building the list
-   by following parents.
+   by following parents.  We subtract one (~<:~) because we consider
+   the root to be depth 0.
 
 #+BEGIN_SRC j :session :exports both
 ]partA=: +/ <: #@path"0 i.#planets
@@ -48,9 +51,7 @@ path=: (,~[:$:[:0&{[:{&S P&i.)`[@.(e.&R) M.
 #+RESULTS:
 : 292387
 
-   We subtract one (~<:~) because we consider the root to be depth 0.
-
-** Geonology
+** Geneology
 
    We can find the least common ancestor by comparing paths from the
    root. Given two planets and their paths to root, the last node
@@ -67,9 +68,14 @@ path=: (,~[:$:[:0&{[:{&S P&i.)`[@.(e.&R) M.
 orbital_transfers=: (+&(<:@#) - +:@([:{.[:I.-.@=/@,:))&path
 #+END_SRC
 
-   In short, ~orbital_transfers~ is the depth of two planets, minus
-   twice the 1 plus the depth of their lca.
+#+RESULTS:
+
+   In short, ~orbital_transfers~ is the depth of two planets minus
+   twice 1 plus the depth of their lca.
 
 #+BEGIN_SRC j :session :exports both
 ]partB=: 'YOU' orbital_transfers&(planets&i.) 'SAN'
 #+END_SRC
+
+#+RESULTS:
+: 433

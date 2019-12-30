@@ -2,7 +2,7 @@
 (advent-year 19)
 (advent-day 15)
 
-(define intcode
+(define program
   (parse-advent comma-separated))
 
 (define north 1)
@@ -21,7 +21,7 @@
     (0-i south)))
 
 (define g (make-eqv-hashtable))
-(define m (cpu intcode))
+(define m (intcode program))
 (define *tank*)
 
 (define (random-element lst)
@@ -29,7 +29,7 @@
 
 (define (random-walk)
   (define loc 0)
-  (define m (cpu intcode))
+  (define m (intcode program))
   (define j 0)
   (define frontier (make-eqv-hashtable))
   (define (next loc)
@@ -71,9 +71,9 @@
   (bfs-distance 0 *tank* map-adjacent))
 
 (define (partB)
-  (v:fold (hashtable-values (bfs-result-distances (bfs *tank* map-adjacent)))
-          0
-          max))
+  (apply max (vector->list
+              (hashtable-values
+               (bfs-result-distances (bfs *tank* map-adjacent))))))
 
 (define (solve)
   ;; seeds, 6 fast 7 slow. 13 nice, 16

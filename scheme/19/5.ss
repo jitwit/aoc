@@ -2,17 +2,11 @@
 (advent-year 19)
 (advent-day 5)
 
-(define intcode
+(define program
   (parse-advent comma-separated))
 
-(define (solve intcode seed)
-  (define M (cpu intcode))
-  (send-input M seed)
-  (run-until-halt M)
-  (M 'out))
-
 (define (partA)
-  (solve intcode 1))
+  (run-intcode program 1))
 
 (define (partB)
-  (solve intcode 5))
+  (run-intcode program 5))

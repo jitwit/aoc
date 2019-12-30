@@ -2,7 +2,7 @@
 (advent-year 19)
 (advent-day 7)
 
-(define intcode
+(define program
   (parse-advent comma-separated))
 
 (define (feed M N)
@@ -14,12 +14,12 @@
         ((done) 'done)
         (else (run))))))
 
-(define (day7 phase-settings intcode)
+(define (day7 phase-settings program)
   (define-syntax define-network
     (lambda (x)
       (syntax-case x (=> <- >?)
-        ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (?> T) intcode)
-         #'(let ((A (cpu intcode)) ...)
+        ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (?> T) program)
+         #'(let ((A (intcode program)) ...)
              (let ((loop (list (feed x y) ...)))
                (m 'in phase) ...
                (let run ()
@@ -35,7 +35,7 @@
       ((A => B) (B => C) (C => D) (D => E) (E => A))
       ((A <- p) (B <- h) (C <- a) (D <- s) (E <- e) (A <- 0))
       (>? E)
-      intcode)))
+      program)))
 
 (define (best-configuration phases)
   (define best 0)

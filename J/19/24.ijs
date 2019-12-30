@@ -1,4 +1,4 @@
-load '~/code/advent/code/biblio.ijs'
+load '~/code/advent/code/biblio.ijs viewmat'
 require 'viewmat'
 
 world=:'#'='m'freads<advent_input 19 24
@@ -10,9 +10,11 @@ bio=: 2&#.@|.@,
 bio_div=: [: bio [: life [: {: [: ([: ~. ] , life@{:)^:_ ,:
 ]partA=: bio_div world
 
-visualize=: 3 : 0
-pal=. (, 255&-) ? 1 3 $ 256
-pal viewmat ,"2 life ^: (i.y) ? 5 5 $ 2
+visualize=: 4 : 0
+if. IFQT
+do. pal=. (, 255&-) ? 1 3 $ 256
+    pal viewmat ,"2 life ^: (i.y) ? (x , x) $ 2
+end.
 )
 
-visualize 66
+18 visualize 300
