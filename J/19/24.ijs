@@ -23,22 +23,21 @@ NB. 18 visualize 300
 
 NB. =========================================================
 NB. animation
+launch=: verb define
 wd'pc LIFE closeok'
 wd'minwh 800 800; cc G isidraw;'
 wd'pshow'
 wd'psel LIFE'
+)
 
-NB. #0f0f23
-NB. #cccccc
-NB. #99ff99
-NB. #009900
-NB. #10101a
-NB. #ffff66
-NB. #1e1e46
+terminate=: verb define
+wd'psel LIFE;pclose;timer 0'
+)
+
 P =: 2 3 $ 15 15 51 187 187 187
 
 new_world=: verb define
-world=: 1 < ? (y,y) $ 100
+world=: 1 < ? (y,y) $ 200
 )
 
 NB. render current world to G
@@ -59,6 +58,8 @@ halt=: verb define
 wd'timer 0'
 )
 
-new_world 200
+new_world 800
 sys_timer_z_=: step_base_
+launch''
 wd'timer 0'
+NB. terminate''

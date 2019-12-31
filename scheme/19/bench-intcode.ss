@@ -8,6 +8,13 @@
   (time
    (apply run-intcode src input)))
 
+(define (run-program src-file . input)
+  (define src (with-input-from-file src-file comma-separated))
+  (define M (intcode src))
+  (apply M 'in input)
+  (run-until-halt M)
+  (format #t "~a ~a~%" (read-output M) (M 'max-ref)))
+
 (define (sum-primes-ic n)
   (bench-intcode "sum-primes.intcode" n))
 
