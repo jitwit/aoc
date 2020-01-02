@@ -8,29 +8,29 @@ W=: '.|#' i. 'm' freads < advent_input 18 18
 NB. W=: '.|#' i. 'm' freads < '18.in'
 
 adj=: (,"0/~i:1)&(|.!.0)
-col=: [: |: [: ,/ adj
 cell=: (3<:[:+/1=])`([:>:3<:[:+/2=])`([:+:(1<:[:+/1=])(*.)2<:[:+/2=])@.(4&{)
-evolve=: [: cell"_2&.|: [: ,/ adj
+evolve=: [: cell"_2&.|: [: ,/ (,"0/~i:1)&(|.!.0)
 
 partA=: [: (([: +/ 2 = ]) * [: +/ 1 = ]) [: , evolve^:10
 ] partA W
 NB. GRAPHICS
-pal =: 3 3 $ 187 187 187 15 15 51 255 255 102
+pal =: 3 3 $ 15 15 51 187 187 187 255 255 102
 
 launch=: verb define
 wd'pc LIFE closeok'
-wd'minwh 500 500; cc G isidraw;'
+wd'minwh 800 800; cc G isidraw;'
 wd'pshow'
 wd'psel LIFE'
+wd'timer 60'
 )
 
 render=: verb define
-pal viewmatcc W;'G'
+pal viewmatcc world;'G'
 glpaint''
 )
 
 update=: verb define
-W=: evolve W
+world=: evolve world
 )
 
 step=: render@update
@@ -39,11 +39,15 @@ halt=: verb define
 wd'timer 0'
 )
 
-NB. W=: ? 250 250 $ 3
+reset=: verb define
+world=: 60 80 I. ? 400 400 $ 100
+)
+
+close=: verb define
+wd'psel LIFE;pclose;timer 0'
+)
 
 sys_timer_z_=: step_base_
+close''
 launch''
-
-wd'timer 0'
-
-
+reset''

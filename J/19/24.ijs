@@ -34,7 +34,7 @@ terminate=: verb define
 wd'psel LIFE;pclose;timer 0'
 )
 
-P =: 2 3 $ 15 15 51 187 187 187
+P =: 2 3 $ 15 15 51 255 255 102
 
 new_world=: verb define
 world=: 1 < ? (y,y) $ 200
@@ -53,13 +53,11 @@ world=: life world
 NB. updaet current world according to rule
 step=: render@update
 
-NB. idk
-halt=: verb define
-wd'timer 0'
+close=: verb define
+wd'psel LIFE;pclose;timer 0'
 )
-
-new_world 800
+new_world 400
 sys_timer_z_=: step_base_
 launch''
-wd'timer 0'
+wd'timer 80'
 NB. terminate''
