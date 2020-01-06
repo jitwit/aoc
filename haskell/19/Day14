@@ -46,7 +46,7 @@ parse_rules = sepBy parse_rule newline <* eof where
   wrap n s = (fromIntegral n, s)
 #+END_SRC
 
-** Reacting
+** Organizing
 
   The core idea is that we look at the situation as a graph. Vertices
   are chemicals and edges are dependencies in the reactions. If
@@ -81,7 +81,7 @@ chemical_order = fromRight (error "oops") . topSort . graph_of_recipes
 
   The graph is acyclic. ~"oops"~ is indicated if I've misunderstood
   something. When ~topSort~ fails, it provides an explicit cycle in
-  the ~Left~ branch. This "shouldn't happen" here ;)
+  the ~Left~ branch. This "shouldn't happen" here
 
   To carry out the plan we also need an initial factory state: the
   rule list augmented with a need of 0 for all chemicals.
@@ -92,8 +92,10 @@ nano_factory :: Ord a => [Reaction a] -> NanoFactory a
 nano_factory reactions = fromList [ (c,(0,n,is)) | (is, (n,c)) <- reactions ]
 #+END_SRC
 
-  And now for the final penultimate act. To produce ~n~ fuel, given
-  the sorted chemicals and the reactions a nanofactory uses. In
+** Reacting
+
+  And now for the penultimate act, to produce ~n~ fuel given the
+  sorted chemicals and the reactions a nanofactory uses. In
   pseudocode:
 
 #+BEGIN_SRC haskell
@@ -130,7 +132,7 @@ produce_fuel chemicals factory n = final ^?! ix "ORE" . _1 where
       (need,make,dependencies) = factory ^?! ix chemical
 #+END_SRC
 
-** Finally
+** 1000000000000 FUEL
 
   Getting one FUEL is easy enough. If multiple fuel is needed the
   leftovers won't scale proportionally with the fuel needed, so part
