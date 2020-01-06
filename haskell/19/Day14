@@ -1,0 +1,171 @@
+
+* [[https://adventofcode.com/2019/day/14][Day 14: Space Stoichiometry]]
+
+  The goal here is to take a list of chemical reactions and discover
+  how much ~ORE~ is needed to get one ~FUEL~. The second part asks how
+  much is needed to get a quadrillion ~FUEL~. 
+
+** Types
+
+  To work with more evocative feeling types, I named a bunch of type
+  synonyms. Maybe it would be better to go with custom data types to
+  get the extra type safety that comes with stronger types, or to get
+  more strictness, but oh well. Bref:
+  - ~Chemical~ is a humble ~String~.
+  - ~Quantity a~ is an ~a~ and an ~Int~. These make up
+    ingredient lists for reactions.
+  - ~Reaction a~ A list of necessary chemical quantities needed to
+    make a given quantity of another chemical.
+  - ~Nanofactory a~ is a table of reactions and additionally the
+    current amount of the given chemical. An entry ~factory[x] =
+    (a,b,c)~ means for chemical ~x~, amount ~a~ of it is needed,
+    amount ~b~ of it is produced by reaction ~c~.
+
+#+BEGIN_SRC haskell
+type Chemical = String
+type Quantity a = (Int,a)
+type Reaction a = ([Quantity a], Quantity a)
+type NanoFactory a = Map a (Int,Int,[Quantity a])
+#+END_SRC
+
+** Parsing
+
+  Despite a simple enough input format, in usual haskell fashion I
+  opted for one of the standard parser combinator libraries. Out of
+  habit I chose Kmett's [[http://hackage.haskell.org/package/trifecta][trifecta]]. Reactions are comma separated lists
+  of chemicals, ending with ~"=>"~ and the resulting chemical. The
+  expression ~input_parse parse_rules 19 14~ in ~main~ simply runs the
+  parser on the contents of the file ~input/19/14.in~.
+
+#+BEGIN_SRC haskell
+parse_rules :: TokenParsing m => m [Recipe Chemical]
+parse_rules = sepBy parse_rule newline <* eof where
+  parse_rule = (,) <$> commaSep parse_ingredient <* string " => " <*> parse_ingredient
+  parse_ingredient = wrap <$> integer <*> many letter where
+  wrap n s = (fromIntegral n, s)
+#+END_SRC
+
+** Reacting
+
+  The core idea is that we look at the situation as a graph. Vertices
+  are chemicals and edges are dependencies in the reactions. If
+  chemical ~A~ is needed to produce chemical ~B~, there is an edge
+  ~(A,B)~ in the graph. This must be acyclic, so we can topologically
+  sort the vertices to study how much is needed to produce ~FUEL~. The
+  nanofactory state will indicate how much of a given chemical is
+  needed along with the recipe to produce it. We look at the reverse
+  of the topological order, starting with ~FUEL~. Once we know how
+  much of a given chemical we need, we determine how much of the
+  required chemicals are needed. The key characteristic of a
+  topological sort is that it will put the chemicals in a list such
+  that the end of it is not needed to make any of the earlier
+  chemicals -- put another way, there's no edge ~(B,A)~ if ~B~ appears
+  after ~A~ in the list.
+
+  First thing's first: we would like to use graph functionality from
+  [[https://github.com/snowleopard/alga/][alga]]. Why alga? It's a wonderful graph library (as well, the current
+  ~topSort~ implementation was written by yours truly). To run a
+  ~topSort~, we need an ~AdjacencyMap Chemical~ and for that we need
+  an edge list. The following does that:
+
+#+BEGIN_SRC haskell
+-- note: f =<< is just a pretentious way of saying concatMap f.
+graph_of_recipes :: Ord a => [Reaction a] -> AdjacencyMap a
+graph_of_recipes = edges . (edges_of_recipe =<<) where
+  edges_of_recipe (ingredients, (_,o)) = [ (i,o) | (_,i) <- ingredients ]
+
+chemical_order :: Ord a => [Reaction a] -> [a]
+chemical_order = fromRight (error "oops") . topSort . graph_of_recipes
+#+END_SRC
+
+  The graph is acyclic. ~"oops"~ is indicated if I've misunderstood
+  something. When ~topSort~ fails, it provides an explicit cycle in
+  the ~Left~ branch. This "shouldn't happen" here ;)
+
+  To carry out the plan we also need an initial factory state: the
+  rule list augmented with a need of 0 for all chemicals.
+
+#+BEGIN_SRC haskell
+-- Data.Map's fromList
+nano_factory :: Ord a => [Reaction a] -> NanoFactory a
+nano_factory reactions = fromList [ (c,(0,n,is)) | (is, (n,c)) <- reactions ]
+#+END_SRC
+
+  And now for the final penultimate act. To produce ~n~ fuel, given
+  the sorted chemicals and the reactions a nanofactory uses. In
+  pseudocode:
+
+#+BEGIN_SRC haskell
+-- for each chemical in reversed top sort:
+--   let (need,make,dependencies) be how much is needed how much is made and the reaction
+--   for each chemical c in dependencies:
+--     adjust the amount of c needed by n * floor ((need+make-1)/make)
+-- lookup how much ore is needed
+#+END_SRC
+
+  Correlating the pseudocode back to the haskell:
+  - ~start~ state is ~factory~ updated to need ~n FUEL~.
+  - ~foldr~ over the sorted chemicals to work over the reverse top
+    sort. We sorted with ~(A,B)~ if ~B~ needs ~A~. ~foldr~ accumulates
+    from the back of the list. So, the argument ~chemical~ in
+    ~produce~ is never considered before the amount of it needed is
+    known.
+  - ~update (n,c)~ updates all the dependencies in a secondary
+    ~foldr~. Here, the order of the fold does not matter. What does
+    matter is ~times = (need+make-1)`div`make~ to calculate how many
+    reactions are needed to get enough ~chemical~. The ~(n,c)~
+    argument will be a dependency chemical ~c~ and how much of it is
+    needed to make ~chemical~. ~factory[c]~ is then updated
+    accordingly during the secondary fold.
+
+#+BEGIN_SRC haskell
+produce_fuel :: [Chemical] -> NanoFactory Chemical -> Int -> Int
+produce_fuel chemicals factory n = final ^?! ix "ORE" . _1 where
+  start = factory & ix "FUEL" . _1 .~ n
+  final = foldr produce start chemicals where
+    produce chemical factory = foldr update factory dependencies where
+      update (n,c) = ix c . _1 +~ n * times
+      times = (need+make-1)`div`make
+      (need,make,dependencies) = factory ^?! ix chemical
+#+END_SRC
+
+** Finally
+
+  Getting one FUEL is easy enough. If multiple fuel is needed the
+  leftovers won't scale proportionally with the fuel needed, so part
+  B's answer won't be a quadrillion times part A's. Instead, the trick
+  is to use binary search to efficiently not worry about how
+  differening portions of leftovers affect matters. ~ore~ calculates
+  how much ore is needed to produce a given amount of fuel.
+
+#+BEGIN_SRC haskell
+solve :: [Reaction Chemical] -> Solution Int Int
+solve rules = AB (ore 1) (bin 1 (10^12)) where
+  chemicals = chemical_order rules
+  -- small wrinkle: no rule for ORE, but we need ORE, so a dummy (0,0,[]) entry is added
+  factory = nano_factory rules & at "ORE" ?~ (0,0,[])
+  ore = produce_fuel chemicals factory
+  bin lo hi | hi < lo = hi
+            | ore m <= 10^12 = bin (m+1) hi
+            | otherwise = bin lo (m-1)
+            where m = (lo + hi)`div`2
+#+END_SRC
+
+** Coughing
+
+  And for completeness, the trademark haskell language pragmas and
+  import list:
+
+#+BEGIN_SRC haskell
+{-# language GADTs, OverloadedStrings, TupleSections #-}
+
+import Algebra.Graph.AdjacencyMap.Algorithm
+import Algebra.Graph.AdjacencyMap
+import Control.Lens
+import Data.Map (Map,fromList)
+import Text.Trifecta
+import Data.Either
+import Advent
+
+main = output . solve =<< input_parse parse_rules 19 14
+#+END_SRC

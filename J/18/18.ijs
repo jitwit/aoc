@@ -21,7 +21,7 @@ wd'pc LIFE closeok'
 wd'minwh 800 800; cc G isidraw;'
 wd'pshow'
 wd'psel LIFE'
-wd'timer 60'
+wd'timer 20'
 )
 
 render=: verb define
@@ -40,7 +40,7 @@ wd'timer 0'
 )
 
 reset=: verb define
-world=: 60 80 I. ? 400 400 $ 100
+world=: 60 80 I. ? 100 100 $ 100
 )
 
 close=: verb define
@@ -48,6 +48,6 @@ wd'psel LIFE;pclose;timer 0'
 )
 
 sys_timer_z_=: step_base_
-close''
+close ^: (wdisparent'LIFE') ''
 launch''
 reset''
