@@ -1,0 +1,86 @@
+#+title: [[https://adventofcode.com/2015/day/12][Day 12: JSAbacusFramework.io]]
+
+This puzzle is less about interesting solutions and more about knowing
+enough language details to get the job done. We have to add the
+numbers in a JSON object once simply and another time ignoring numbers
+in objects which have an item with property ~red~.
+
+* Key ingredients
+
+** JSON
+
+The ~JAL~ collection of libraries has functionality for encoding and
+decoding ~JSON~. Here we get the contents of the puzzle in a JSON
+object in ~J~. It is a boxed array or tree.
+
+#+BEGIN_SRC j :session :exports code
+load '~/code/advent/code/biblio.ijs convert/json'
+input=: dec_json freads < advent_input 15 12
+#+END_SRC
+
+** Type
+
+We also need to know the types of what we're dealing with to branch
+and tally appropriately. The verb ~3!:0~ tells us what type of object
+we have. J character arrays get 2, which is what we'll use. I
+originally checked to see if the value was a number, but this failed
+because ~1~ is actually parsed as a boolean and wasn't being included
+in the tally.
+
+#+BEGIN_SRC j :session :exports both
+val=: ]`0:@.(2=3!:0)
+example_data=:20;1;0;'cat'
+('val';'type';'tally') , > (; 3!:0 ; val)&.> example_data
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+┌───┬────┬─────┐
+│val│type│tally│
+├───┼────┼─────┤
+│20 │4   │20   │
+├───┼────┼─────┤
+│1  │1   │1    │
+├───┼────┼─────┤
+│0  │1   │0    │
+├───┼────┼─────┤
+│cat│2   │0    │
+└───┴────┴─────┘
+#+end_example
+
+** Array or Object?
+
+This is probably hackish, but I figured it's possible to distinguish
+arrays from objects based on the rank. Rank 2 means keys and values,
+an object. Rank 1 means an array and rank 0 means a value to count as
+above. 
+
+If we have an array we recursively tally, unbox, then sum. If we have
+an object, we check to see if ~red~ is a property, and if not,
+recursively tally on the values. This assumes all keys are strings,
+which was the case on my input.
+
+#+BEGIN_SRC j :session :exports code
+red=: (<'red') e. 1&{
+
+tally=: val`([:+/[:>$:&.>)`(([:$:1&{)`0:@.red)@.(#@$)
+#+END_SRC
+
+#+RESULTS:
+
+
+* Solution
+
+At last:
+
+#+BEGIN_SRC j :session :exports both
+(tally ;~ [: +/ tally S:0) input
+#+END_SRC
+
+#+RESULTS:
+: ┌──────┬─────┐
+: │111754│65402│
+: └──────┴─────┘
+
+So yeah, a helpful problem for exercising language features
+(libraries, types, agenda, etc.), but otherwise uninteresting.
