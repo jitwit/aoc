@@ -1,12 +1,12 @@
 load '~/code/advent/code/biblio.ijs'
 input=: ". 'm' freads < advent_input 18 1
 
-]partA=: +/ input
-
-expand=: dyad define
-freqs=. +/\ 0,,~^: x y
+NB. inc number of doublings until enough frequencies are there to find repetition
+expand=: monad define
+freqs=. +/\ 0,,~^: y input
 reps=. I. -. ~: freqs
-if. 0<#reps do. ({.reps){freqs else. (1+x) expand y end.
+if. 0<#reps do. ({.reps){freqs else. expand >:y end.
 )
 
-]partB=: 1 expand input
+]partA=: +/ input
+]partB=: expand 1

@@ -14,7 +14,7 @@ partB=: >./ +/ (= >./)"1 history
 run=: verb define
 echo partA;partB
 if. IFQT
-do. pal=. 2 3 $ 255 255 255 0 120 180
+do. pal=. 2 3 $ 205 0 175 205 255 175
     require 'viewmat'
     pal viewmat history
 end.

@@ -11,7 +11,7 @@ good=: rule1 *. rule2 *. rule3
 next_password=: 3 : 0
 y=. letter y
 while. -. good y do. y=. bump y end.
-([ clipwrite) letter ^:_1 y
+letter ^:_1 y
 )
 
 NB. rather slow, so commented out
