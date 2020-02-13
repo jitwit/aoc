@@ -7,7 +7,6 @@
   (define size (vector-length memory-1))
   (define in '())
   (define out '())
-  (define max-ref 0)
 
   (define (ip! dx)
     (set! ip (fx+ ip dx)))
@@ -21,7 +20,6 @@
         (hashtable-set! memory-2 addr val)))
   
   (define (ref addr)
-    (set! max-ref (max max-ref addr))
     (if (fx< addr size)
         (vector-ref memory-1 addr)
         (hashtable-ref memory-2 addr 0)))
@@ -77,7 +75,6 @@
       ((store!) (apply store! args))
       ((reset!) (reset!))
       ((program) program)
-      ((max-ref) max-ref)
       (else (error 'cpu "unknown message" me)))))
 
 (define (read-memory M addr)

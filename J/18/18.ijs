@@ -18,10 +18,10 @@ pal =: 3 3 $ 15 15 51 187 187 187 255 255 102
 
 launch=: verb define
 wd'pc LIFE closeok'
-wd'minwh 800 800; cc G isidraw;'
+wd'minwh 400 400; cc G isidraw;'
 wd'pshow'
 wd'psel LIFE'
-wd'timer 20'
+wd'timer 1'
 )
 
 render=: verb define
@@ -40,7 +40,7 @@ wd'timer 0'
 )
 
 reset=: verb define
-world=: 60 80 I. ? 100 100 $ 100
+world=: 60 80 I. ? 1000 1000 $ 100
 )
 
 close=: verb define

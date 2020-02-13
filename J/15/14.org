@@ -1,0 +1,104 @@
+
+[[https://adventofcode.com/2015/day/14][Day 14: Reindeer Olympics]]
+
+A simple problem and an exercise in J primitives.
+
+Reindeer each have a speed at which they fly as well as durations they
+must move and rest.
+
+#+BEGIN_SRC j :session :exports both
+load '~/code/advent/code/biblio.ijs tables/dsv'
+input=: ' 'readdsv < advent_input 15 14
+3{.input
+#+END_SRC
+
+#+RESULTS:
+: ┌───────┬───┬───┬──┬────┬───┬─┬────────┬───┬────┬────┬────┬───┬───┬────────┐
+: │Dancer │can│fly│27│km/s│for│5│seconds,│but│then│must│rest│for│132│seconds.│
+: ├───────┼───┼───┼──┼────┼───┼─┼────────┼───┼────┼────┼────┼───┼───┼────────┤
+: │Cupid  │can│fly│22│km/s│for│2│seconds,│but│then│must│rest│for│41 │seconds.│
+: ├───────┼───┼───┼──┼────┼───┼─┼────────┼───┼────┼────┼────┼───┼───┼────────┤
+: │Rudolph│can│fly│11│km/s│for│5│seconds,│but│then│must│rest│for│48 │seconds.│
+: └───────┴───┴───┴──┴────┴───┴─┴────────┴───┴────┴────┴────┴───┴───┴────────┘
+
+From the chart, the relevant indices are 
+
+#+BEGIN_SRC j :session :exports both
+ixs=: 3 6 13
+speeds=: > ". L: 0 ixs { &. |: input
+trace=: ([$((1{])#0{]),0#~2{])"_ 1
+
+5!:2 <'trace'
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+┌───────────────────────────────────────────────┬─┬───┐
+│┌─┬─┬─────────────────────────────────────────┐│"│_ 1│
+││[│$│┌───────────────────┬─┬─────────────────┐││ │   │
+││ │ ││┌───────┬─┬───────┐│,│┌─┬─────┬───────┐│││ │   │
+││ │ │││┌─┬─┬─┐│#│┌─┬─┬─┐││ ││0│┌─┬─┐│┌─┬─┬─┐││││ │   │
+││ │ ││││1│{│]││ ││0│{│]│││ ││ ││#│~│││2│{│]│││││ │   │
+││ │ │││└─┴─┴─┘│ │└─┴─┴─┘││ ││ │└─┴─┘│└─┴─┴─┘││││ │   │
+││ │ ││└───────┴─┴───────┘│ │└─┴─────┴───────┘│││ │   │
+││ │ │└───────────────────┴─┴─────────────────┘││ │   │
+│└─┴─┴─────────────────────────────────────────┘│ │   │
+└───────────────────────────────────────────────┴─┴───┘
+#+end_example
+
+What trace accomplishes is filling out a table for each reindeer of
+their speed, given that and the amount of time they alternate flying
+and resting. It is read as the left argument determins how big a slice
+of time to tabulate of each reindeer's movement followed by its
+rest. Each column (reindeer) is filled independently.
+
+#+BEGIN_SRC j :session :exports both
+history=: +/\ |: 2503 trace speeds
+10{.history
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+ 27 22 11  28  4 14  3  18 18
+ 54 44 22  56  8 28  6  36 36
+ 81 44 33  84 12 42  9  54 54
+108 44 44 112 16 42 12  72 72
+135 44 55 140 20 42 15  90 90
+135 44 55 140 24 42 18 108 90
+135 44 55 140 28 42 21 108 90
+135 44 55 140 32 42 24 108 90
+135 44 55 140 36 42 27 108 90
+135 44 55 140 40 42 30 108 90
+#+end_example
+
+The first three columns illustrate the previously shown reindeer's
+starts.
+
+And with that, the answers to the problem's quetions are readily
+answered. The first is, how far is the reindeer in front after 2053
+seconds?
+
+#+BEGIN_SRC j :session :exports both
+]partA=: >./ ^: 2 history
+#+END_SRC
+
+#+RESULTS:
+: 2640
+
+The maximum distance at 2053 seconds is the maximum distance overall,
+since all reindeer move forward. The answer is a double fold
+calculating the maximum.
+
+The second question requires a little more thought, how long has the
+reinder that's been in front the longest been in front?
+
+#+BEGIN_SRC j :session :exports both
+]partB=: >./ +/ (= >./)"1 history
+#+END_SRC
+
+#+RESULTS:
+: 1102
+
+This answer is found by looking at each slice of time or row
+calculating which distances of that row are out in front ~(= >./)"1~,
+summing per reindeer ~+/~ and taking that maximum.

@@ -1,50 +1,50 @@
-Chez Scheme Transcript [Mon Dec 30 14:03:35 2019]
+Chez Scheme Transcript [Wed Feb 12 15:55:30 2020]
 
 sum-primes.intcode (100000)
 (time (apply run-intcode ...))
-    1 collection
-    0.227517311s elapsed cpu time, including 0.001830321s collecting
-    0.228217000s elapsed real time, including 0.001835000s collecting
-    2990496 bytes allocated, including 5789472 bytes reclaimed
+    no collections
+    0.221132232s elapsed cpu time
+    0.222032000s elapsed real time
+    2989728 bytes allocated
 
 sum-primes.intcode (2000000)
 (time (apply run-intcode ...))
     8 collections
-    6.847583097s elapsed cpu time, including 0.094577803s collecting
-    6.864303000s elapsed real time, including 0.094852000s collecting
-    57635312 bytes allocated, including 9561648 bytes reclaimed
+    6.632118843s elapsed cpu time, including 0.091731205s collecting
+    6.639892000s elapsed real time, including 0.091798000s collecting
+    57635312 bytes allocated, including 13787840 bytes reclaimed
 
 ackermann.intcode (3 6)
 (time (apply run-intcode ...))
     no collections
-    0.124485678s elapsed cpu time
-    0.124947000s elapsed real time
+    0.128472053s elapsed cpu time
+    0.128968000s elapsed real time
     106992 bytes allocated
 
 divmod.intcode (1024 3)
 (time (apply run-intcode ...))
     no collections
-    0.000214999s elapsed cpu time
-    0.000214000s elapsed real time
+    0.000165102s elapsed cpu time
+    0.000164000s elapsed real time
     5888 bytes allocated
 
 isqrt.intcode (130)
 (time (apply run-intcode ...))
     no collections
-    0.000189038s elapsed cpu time
-    0.000189000s elapsed real time
+    0.000166004s elapsed cpu time
+    0.000163000s elapsed real time
     2240 bytes allocated
 
 factor.intcode (2147483647)
 (time (apply run-intcode ...))
     no collections
-    0.525871326s elapsed cpu time
-    0.526979000s elapsed real time
+    0.535804953s elapsed cpu time
+    0.536865000s elapsed real time
     3049856 bytes allocated
 
 factor.intcode (19201644899)
 (time (apply run-intcode ...))
     1 collection
-    1.355622351s elapsed cpu time, including 0.004854502s collecting
-    1.358965000s elapsed real time, including 0.004859000s collecting
-    8137488 bytes allocated, including 56340848 bytes reclaimed
+    1.406100057s elapsed cpu time, including 0.005562914s collecting
+    1.407370000s elapsed real time, including 0.005609000s collecting
+    8137488 bytes allocated, including 55513840 bytes reclaimed
