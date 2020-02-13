@@ -18,12 +18,13 @@ pc life;
 bin h;
   cc win isidraw; set win wh 200 200;
   bin v;
-    cc reset button; cn "reset!";
+    cc dt edit; set dt text "30";
     cc part combolist; set part items A B;
-    cc dt edit; set dt text "10";
+    cc random button; cn "random!";
+    cc reset button; cn "reset!";
   bin z;
 bin z;
-pshow; timer 10;
+pshow; timer 30;
 )
 
 life_close=: monad define
@@ -32,6 +33,10 @@ wd 'psel life;pclose;timer 0'
 
 life_reset_button=: monad define
 world =: grid
+)
+
+life_random_button=: monad define
+world =: ? ($grid)$2
 )
 
 life_part_select=: monad define
