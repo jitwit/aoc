@@ -1,9 +1,7 @@
 load'~/code/advent/code/biblio.ijs tables/dsv'
 ]input=: > ". &.> _2&{. &.> ',' readdsv advent_input 15 15
-
-NB. reshape based on shape after unraveling
-flatten=: (*/@:}: , {:)@$ $ ,
-triples=: [: flatten ] ,"0 1/ [: flatten (,"0/~) f.
+flatten=: (*/@:}:,{:)@$$,
+triples=: [:flatten],"0 1/[:flatten(,"0/~)
 recipes=: |: (,~ <:@101-+/)"1 (] #~ (101 > +/"1)) (triples i.101)
 
 opt=: [: >./ [: */ 0 >. [: +/ (}:"1 input) *"0 1 ]

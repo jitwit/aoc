@@ -238,3 +238,5 @@
 (define (digit-at i n)
   (fxmod (fx/ n (expt 10 (1+ i))) 10))
 
+(define (swap x.y)
+  (cons (cdr x.y) (car x.y)))

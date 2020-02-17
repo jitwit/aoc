@@ -1,8 +1,8 @@
 load '~/code/advent/code/biblio.ijs'
 
-input=:".'m'freads<advent_input 15 17
+in=:".'m'freads<advent_input 15 17
 
-eggnog=: #: I. 150 = (#:i.2^#input) +/ .* input
+nog=: #:I.150=(#:i.2^#in) +/ .* in
 
-]partA=: # eggnog
-]partB=: +/ (= <./) +/"1 eggnog
+]partA=: # nog
+]partB=: +/ (= <./) +/"1 nog
