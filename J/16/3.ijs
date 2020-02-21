@@ -1,5 +1,4 @@
-load'~/code/advent/code/biblio.ijs'
-input=: ". 'm' freads < advent_input 16 3
+input=: ". 'm' freads < '~/code/advent/input/16/3.in'
 
 tri=: <`+/ @ \:~
 

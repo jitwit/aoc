@@ -18,6 +18,8 @@ load '~/code/advent/code/biblio.ijs convert/json'
 input=: dec_json freads < advent_input 15 12
 #+END_SRC
 
+#+RESULTS:
+
 ** Type
 
 We also need to know the types of what we're dealing with to branch

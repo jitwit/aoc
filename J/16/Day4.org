@@ -1,0 +1,83 @@
+
+* Day 4
+
+** Setup
+
+Getting input and functions for analyzing entries.
+
+#+BEGIN_SRC j :session :exports both
+input=: 'b' freads < '~/code/advent/input/16/4.in'
+
+valid=: 'not-a-real-room-404[oarel]'
+fake=: 'totally-real-room-200[decoy]'
+
+undash=: [:<;._1'-',]
+chars=: ' ' -.~ [: , [: > [: }: undash
+ordered=: (] (5 {. ] \: [: +/ [ =/ ]) [: /:~ ~.)@:chars
+sid_key=: [:(([:".0&{::) ; [:}:1&{::) [:<;._1'[',[:>[:{: undash
+
+analyze=: ordered 0:`(0 {:: ])@.([ -: 1 {:: ]) sid_key
+
+present =: [: |. [: ,. (analyze ; sid_key ; ordered ; chars ; undash ; ])
+
+present &.> valid;fake
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+┌──────────────────────────────┬────────────────────────────────┐
+│┌────────────────────────────┐│┌──────────────────────────────┐│
+││not-a-real-room-404[oarel]  │││totally-real-room-200[decoy]  ││
+│├────────────────────────────┤│├──────────────────────────────┤│
+││┌───┬─┬────┬────┬──────────┐│││┌───────┬────┬────┬──────────┐││
+│││not│a│real│room│404[oarel]│││││totally│real│room│200[decoy]│││
+││└───┴─┴────┴────┴──────────┘│││└───────┴────┴────┴──────────┘││
+│├────────────────────────────┤│├──────────────────────────────┤│
+││notarealroom                │││totallyrealroom               ││
+│├────────────────────────────┤│├──────────────────────────────┤│
+││oarel                       │││loart                         ││
+│├────────────────────────────┤│├──────────────────────────────┤│
+││┌───┬─────┐                 │││┌───┬─────┐                   ││
+│││404│oarel│                 ││││200│decoy│                   ││
+││└───┴─────┘                 │││└───┴─────┘                   ││
+│├────────────────────────────┤│├──────────────────────────────┤│
+││404                         │││0                             ││
+│└────────────────────────────┘│└──────────────────────────────┘│
+└──────────────────────────────┴────────────────────────────────┘
+#+end_example
+
+** Part A
+
+#+BEGIN_SRC j :session :exports both
+room_ids=: > analyze &.> input
+]partA=: +/ room_ids
+#+END_SRC
+
+#+RESULTS:
+: 173787
+
+** Part B
+
+Decrypt messages by shift ciphering chars by amount in room id. Also
+need to find room with messages like ~northpole~.
+
+#+BEGIN_SRC j :session :exports both
+decrypt=: 4 : 0
+letters=. (97+i.26) { a.
+(letters{~26|x+]) &.> letters&i. &.> }:<;._1'-',>y
+)
+
+rooms=: I. -. 0 = room_ids NB. rooms with ids (nonzero)
+messages=: ({&room_ids decrypt"0 {&input) rooms
+northpole=: I. +/"1 > 'northpole'&-: &.> messages
+partB=: room_ids {~ rooms {~ northpole
+
+(> 3 {. , messages {~ northpole); partB
+#+END_SRC
+
+#+RESULTS:
+: ┌─────────┬───┐
+: │northpole│548│
+: │object   │   │
+: │storage  │   │
+: └─────────┴───┘
