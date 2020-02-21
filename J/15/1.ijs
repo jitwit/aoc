@@ -1,11 +1,5 @@
-require 'plot'
+santas_trip =: +/\0,<:+:'('&=freads<'~/code/advent/input/15/1.in'
 
-floors =: <:+:'('&=freads<'~/code/advent/input/15/1.in'
+]partA=: {: santas_trip
+]partB=: santas_trip i. _1
 
-santas_trip =: +/\0,floors
-
-solve =: 3 : 0
-if. IFQT do. plot y end.
-({: ; i.&_1) y
-)
-solve santas_trip

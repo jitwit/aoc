@@ -11,16 +11,10 @@ do. ys=.(<(j{.y),out,((j+#in)}.y)),ys
 end. <ys
 )
 
-]partA=: # (<'') -.~ ~. , > (replace&molecule)"1 rules
-
 spl=: [: < (0{::]) }. (1{::]) {. [
 syms=: # ,~ [: I. 91 > a. i. ]
 atoms=: spl"_ 1 (2 ]\ syms)
 cnt=: [: +/ <@[ E. ]
 
+]partA=: # (<'') -.~ ~. , > (replace&molecule)"1 rules
 ]partB=: <: (# - 'Ar'&cnt + 'Rn'&cnt + [: +: (,:'Y')&cnt) atoms molecule
-
-ins=: ~. {."1 rules
-outs=: (<'') -.~ ~. , ~. > atoms &.> {:"1 rules
-terms=: outs -. ins
-isterm=: e.&terms @ <

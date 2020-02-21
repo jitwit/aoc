@@ -1,16 +1,14 @@
 require'tables/dsv ~/code/advent/code/biblio.ijs'
 
 chart=: makenum' 'readdsv advent_input 15 13
-people=: ~.,.0{"1 chart
-identity=: verb def 'I.,>y&-:&.>people'
+id=: (,~.,.0{"1 chart)i.< NB. index of given person
 
-parse=: ([:identity 0{::]);([:identity _1}.[:>{:);([:<:[:+:'gain'-:2{::])*3{::]
+parse=: ([: id 0{::]);([:id _1}.[:>{:);([:<:[:+:'gain'-:2{::])*3{::]
 
-situations=: ,. > parse"1 chart
-pairs=: 0 1{"1 situations [ scores=: 2{"1 situations
+pairs=: 0 1{"1 situations [ scores=: 2{"1 ] situations=: ,. > parse"1 chart
 score=: scores {~ [: I. -:"1&pairs
 
-happy_1way=:[:+/[:score"1((,.) 1&|.)
+happy_1way=: [:+/[:score"1((,.) 1&|.)
 happiness=: happy_1way+happy_1way@|.
 
 ]partA=:>./ happiness"_1 (i.@! A. i.) 8

@@ -1,6 +1,4 @@
-require 'tables/dsv'
-load '~/code/advent/code/biblio.ijs'
-
+require '~/code/advent/code/biblio.ijs tables/dsv'
 input=: makenum' 'readdsv < advent_input 15 9
 
 distances=: > 4{"1 input
