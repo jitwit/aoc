@@ -5,6 +5,3 @@ analyze=: adverb : 'letters {~ (i. u) +/"1 letters =/ y'
 
 ]partA=: >./ analyze"1 input
 ]partB=: <./ analyze"1 input
-
-
-
