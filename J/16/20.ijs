@@ -10,8 +10,3 @@ join2=: ({.,$:@}.)@:join1`]@.(0=#)
 
 ]partA=: >: (<0 1) { join1 input
 ]partB=: (2^32x) + +/ <: -/"1 join2 input
-
-
-
-
-
