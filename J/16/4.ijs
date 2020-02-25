@@ -2,7 +2,7 @@ input=: 'b' freads < '~/code/advent/input/16/4.in'
 
 undash=: [:<;._1'-',]
 chars=: ' ' -.~ [: , [: > [: }: undash
-ordered=: (] (5 {. ] \: [: +/ [ =/ ]) [: /:~ ~.)@:chars
+ordered=: (] (5 {. ] \: [: +/ =/) [: /:~ ~.)@:chars
 sid_key=: [:(([:".0&{::) ; [:}:1&{::) [:<;._1'[',[:>[:{: undash
 
 analyze=: ordered 0:`(0 {:: ])@.([ -: 1 {:: ]) sid_key
