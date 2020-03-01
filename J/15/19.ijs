@@ -16,5 +16,5 @@ syms=: # ,~ [: I. 91 > a. i. ]
 atoms=: spl"_ 1 (2 ]\ syms)
 cnt=: [: +/ <@[ E. ]
 
-]partA=: # (<'') -.~ ~. , > (replace&molecule)"1 rules
+]partA=: #a:-.~~.,>(replace&molecule)"1 rules
 ]partB=: <: (# - 'Ar'&cnt + 'Rn'&cnt + [: +: (,:'Y')&cnt) atoms molecule
