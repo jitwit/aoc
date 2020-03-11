@@ -1,7 +1,6 @@
 # -*- mode: org -*-
 #+title: [[https://adventofcode.com/2019/day/22][Day 22: Slam Shuffle]]
 
-
 ** Loading
 
   We read the input instructions as a space separated dsv for
@@ -112,7 +111,7 @@ Ma | b+a*2019
 
 #+BEGIN_SRC j :session :exports both
 an=: a Mb&|@^]n=: <:Mb-101741582076661x
-Mb | (an*2020)+ b*(<:an)*(<:a) Mb&|@^ (Mb-2)
+Mb | (an*2020) + b*(<:an)*(<:a) Mb&|@^ (Mb-2)
 #+END_SRC
 
 #+RESULTS:

@@ -41,5 +41,3 @@ iter2=: [: unfocus [: (match2@,"_2) _2 focus ]
 iter3=: [: unfocus [: (match3@,"_2) _3 focus ]
 unfocus=: [: ,/ ,./"_1
 iter=: iter2`iter3@.(2|#)
-
-

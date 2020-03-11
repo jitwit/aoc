@@ -6,6 +6,8 @@
 (define parent-table (make-hashtable string-hash string=?))
 
 (define (init)
+  (set! child-table (make-hashtable string-hash string=?))
+  (set! parent-table (make-hashtable string-hash string=?))
   (for-all (lambda (pq)
              (let ((p (substring pq 0 3))
                    (q (substring pq 4 7)))

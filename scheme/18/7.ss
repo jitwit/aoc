@@ -62,7 +62,7 @@
   (let work ((shop (make-workshop 0 t:empty))
              (tasks (edges instructions)))
     (if (t:empty? tasks)
-        shop
+        (workshop-time shop)
         (let* ((n (free-workers w shop))
                (ts (s:take n (workable-tasks shop tasks))))
           (if (or (zero? n) (null? ts))
@@ -73,4 +73,4 @@
               (work (fold-right add-job shop ts) tasks))))))
 
 (define (partB)
-  (workshop-time (multi 5 instructions)))
+  (multi 5 instructions))

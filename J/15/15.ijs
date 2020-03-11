@@ -1,5 +1,5 @@
 load'~/code/advent/code/biblio.ijs tables/dsv'
-]input=: > ". &.> _2&{. &.> ',' readdsv advent_input 15 15
+input=: > ". &.> _2&{. &.> ',' readdsv advent_input 15 15
 flatten=: (*/@:}:,{:)@$$,
 triples=: [:flatten],"0 1/[:flatten(,"0/~)
 recipes=: |: (,~ <:@101-+/)"1 (] #~ (101 > +/"1)) (triples i.101)
