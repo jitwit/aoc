@@ -12,8 +12,8 @@ mask=: {.<}. *. (2|>:@{.) = 2|}.
 NB. d is distance vector. d[i] will hold length of longest satisfying
 NB. subsequences after index i. graph g. edge u->v is in g when u and
 NB. v are different mod 2, u<v, and y[u] < y[v]. for each vertex from
-NB. the end, set the longest increasing subsequence using i to minimum
-NB. of all those based on graph g.
+NB. the end, set the longest increasing subsequence with i to minimum
+NB. of those of i's out edges in g.
 SEQ=: monad define
 y=.~.y NB. nub
 n=.#y
