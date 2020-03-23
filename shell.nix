@@ -4,10 +4,10 @@ let
 
   inherit (nixpkgs) pkgs;
 
-  f = { mkDerivation, ansi-wl-pprint, array, base, bytestring
-      , containers, filepath, fingertree, groups, hashable, lens, linear, JuicyPixels
-      , MemoTrie, psqueues, stdenv, trifecta, unordered-containers
-      , vector
+  f = { mkDerivation, algebraic-graphs, ansi-wl-pprint, array, base
+      , bytestring, containers, filepath, fingertree, groups, hashable
+      , JuicyPixels, lens, linear, MemoTrie, psqueues, stdenv, trifecta
+      , unordered-containers, vector
       }:
       mkDerivation {
         pname = "advent";
@@ -16,11 +16,15 @@ let
         isLibrary = true;
         isExecutable = true;
         libraryHaskellDepends = [
-          ansi-wl-pprint array base bytestring containers filepath fingertree
-          groups hashable lens linear JuicyPixels MemoTrie psqueues trifecta
-          unordered-containers vector
+          ansi-wl-pprint array base bytestring containers
+          filepath fingertree groups hashable JuicyPixels lens linear
+          MemoTrie psqueues trifecta unordered-containers vector
         ];
-        executableHaskellDepends = [ base ];
+        executableHaskellDepends = [
+          ansi-wl-pprint array base bytestring containers
+          filepath fingertree groups hashable JuicyPixels lens linear
+          MemoTrie psqueues trifecta unordered-containers vector
+        ];
         license = "unknown";
         hydraPlatforms = stdenv.lib.platforms.none;
       };

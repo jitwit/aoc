@@ -4,7 +4,7 @@ parse =: makenum@:}.*{&0j1 1 0j_1 _1@:('URDL'&i.)@:{.
 input=: parse &.> readcsv '~/code/advent/input/19/3.in'
 
 steps =: [ + ((%|) * 1+i.@|) @: -~
-unwind =: [: steps/&.> 2 <\ ]
+unwind =: 2([:<steps/)\]
 wires =: ,. ,; &.> <"1 unwind"1 ,. ([: +/\ 0&, @: >)"1 input
 
 wireA =: +.,;>0{::wires

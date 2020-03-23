@@ -2,7 +2,7 @@
 (advent-year 19)
 (advent-day 17)
 
-(define programy
+(define program
   (parse-advent comma-separated))
 
 (define (on? x)
@@ -11,10 +11,23 @@
 (define (gref xs i j)
   (string-ref (list-ref xs i) j))
 
+(define (grid->hashtable grid)
+  (define m (length grid))
+  (define n (string-length (car grid)))
+  (define T (make-eqv-hashtable))
+  (do ((i 0 (1+ i)))
+      ((= i m) T)
+    (do ((j 0 (1+ j)))
+        ((= j n))
+      (let ((x (gref grid i j)))
+        (cond
+         ((eqv? x #\^) (hashtable-set! T (+ i (* 0+1i j)) 'start))
+         ((eqv? x #\#) (hashtable-set! T (+ i (* 0+1i j)) 'block)))))))
+
 (define (solveA)
   (define m (intcode program))
   (run-until-halt m)
-  (let* ((g (m 'peek-out))
+  (let* ((g (read-output m))
          (s (string-tokenize (list->string (map integer->char g))))
          (h (length s))
          (w (string-length (car s)))
@@ -30,7 +43,13 @@
                    (on? (gref s i (1- j))))
           (push! (* i j) xs))))
     (for-each display-ln s)
-    (display-ln (apply + xs))))
+    (apply + xs)))
+
+(define (solve)
+  (define grid-string
+    ((compose reverse cdr reverse string-tokenize)
+     (with-output-to-string solveA)))
+  grid-string)
 
 (define (solveB)
   (define m (intcode program))

@@ -11,7 +11,7 @@ NB. calculate depth vector
 'depths ids'=: |: > 0 dfs planets I. <'COM'
 
 NB. calculate parent vector from depth vector
-PP=: 0,[:}.(i:<:@{:)\
+PP=: (i:<:@{: * *@{:)\
 NB. trace along parents to get path
 path=: [: |. [: ({&(PP depths) ^: a:) ids i. planets I. <
 NB. find lca to find distance between planets.
