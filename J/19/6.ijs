@@ -1,21 +1,16 @@
-input =: ([:<;._1')',]);._2 freads < '~/code/advent/input/19/6.in'
+in=: ([:[;._1')',]);._2 (1!:1) < '../../input/19/6.in'
 
-NB. planets: ravel the inputs, nub and sort
-NB. orbits: sort input (on outgoing planet), then key on first column
-planets=: /:~ ~. , input
-orbits=: ({."1 ({.^:2 ; [:<[:<"0{:"1)/. ]) planets I. /:~ input
-orbits=: {:"1 /:~ orbits , (a:,~<)"0 (i.#planets) -. > {."1 orbits
+S=: in I.~ ]P=: /:~ > {./.~ ,/ in
+T=: ([: {:"1 S #~ ({."1 S)&=) &.> <"0 i.#P
+dfs=: [: ; ([:<,.) ; (>:@[ $: &.> T {::~ ]) NB. awkward...
+'DV IV'=: |: > 0 dfs P I. 'COM' NB. depth vector and ids
+PV=: **(i: <:@{:)\ NB. calculate parent vector from depth vector
 
-dfs=: [: ; ([:<,.) ; (>:@[ $: &.> orbits {::~ ]) NB. awkward...
-NB. calculate depth vector
-'depths ids'=: |: > 0 dfs planets I. <'COM'
-
-NB. calculate parent vector from depth vector
-PP=: (i:<:@{: * *@{:)\
 NB. trace along parents to get path
-path=: [: |. [: ({&(PP depths) ^: a:) ids i. planets I. <
 NB. find lca to find distance between planets.
-orbital_transfers=: (+&<:&# - [:+:[:{.[:I.[:-.[:=/,:) & path
+path=: [: |. [: ({&(PV DV) ^: a:) IV i. ]
+LCA=: [: ({.@:I.@:-.@:=/) ,:
+dist=: (+&<:&# - 2*LCA) & path & (P&I.)
 
-]partA=: +/ depths
-]partB=: 'SAN' orbital_transfers 'YOU'
+]partA=: +/ DV
+]partB=: 'SAN' dist 'YOU'

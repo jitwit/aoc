@@ -7,13 +7,14 @@ input=: ".,'m' freads '~/code/advent/input/corona/1.in'
 )
 
 NB. in array mask for indices that satisfy requrements based on head.
-mask=: {. (<*1=2|-) }.
+sat=: <*1=2|-
+mask=: {.sat}.
 
 SEQ=: monad define
 d=.0#~]n=.#]y=.~.y
 g=. (>:i.n) (+&.>) ([:<I.@mask)\. y 
-for_e. i.-n do.
-  d=. (>: >./ 0,(e{::g){d) (e}) d
+for_v. i.-n do.
+  d=. (>: >./ 0,(v{::g){d) v} d
 end. d
 )
 

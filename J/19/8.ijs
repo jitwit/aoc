@@ -1,11 +1,7 @@
-require 'viewmat'
- 
-input =: freads < '~/code/advent/input/19/8.in'
-layers =: _1 }. _150 [\ input
+layers =: _150 ]\ , ];._2 (1!:1) < '../../input/19/8.in'
 
-count=: [: +/"1 =
 color=: [: {. [ {~ [: I. '2'&~:
-solveA=: [: */ [: +/"1 '12' =/ ({~ (i. <./) @ count&'0')
+solveA=:[: */ [: +/"1 '12' =/ ({~ [: (i. <./) (+/ .=&'0'))
 
 ]partA=: solveA layers
 ]partB=: (' J' {~ '1' = 6 25 $ color"1 @ |:) layers
