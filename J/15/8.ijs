@@ -1,14 +1,9 @@
 input =: < ;. _2 freads < '~/code/aoc/input/15/8.in'
 
-NB. char classes
-cquote=: ,:'"'               NB. quote begin/end string
-cback=: ,:'\'                NB. escape
-chexx=: ,:'x'                NB. begin hex escape
-chexd=: '0123456789abcdef' NB. inside hex escape
-char=: 1 I.~ (cquote;cback;chexx;chexd) e.&>~ ]
-
-NB. state table:
-NB. 0 - start/end; 1 - letter; 2 - backslash; 3 - hexbegin; 4 - hex1; 5 - hex2
+NB. STATE TABLE:
+NB. CHAR CLASS: quote, back, x (hex), hex chars, other chars
+char=: 1 I.~ ('"';'\';'x';'0123456789abcdef') e.&>~ ]
+NB. STATE: 0 start/end; 1 letter; 2 backslash; 3 hexbegin; 4 hex1; 5 hex2
 table=: 5 5 2 $ , ". ;. _2 ] 0 : 0
 1 1  0 6  0 6  0 6  0 6 NB. parse string or stop
 0 2  2 0  1 2  1 2  1 2 NB. 3 to say we read letter, 2 to start hex, 0 6 for end
