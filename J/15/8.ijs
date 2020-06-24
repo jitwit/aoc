@@ -1,4 +1,4 @@
-input =: < ;. _2 freads < '~/code/aoc/input/15/8.in'
+input =: < ;. _2 (1!:1) < '../../input/15/8.in'
 
 NB. STATE TABLE:
 NB. CHAR CLASS: quote, back, x (hex), hex chars, other chars
@@ -17,5 +17,5 @@ NB. for enclosing quotes.
 string_data=: 2 -~ [: # (3;table;char"0 a.) ;: ]
 needs_escape=: e.&'"\'
 
-partA;timespacex'partA=: +/ (# - string_data) &> input'
-partB;timespacex'partB=: +/ (2 + +/@:needs_escape) &> input'
+partA;6!:2'partA=: +/ (# - string_data) &> input'
+partB;6!:2'partB=: +/ (2 + +/@:needs_escape) &> input'

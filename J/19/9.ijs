@@ -1,4 +1,5 @@
-input=: ".;._1}:',',freads<'~/code/advent/input/19/9.in'
+input=: ".;._1}:',',aoc 2019;9
+NB. freads<'~/code/advent/input/19/9.in'
 
 intcode=: monad define
 0;0;'';'';y,(1100-(#y)) # 0

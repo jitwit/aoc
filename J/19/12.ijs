@@ -1,4 +1,4 @@
-input=: ([:<;._1' ',-.&'<>xyz=,')&.>'b'freads<'~/code/advent/input/19/12.in'
+input=: ([:<;._1' ',-.&'<>xyz=,')&.>'b'freads<'~/code/aoc/input/19/12.in'
 moons=: (3 4$0),.~|:>".&.>>input
 
 step=: +(4|.!.0])"1+[:,.~([:([:+/[:*-/~)4&{.)"1

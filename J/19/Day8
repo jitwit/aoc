@@ -6,7 +6,8 @@
   Split into 100 (150=6x25) "layers."
 
 #+begin_src j :session :exports code
-input =: 1!:1 < '../../input/19/8.in'
+load '~/code/aoc/aoc.ijs'
+input =: aoc 2019;8
 layers =: _1 }. _150 [\ input
 #+end_src
 
