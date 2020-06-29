@@ -1,5 +1,6 @@
 coclass 'aoc'
-require 'web/gethttp'
+require 'web/gethttp stats/bonsai'
+coinsert 'bonsai'
 
 AOCDIR=: '/.aoc' ,~ 2!:5'HOME'
 USER=: 'jitwit'
@@ -56,4 +57,4 @@ update_cookie_z_ =: 3 : 0
 y 1!:2 < cookie_file_aoc_ ''
 )
 
-coclass 'base'
+coinsert 'bonsai'

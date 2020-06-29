@@ -1,6 +1,7 @@
+load'~/code/aoc/aoc.ijs'
 require 'tables/csv'
 
-source =: {. makenum readcsv '~/code/advent/input/19/2.in'
+source =: 0&".;._1 ',',aoc 2019;2 NB. {. makenum readcsv '~/code/advent/input/19/2.in'
 eg1 =: 1 1 1 4 99 5 6 0 99
 eg2 =: 1 9 10 3 2 3 11 0 99 30 40 50
 

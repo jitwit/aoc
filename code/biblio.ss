@@ -108,7 +108,7 @@
    (date-day (current-date))))
 
 (define (advent-file)
-  (format "~~/code/advent/input/~a/~a.in" (advent-year) (advent-day)))
+  (format "~~/code/aoc/input/~a/~a.in" (advent-year) (advent-day)))
 
 (define (fetch-advent)
   (let ((auj (current-date)))
@@ -124,7 +124,7 @@
                  (day (advent-day)))
              (format #t "Fetching day ~a year 20~a~%" day year)
              (system
-              (format "sh ~~/code/advent/code/fetch.sh ~a ~a" year day))))
+              (format "sh ~~/code/aoc/code/fetch.sh ~a ~a" year day))))
           (else (format #t "wake me up when december begins~%")))))
 
 (define (advent-ensure)

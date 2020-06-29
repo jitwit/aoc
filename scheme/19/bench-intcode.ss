@@ -1,5 +1,5 @@
 (optimize-level 3)
-(load "~/code/advent/load.ss")
+(load "~/code/aoc/load.ss")
 
 (define (bench-intcode src-file . input)
   (define src (with-input-from-file src-file comma-separated))
@@ -31,7 +31,7 @@
   (bench-intcode "factor.intcode" n))
 
 (define (bench!)
-  (let ((transcript "~/code/advent/output/intcode-bench.txt"))
+  (let ((transcript "~/code/aoc/output/intcode-bench.txt"))
     (delete-file transcript)
     (transcript-on transcript)
     (sum-primes-ic 100000)

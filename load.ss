@@ -7,14 +7,14 @@
         (prefix (batched-queue) q:)
         (prefix (pairing-heap) h:)
         (prefix (alga) g:)
-        (sxml-mini)
+;;        (sxml-mini)
         (euler)
         (matchable))
 
 (print-gensym #f)
 
 (define (advent-file-path file)
-  (string-append "~/code/advent/code/" file))
+  (string-append "~/code/aoc/code/" file))
 
 (define source-files
   (map advent-file-path '("biblio.ss" "outils.ss" "graph.ss" "intcode.ss" "svg.ss")))

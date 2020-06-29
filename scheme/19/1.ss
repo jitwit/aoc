@@ -1,4 +1,4 @@
-(include "~/code/advent/load.ss")
+(include "~/code/aoc/load.ss")
 (advent-year 19) (advent-day 1)
 
 (define masses

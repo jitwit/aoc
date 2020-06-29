@@ -1,4 +1,4 @@
-(load "~/code/advent/load.ss")
+(load "~/code/aoc/load.ss")
 
 (advent-day 23)
 (advent-year 19)

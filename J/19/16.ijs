@@ -1,4 +1,5 @@
 load'~/code/aoc/aoc.ijs'
+coinsert'bonsai'
 
 digits=: "."0}: aoc 2019;16
 

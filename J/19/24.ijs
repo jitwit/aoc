@@ -3,7 +3,7 @@ load '~/code/advent/code/biblio.ijs'
 require 'viewmat'
 coinsert 'jviewmat jgl2'
 
-world=:'#'='m'freads<advent_input 19 24
+world=:'#'=];._2 aoc 2019;24
 
 rule=: (3 2$1 1 0 1 0 2)e.~,
 life=: rule/"0(1|.!.0])+(_1|.!.0])+(_1|.!.0"1])+1|.!.0"1]

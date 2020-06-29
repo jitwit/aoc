@@ -1,4 +1,5 @@
-input=: ".;._1}:',',freads<'~/code/advent/input/19/5.in'
+load'~/code/aoc/aoc.ijs'
+input=: ".;._1}:',',aoc 2019;5
 
 intcode=: 0;0;'';'';]
 

@@ -1,3 +1,4 @@
+load'~/code/aoc/aoc.ijs'
 input=: ".;._1}:',',aoc 2019;9
 NB. freads<'~/code/advent/input/19/9.in'
 
