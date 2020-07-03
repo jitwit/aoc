@@ -1,5 +1,4 @@
-clear''
-load '~/code/advent/code/biblio.ijs'
+load '~/code/advent/aoc.ijs'
 require 'viewmat'
 coinsert 'jviewmat jgl2'
 

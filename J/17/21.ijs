@@ -1,13 +1,13 @@
+load '~/code/aoc/aoc.ijs'
 require 'tables/dsv'
 
-input =: 0 2{"1 ' ' readdsv < '~/code/advent/input/17/21.in'
-NB. '~/code/advent/J/17/21.in'
+input =: 0 2 {"1 ([: <;._1 ' '&,);._2 aoc 2017;21
 
 clean =: {~ ([: I. 2 > '#.'&i.)
 rules =: (=&'#' @ clean) &.> input
 
-r2 =: 6 {. rules
-r3 =: 6 }. rules
+r2 =: rules #~ 4={."1 # & > rules
+r3 =: rules #~ 9={."1 # & > rules
 
 NB. rho for rhotate, phi for phlip
 rho2 =: 1 3 0 2 [ phi2 =: 1 0 3 2 [ rho3 =: 1 2 5 0 4 8 3 6 7 [ phi3 =: 2 1 0 5 4 3 8 7 6

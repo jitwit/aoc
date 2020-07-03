@@ -1,5 +1,6 @@
+load '~/code/aoc/aoc.ijs'
 parse=: [:,[:>[:([:".;._1'x',])&.>2}.[:<;._1' ',':'-.~]
-input=: parse ;._2 freads < '~/code/advent/input/18/3.in'
+input=: parse;._2 aoc 2018;3
 
 lo=: 2&{.
 hi=: lo + 2&}.

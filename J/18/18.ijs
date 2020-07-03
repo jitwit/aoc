@@ -1,10 +1,9 @@
-clear''
-
-load '~/code/advent/code/biblio.ijs'
+load '~/code/aoc/aoc.ijs'
+W=: '.|#' i. ];._2 aoc 2018;18
 require 'viewmat'
 coinsert 'jviewmat jgl2'
 
-W=: '.|#' i. 'm' freads < advent_input 18 18
+
 NB. W=: '.|#' i. 'm' freads < '18.in'
 
 adj=: (,"0/~i:1)&(|.!.0)

@@ -1,5 +1,5 @@
-load '~/code/advent/code/biblio.ijs'
-input=: ". 'm' freads < advent_input 18 1
+load '~/code/aoc/aoc.ijs'
+input=: (0&".);._2 aoc 2018;1
 
 NB. inc number of doublings until enough frequencies are there to find repetition
 expand=: monad define

@@ -1,4 +1,4 @@
-(load "~/code/advent/load.ss")
+(load "~/code/aoc/load.ss")
 
 (define program
   (parameterize ((advent-day 21) (advent-year 19))
