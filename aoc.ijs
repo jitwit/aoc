@@ -1,5 +1,6 @@
+load 'web/gethttp stats/bonsai'
 coclass 'aoc'
-require 'web/gethttp stats/bonsai'
+
 
 AOCDIR=: '/.aoc' ,~ 2!:5'HOME'
 USER=: 'jitwit'

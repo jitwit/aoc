@@ -1,3 +1,6 @@
+(load "~/code/intcode/chez/intcode.sls")
+
+
 (import (srfi :1)
         (srfi :13)
         (srfi :14)
@@ -9,7 +12,8 @@
         (prefix (alga) g:)
 ;;        (sxml-mini)
         (euler)
-        (matchable))
+        (matchable)
+	(intcode))
 
 (print-gensym #f)
 
@@ -17,6 +21,7 @@
   (string-append "~/code/aoc/code/" file))
 
 (define source-files
-  (map advent-file-path '("biblio.ss" "outils.ss" "graph.ss" "intcode.ss" "svg.ss")))
+  (map advent-file-path '("biblio.ss" "outils.ss" "graph.ss" "svg.ss")))
 
-(for-all load source-files)
+(for-each load source-files)
+

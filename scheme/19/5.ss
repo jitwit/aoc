@@ -1,9 +1,9 @@
-(load "~/code/advent/load.ss")
+(load "~/code/aoc/load.ss")
 (advent-year 19)
 (advent-day 5)
 
 (define program
-  (parse-advent comma-separated))
+  (with-input-from-file (advent-file) parse-intcode))
 
 (define (partA)
   (run-intcode program 1))

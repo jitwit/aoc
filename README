@@ -1,19 +1,24 @@
 # -*- mode: org -*-
 
-
-
 * AOC solutions
 
   Solutions to advent of code problems in ~scheme~, ~J~, and
   ~haskell~.
 
+** By year
+
+  Solutions by year with "writeups"
+
 ** 2019
+
+I split out the intcode stuff to a separate [[https://github.com/jitwit/intcode][repo]] with versions for
+ChezScheme, Guile, and Racket.
 
 *** J
  
    - [[file:J/19/Day22][Day 22: Slam Shuffle]]
    - [[file:J/19/Day16][Day 16: Flawed Frequency Transmission]]
-   - [[./J/19/Day12][Day 12: The N-Body Problem]]
+   - [[file:J/19/Day12][Day 12: The N-Body Problem]]
    - [[./J/19/Day10][Day 10: Monitoring Station]]
    - [[./J/19/Day8][Day 8: Space Image Format]]
    - [[./J/19/Day6][Day 6: Universal Orbit Map]]
@@ -33,6 +38,8 @@
     - [[./haskell/19/Day14][Day 14: Space Stoichiometry]]
     - [[./haskell/19/24.hs][Day 24: Planet of Discord]]
 
+
+
 ** 2017
 
 *** Scheme
@@ -43,13 +50,118 @@
 
 *** J
 
-   - [[./J/15/Day1][Day 1: Not Quite Lisp]]
-   - [[J/15/Day12.org][Day 12: JSAbacusFramework.io]]
+   - [[file:J/15/Day1][Day 1: Not Quite Lisp]]
+   - [[file:J/15/Day12.org][Day 12: JSAbacusFramework.io]]
 
 *** Scheme
 
    - [[./scheme/15/Day7][Day 7: Some Assembly Required]]
 
 
+** By Language
 
+  Solutions by Language which may or may not be complete
 
+#+begin_src j :session :exports both :results raw
+link=: '[[file:'&, @ ,&']]'
+link &> {."1 dirtree 'J/*.ijs'
+#+end_src
+
+#+RESULTS:
+[[file:J/15/15.ijs]] 
+[[file:J/15/14.ijs]] 
+[[file:J/15/17.ijs]] 
+[[file:J/15/13.ijs]] 
+[[file:J/15/1.ijs]]  
+[[file:J/15/9.ijs]]  
+[[file:J/15/11.ijs]] 
+[[file:J/15/16.ijs]] 
+[[file:J/15/8.ijs]]  
+[[file:J/15/v18.ijs]]
+[[file:J/15/19.ijs]] 
+[[file:J/15/18.ijs]] 
+[[file:J/15/2.ijs]]  
+[[file:J/15/10.ijs]] 
+[[file:J/15/12.ijs]] 
+[[file:J/18/1.ijs]]  
+[[file:J/18/3.ijs]]  
+[[file:J/18/18.ijs]] 
+[[file:J/18/2.ijs]]  
+[[file:J/16/20.ijs]] 
+[[file:J/16/5.ijs]]  
+[[file:J/16/13.ijs]] 
+[[file:J/16/1.ijs]]  
+[[file:J/16/9.ijs]]  
+[[file:J/16/7.ijs]]  
+[[file:J/16/4.ijs]]  
+[[file:J/16/16.ijs]] 
+[[file:J/16/8.ijs]]  
+[[file:J/16/3.ijs]]  
+[[file:J/16/19.ijs]] 
+[[file:J/16/2.ijs]]  
+[[file:J/16/6.ijs]]  
+[[file:J/19/20.ijs]] 
+[[file:J/19/5.ijs]]  
+[[file:J/19/1.ijs]]  
+[[file:J/19/9.ijs]]  
+[[file:J/19/4.ijs]]  
+[[file:J/19/16.ijs]] 
+[[file:J/19/8.ijs]]  
+[[file:J/19/3.ijs]]  
+[[file:J/19/2.ijs]]  
+[[file:J/19/22.ijs]] 
+[[file:J/19/24.ijs]] 
+[[file:J/19/10.ijs]] 
+[[file:J/19/6.ijs]]  
+[[file:J/19/12.ijs]] 
+[[file:J/17/16.ijs]] 
+[[file:J/17/21.ijs]]
+
+#+begin_src j :session :exports both :results raw
+link &> {."1 dirtree 'scheme/*.ss'
+#+end_src
+
+#+RESULTS:
+[[file:scheme/15/1.ss]]            
+[[file:scheme/15/8.ss]]            
+[[file:scheme/15/21.ss]]           
+[[file:scheme/15/7.ss]]            
+[[file:scheme/15/10.ss]]           
+[[file:scheme/18/16.ss]]           
+[[file:scheme/18/7.ss]]            
+[[file:scheme/19/16.ss]]           
+[[file:scheme/19/1.ss]]            
+[[file:scheme/19/9.ss]]            
+[[file:scheme/19/19.ss]]           
+[[file:scheme/19/8.ss]]            
+[[file:scheme/19/21.ss]]           
+[[file:scheme/19/11.ss]]           
+[[file:scheme/19/7.ss]]            
+[[file:scheme/19/3.ss]]            
+[[file:scheme/19/4.ss]]            
+[[file:scheme/19/10.ss]]           
+[[file:scheme/19/5.ss]]            
+[[file:scheme/19/18.ss]]           
+[[file:scheme/19/13.ss]]           
+[[file:scheme/19/23.ss]]           
+[[file:scheme/19/25.ss]]           
+[[file:scheme/19/17.ss]]           
+[[file:scheme/19/2.ss]]            
+[[file:scheme/19/15.ss]]           
+[[file:scheme/19/bench-intcode.ss]]
+[[file:scheme/19/22.ss]]           
+[[file:scheme/19/12.ss]]           
+[[file:scheme/19/14.ss]]           
+[[file:scheme/19/6.ss]]            
+[[file:scheme/17/22.ss]]
+
+#+begin_src j :session :exports both :results raw
+link &> {."1 dirtree 'haskell/*.hs'
+#+end_src
+
+#+RESULTS:
+[[file:haskell/Advent.hs]]      
+[[file:haskell/Advent/Write.hs]]
+[[file:haskell/19/14.hs]]       
+[[file:haskell/19/1.hs]]        
+[[file:haskell/19/24.hs]]

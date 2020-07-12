@@ -1,16 +1,16 @@
-(include "~/code/advent/load.ss")
+(load "~/code/aoc/load.ss")
 (advent-year 19)
 (advent-day 2)
 
 (define program
-  (parse-advent comma-separated))
+  (with-input-from-file (advent-file) parse-intcode))
 
-(define (solve intcode a b)
-  (define M (cpu intcode))
-  (M 'set-mem! 1 a)
-  (M 'set-mem! 2 b)
+(define (solve program a b)
+  (define M (intcode program))
+  (intcode-set! M 1 a)
+  (intcode-set! M 2 a)
   (run-until-halt M)
-  (car (M 'mem 0)))
+  (intcode-ref M 0))
 
 (define (partA)
   (solve intcode 12 2))

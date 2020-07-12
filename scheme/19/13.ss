@@ -1,8 +1,8 @@
-(load "~/code/advent/load.ss")
+(load "~/code/aoc/load.ss")
 
 (define program
   (parameterize ((advent-year 19) (advent-day 13))
-    (parse-advent comma-separated)))
+    (with-input-from-file (advent-file) parse-intcode)))
 
 (define empty 0)
 (define (empty? x) (= empty x))
@@ -47,7 +47,7 @@
 
 (define (partB)
   (define m (intcode program))
-  (store! m 0 2)
+  (intcode-set! m 0 2)
   (let run ()
     (paint m)
     (unless (done? m)

@@ -3,7 +3,7 @@
 (advent-day 9)
 
 (define program
-  (parse-advent comma-separated))
+  (with-input-from-file (advent-file) parse-intcode))
 
 (define (partA)
   (run-intcode program 1))

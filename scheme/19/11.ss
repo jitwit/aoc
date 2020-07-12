@@ -1,9 +1,9 @@
-(load "~/code/advent/load.ss")
+(load "~/code/aoc/load.ss")
 (advent-year 19)
 (advent-day 11)
 
 (define program
-  (parse-advent comma-separated))
+  (with-input-from-file (advent-file) parse-intcode))
 
 (define (turn-right dir) (* dir 0-i))
 (define (turn-left dir) (* dir 0+i))
