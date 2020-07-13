@@ -1,6 +1,3 @@
-(load "~/code/intcode/chez/intcode.sls")
-
-
 (import (srfi :1)
         (srfi :13)
         (srfi :14)

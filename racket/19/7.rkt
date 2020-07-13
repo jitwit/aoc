@@ -1,11 +1,9 @@
-(load "~/code/aoc/load.ss")
-(advent-year 19)
-(advent-day 7)
+#lang racket
+
+(require "intcode.rkt")
 
 (define program
-  (parse-advent parse-intcode))
-
-(define fuel 50)
+  (with-input-from-file "../../input/19/7.in" parse-intcode))
 
 (define (feed M N)
   (lambda ()
@@ -16,22 +14,29 @@
         ((done) 'done)
         (else (run))))))
 
+(define-syntax pop!
+  (lambda (x)
+    (syntax-case x ()
+      ((_ xs)
+       #'(let ((x (car xs)))
+	   (set! xs (cdr xs))
+	   x)))))
+
 (define-syntax define-network
   (lambda (x)
     (syntax-case x (=> <- >?)
       ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (>? T) program)
        #'(let ((A (intcode program)) ...)
-	   (let ((loop (list (feed x y) ...)))
-	     (send-input m phase)
-	     ...
+	   (let ((loop `(,(feed x y) ...)))
+	     (send-input m phase) ...
 	     (let run ()
 	       (if (eq? 'done (step T))
 		   (peek-output T)
 		   (let* ((action (pop! loop))
-			  (result (action)))
-		     (unless (eq? result 'done)
-		       (set! loop `(,@loop ,action)))
-		     (run))))))))))
+                          (result (action)))
+                     (unless (eq? result 'done)
+                       (set! loop `(,@loop ,action)))
+                     (run))))))))))
 
 (define (day7 phase-settings program)
   (let-values (((p h a s e) (apply values phase-settings)))

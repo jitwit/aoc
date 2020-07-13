@@ -4,7 +4,7 @@
 (advent-year 19)
 
 (define program
-  (parse-advent comma-separated))
+  (parse-advent parse-intcode))
 
 (define engine (intcode program))
 
@@ -12,7 +12,7 @@
   (list->string (map integer->char (read-output m))))
 
 (define (put-cmd m cmd)
-  (send-input* m `(,@(map char->integer (string->list cmd)) 10)))
+  (apply send-input m `(,@(map char->integer (string->list cmd)) 10)))
 
 (define bad-items
   '("infinite loop" "escape pod" "molten lava" "photons" "giant electromagnet"))
@@ -80,7 +80,7 @@
   (move-randomly engine message))
 
 (define (explore! engine iters)
-  (reset! engine)
+  (reset-intcode engine)
   (do ((i 0 (1+ i)))
       ((or (done? engine) (= i iters)))
     (unless (done? engine)
@@ -88,7 +88,7 @@
       (explore-mode engine (get-msg engine)))))
 
 (define (drink! engine items iters)
-  (reset! engine)
+  (reset-intcode engine)
   (do ((i 0 (1+ i)))
       ((or (done? engine) (= i iters)))
     (unless (done? engine)
@@ -119,4 +119,4 @@
     (drunken-engine engine items iters 4)))
 
 (define (solve)
-  (drunken-walk (intcode program) 666))
+  (drunken-walk (intcode program) 900))

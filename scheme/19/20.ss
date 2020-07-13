@@ -5,8 +5,8 @@
 (define world-map
   (list->vector
    (map (compose list->vector string->list)
-	;; (with-input-from-file "large.in" lines-raw)
-	(parse-advent lines-raw)
+	(with-input-from-file "large.in" lines-raw)
+	;; (parse-advent lines-raw)
 	)))
 
 (define (world)
@@ -110,76 +110,29 @@
 		   ((x y)
 		    (hashtable-update! GR x (lambda (zs) (cons y zs)) '()))))
 	       oedges)
-     (let ((overts (apply append oedges)))
-       ;; (let-values (((decs incs) (partition out? overts))))
-       (for-each (lambda (vs)
-		   (unless (null? vs)
-		     (let* ((v (car vs))
-			    (dists (bfs-result-distances
-				    (bfs v (lambda (z) (hashtable-ref G2 z '()))))))
-		       (for-each (lambda (u)
-				   (let ((d (hashtable-ref dists u 0)))
-				     (when (< 0 d)
-				       (hashtable-update! G u
-							  (lambda (zs)
-							    (nub-equal
-							     (cons (cons d v) zs)))
-							  '())
-				       (hashtable-update! G v
-							  (lambda (zs)
-							    (nub-equal
-							     (cons (cons d u) zs)))
-							  '()))))
-				 (cdr vs)))))
-		 (suffixes (cons* aa zz overts)))
-       (let* ((explored 0)
-	     (path
-	      (bfs-path (cons 0 aa)
-			(cons 0 zz)
-			(lambda (d.z)
-			  (inc! explored)
-			  (match d.z
-			    ((d . z)
-			     (if (< cutoff (abs d))
-				 '()
-				 (append (map (lambda (y)
-						(cons d y))
-					      (hashtable-ref G2 z '()))
-					 (filter (lambda (d.y)
-						   (<= 0 (car d.y)))
-						 (map (lambda (y)
-							(if (out? z)
-							    (cons (1- d) y)
-							    (cons (1+ d) y)))
-						      (hashtable-ref GR z '())))))))))))
-	 (when path 
-	   (map (lambda (d.z)
-		  (cond ((assoc (cdr d.z) portals) =>
-			 (lambda (z.id)
-			   (write (cons (car d.z) (cdr z.id))) (newline)))))
-		path))
-	 (values explored (and path (length path))
-		 (bfs-distance aa zz (lambda (z) (hashtable-ref G1 z '())))))
-       ;; part-a
-       ;; 
-       ;; (list aa zz decs incs)
-	 ))))
-
-
-;; (bfs-path (cons 0 aa)
-;; 			     (cons 0 zz)
-;; 			     (lambda (d.z)
-;; 			       (display-ln d.z)
-;; 			       (match d.z
-;; 				 ((d . z)
-;; 				  (if (> (abs d) cutoff)
-;; 				      '()
-;; 				      (let ((z-out-p (out? z)))
-;; 					(append (map (lambda (_.y)
-;; 						       (cons d (cdr _.y)))
-;; 						     (hashtable-ref G z '()))
-;; 						(map (lambda (y)
-;; 						       (if z-out-p
-;; 							   (cons (1+ d) y)
-;; 							   (cons (1- d) y)))
-;; 						     (hashtable-ref GR z '())))))))))
+     (let ((path
+	    (bfs-path (cons 0 aa)
+		      (cons 0 zz)
+		      (lambda (d.z)
+			(match d.z
+			  ((d . z)
+			   (if (< cutoff (abs d))
+			       '()
+			       (append (map (lambda (y)
+					      (cons d y))
+					    (hashtable-ref G2 z '()))
+				       (filter (lambda (d.y)
+						 (<= 0 (car d.y)))
+					       (map (lambda (y)
+						      (if (out? z)
+							  (cons (1- d) y)
+							  (cons (1+ d) y)))
+						    (hashtable-ref GR z '())))))))))))
+       (when path 
+	 (map (lambda (d.z)
+		(cond ((assoc (cdr d.z) portals) =>
+		       (lambda (z.id)
+			 (write (cons (car d.z) (cdr z.id))) (newline)))))
+	      path))
+       (values (and path (length path))
+	       (bfs-distance aa zz (lambda (z) (hashtable-ref G1 z '()))))))))

@@ -4,7 +4,7 @@
 (advent-year 19)
 
 (define program
-  (parse-advent comma-separated))
+  (parse-advent parse-intcode))
 
 (define cat6-size 50)
 
@@ -42,7 +42,7 @@
                ((255 _ y z ...)
                 (done y))
                ((a x y z ...)
-                (send-input* (vector-ref network a) (list x y))
+                (send-input (vector-ref network a) x y)
                 (send z))
                (() (void))))))
      (let loop ()
@@ -65,7 +65,7 @@
          (let ((y (cadr nat)) (nic (vector-ref network 0)))
            (when (and nat-y (= nat-y y)) (done y)) ;; first repeat
            (set! nat-y y)
-           (send-input* nic nat))))
+           (send-input nic nat))))
      (define (send-packets Q)
        (if (null? Q)
            (feed--1 network) 
@@ -75,7 +75,7 @@
                 (set! nat (list x y))
                 (send Q))
                ((addr x y Q ...)
-                (send-input* (vector-ref network addr) (list x y))
+                (send-input (vector-ref network addr) x y)
                 (send Q))
                (() (check-idle))))))
      (let loop ()
