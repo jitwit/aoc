@@ -3,8 +3,10 @@
 (advent-day 15)
 
 (define program
-  (with-input-from-file (advent-file)
-    parse-intcode))
+  (with-input-from-file (advent-file) parse-intcode))
+
+(define proggl
+  (with-input-from-file "gl15.txt" parse-intcode))
 
 (define-values (north south east west) (values 1 2 4 3))
 (define-values (wall moved oxygen-system) (values 0 1 2))
@@ -12,7 +14,12 @@
 (define (dir->instr z)
   (match z (1 east) (-1 west) (0+i north) (0-i south)))
 
-(define (explore program animated?)
+(define (fps->duration fps)
+  (make-time 'time-duration
+	     (ceiling (/ (expt 10 9) fps))
+	     0))
+
+(define (explore program animated? fps)
   (define world (make-eqv-hashtable))
   (define part-a #f)
   (define tank #f)
@@ -33,7 +40,7 @@
 	  ((d x droid)
 	   (when animated?
 	     (newline) (showme world x) (newline)
-	     (sleep (make-time 'time-duration 60000000 0)))
+	     (sleep (fps->duration fps)))
 	   (let ((d (+ d 1)))
 	     (let adj ((zs (grid4 x)) (Q (q:tailq Q)))
 	       (match zs

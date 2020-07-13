@@ -162,6 +162,9 @@
 (define (grid4 z)
   `(,(+ z 1) ,(- z 1) ,(+ z 0+i) ,(+ z 0-i)))
 
+(define (nesw z)
+  `(,(+ z 1) ,(- z 1) ,(+ z 0+i) ,(+ z 0-i)))
+
 (define (grid8 z)
   `(,(+ z 1+i) ,(+ z 0+i) ,(+ z -1+i)
     ,(+ z -1) ,(+ z 1)

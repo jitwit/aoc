@@ -3,7 +3,7 @@
 (advent-day 17)
 
 (define program
-  (parse-advent comma-separated))
+  (with-input-from-file (advent-file) parse-intcode))
 
 (define (on? x)
   (char=? x #\#))
@@ -24,7 +24,7 @@
          ((eqv? x #\^) (hashtable-set! T (+ i (* 0+1i j)) 'start))
          ((eqv? x #\#) (hashtable-set! T (+ i (* 0+1i j)) 'block)))))))
 
-(define (solveA)
+(define (part-a)
   (define m (intcode program))
   (run-until-halt m)
   (let* ((g (read-output m))
@@ -45,27 +45,21 @@
     (for-each display-ln s)
     (apply + xs)))
 
-(define (solve)
-  (define grid-string
-    ((compose reverse cdr reverse string-tokenize)
-     (with-output-to-string solveA)))
-  grid-string)
-
-(define (solveB)
+(define (part-b)
   (define m (intcode program))
   (define (send-command m s)
-    (send-input* m `(,@(map char->integer (string->list s))
-                     ,(char->integer #\newline))))
+    (apply send-input m `(,@(map char->integer (string->list s))
+			  ,(char->integer #\newline))))
   (define plan "A,B,A,B,C,B,C,A,C,C")
   (define A "R,12,L,10,L,10")
   (define B "L,6,L,12,R,12,L,4")
   (define C "L,12,R,12,L,6")
   (define vid? "n")
-  (store! m 0 2)
+  (intcode-set! m 0 2)
   (send-command m plan)
   (send-command m A)
   (send-command m B)
   (send-command m C)
   (send-command m vid?)
   (run-until-halt m)
-  (get-output m))
+  (car (last-pair (read-output m))))
