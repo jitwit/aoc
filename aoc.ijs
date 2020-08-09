@@ -36,7 +36,7 @@ file=. input_file y
 try. assert. fexist file
      1!:1 < file
 catch. 'hdr url'=. input_req y
-       input=. url gethttp hdr
+       input=. 2!:0 'curl ', (>hdr) , ' ' , >url
        input 1!:2 < file
        input
 end.
