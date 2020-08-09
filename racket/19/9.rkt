@@ -1,6 +1,6 @@
-(load "~/code/aoc/load.ss")
-(advent-year 19)
-(advent-day 9)
+#lang racket
+
+(require "intcode.rkt")
 
 (define program
   (with-input-from-file "../../input/19/9.in" parse-intcode))

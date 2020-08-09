@@ -1,7 +1,7 @@
 require 'tables/csv'
 
 parse =: makenum@:}.*{&0j1 1 0j_1 _1@:('URDL'&i.)@:{.
-input=: parse &.> readcsv '~/code/advent/input/19/3.in'
+input=: parse &.> readcsv '~/code/aoc/input/19/3.in'
 
 steps =: [ + ((%|) * 1+i.@|) @: -~
 unwind =: 2([:<steps/)\]

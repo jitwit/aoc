@@ -58,14 +58,14 @@
      (define (check-idle)
        (define idle? #t)
        (vector-for-each (lambda (nic)
-                          (unless (null? (get-input nic))
+                          (unless (null? (read-input nic))
                             (set! idle? #f)))
                         network)
        (when idle?
          (let ((y (cadr nat)) (nic (vector-ref network 0)))
            (when (and nat-y (= nat-y y)) (done y)) ;; first repeat
            (set! nat-y y)
-           (send-input nic nat))))
+           (apply send-input nic nat))))
      (define (send-packets Q)
        (if (null? Q)
            (feed--1 network) 

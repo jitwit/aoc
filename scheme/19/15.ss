@@ -1,4 +1,5 @@
 (load "~/code/aoc/load.ss")
+
 (advent-year 19)
 (advent-day 15)
 

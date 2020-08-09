@@ -1,54 +1,42 @@
 (load "~/code/aoc/load.ss")
 (advent-year 19)
 (advent-day 7)
+(load "intcode-network.sls")
+(import (intcode-network))
 
 (define program
   (parse-advent parse-intcode))
 
 (define fuel 50)
 
-(define (feed M N)
-  (lambda ()
-    (let run ()
-      (case (step M)
-        ((out) (send-input N (peek-output M)) (run))
-        ((blocked) 'blocked)
-        ((done) 'done)
-        (else (run))))))
-
-(define-syntax define-network
-  (lambda (x)
-    (syntax-case x (=> <- >?)
-      ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (>? T) program)
-       #'(let ((A (intcode program)) ...)
-	   (let ((loop (list (feed x y) ...)))
-	     (send-input m phase)
-	     ...
+  (define-syntax define-network
+    (lambda (x)
+      (syntax-case x (=> <- >?)
+	((_ (A ...) ((x => y) ...) ((m <- phase) ...) (>? T) program)
+	 #'(let* ((A (intcode program)) ...
+		  (feeds (list (feed x y) ...)))
+	     (send-input m phase) ...
 	     (let run ()
-	       (if (eq? 'done (step T))
+	       (if (done? T)
 		   (peek-output T)
-		   (let* ((action (pop! loop))
-			  (result (action)))
-		     (unless (eq? result 'done)
-		       (set! loop `(,@loop ,action)))
-		     (run))))))))))
+		   (let ((feed (pop! feeds)))
+		     (unless (eq? 'done (feed))
+		       (set! feeds `(,@feeds ,feed)))
+		     (run)))))))))
 
 (define (day7 phase-settings program)
-  (let-values (((p h a s e) (apply values phase-settings)))
-    (define-network (A B C D E)
-      ((A => B) (B => C) (C => D) (D => E) (E => A))
-      ((A <- p) (B <- h) (C <- a) (D <- s) (E <- e) (A <- 0))
-      (>? E)
-      program)))
+  (match phase-settings
+    ((p h a s e)
+     (define-network (A B C D E)
+       ((A => B) (B => C) (C => D) (D => E) (E => A))
+       ((A <- p) (B <- h) (C <- a) (D <- s) (E <- e) (A <- 0))
+       (>? E)
+       program))))
 
 (define (best-configuration phases)
-  (define best 0)
-  (for-each (lambda (phase-settings)
-	      (let ((out (day7 phase-settings program)))
-		(when (< best out)
-		  (set! best (max best out)))))
-	    (permutations phases))
-  best)
+  (fold-right max 0 (map (lambda (phase-settings)
+			   (day7 phase-settings program))
+			 (permutations phases))))
 
 (define (partA)
   (best-configuration '(0 1 2 3 4)))
