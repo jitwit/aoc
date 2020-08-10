@@ -1,14 +1,5 @@
 load'~/code/aoc/aoc.ijs regex'
 
-line =: ([: ". & > '[[:digit:]]+'&rxall) ,&< ('[[:upper:]]+'&rxall)
-input=: line ;._2 aoc 2019 14
-chems =: ~. ; {:"1 input
-chem =: chems&i.
-rules =: (1;chem<'ORE') , ({."1 input) ,. chem &.> {:"1 input
-perm =: /: edges =: ,/ > ,. ({: ; }:) &.> {:"1 rules
-edges =: {:"1 perm { edges
-rules =: perm { rules
-
 tsort =: 3 : 0
 S=. V=. 0 $ n=. # indeg=. # &> y
 while. n > #V do.
@@ -17,9 +8,19 @@ while. n > #V do.
 end. V
 )
 
+line =: ([: ". & > '[[:digit:]]+'&rxall) ,&< ('[[:upper:]]+'&rxall)
+input=: line ;._2 aoc 2019 14
+chems =: ~. ; {:"1 input
+chem =: chems&i.
+rules =: (1;chem<'ORE') , ({."1 input) ,. chem &.> {:"1 input
+perm =: /: edges =: ,/ > ,. ({: ; }:) &.> {:"1 rules
+edges =: {:"1 perm { edges
+rules =: perm { rules
+order =: |. tsort edges
+
 fuel =: 3 : 0
 fl =. y * (chem<'FUEL') = i.#edges
-for_v. |. tsort edges do.
+for_v. order do.
   'gs cs' =. v { rules
   t =. >. (v{fl) % {: gs
   fl =. ((fl {~ }:cs) + t * }:gs) (}: cs)} fl
@@ -35,5 +36,5 @@ end. hi
 )
 
 partA=: fuel 1
-partB=: fuel bin 1 10000000 1000000000000
+partB=: fuel bin 1 1000000000000 1000000000000
 partA;partB
