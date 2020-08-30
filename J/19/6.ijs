@@ -3,7 +3,12 @@ in=: ([:[;._1')',]);._2 aoc 2019;6
 NB. (1!:1) < '../../input/19/6.in'
 
 NB. orbits=: in I.~ ]planets=: /:~ > {./.~ ,/ in NB. sorted to use I?
+
 orbits=: in i.~ ]planets=: /:~ ~. ,/ in NB. sorted to use I?
+E =: orbits
+G0 =: 1 (<"1 E)}($. 0 $~ ,~ >: (>./@,) E)
+G1 =: 1 (<"1 E)}(0 $~ ,~ >: (>./@,) E)
+
 NB. PV = parent vector/self-pointer representation of planets
 PV =: {:"1 (/:{."1) (, [: ,~ (i. # planets) -. {."1) |."1 orbits
 

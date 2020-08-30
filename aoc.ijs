@@ -1,7 +1,6 @@
 load 'web/gethttp stats/bonsai'
 coclass 'aoc'
 
-
 AOCDIR=: '/.aoc' ,~ 2!:5'HOME'
 USER=: 'jitwit'
 
@@ -10,7 +9,7 @@ AOCDIR,'/cookies/',USER
 )
 
 save_cookie=: 1!:2 <@cookie_file
-read_cookie=: 1!:1 @ <@cookie_file
+read_cookie=: 1!:1@<@cookie_file
 
 input_file=: 3 : 0
 'y d'=. ": &.> y

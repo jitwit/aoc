@@ -17,6 +17,8 @@ perm =: /: edges =: ,/ > ,. ({: ; }:) &.> {:"1 rules
 edges =: {:"1 perm { edges
 rules =: perm { rules
 order =: |. tsort edges
+E =:  ; ,. ({: ,. }: ) &.> {:"1 rules
+G =: 1 (<"1 E)}($. 0 $~ ,~ >: (>./@,) E)
 
 fuel =: 3 : 0
 fl =. y * (chem<'FUEL') = i.#edges
