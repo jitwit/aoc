@@ -1,7 +1,7 @@
 load'~/code/aoc/aoc.ijs regex'
 
 tsort =: 3 : 0
-S=. V=. 0 $ n=. # indeg=. # &> y
+S =. V=. 0 $ n=. # indeg=. # &> y
 while. n > #V do.
   V =. V , v =. {. V -.~ vs =. I. 0 = indeg
   indeg =. # &> y =. (-.&V) &.> y
@@ -9,7 +9,7 @@ end. V
 )
 
 line =: ([: ". & > '[[:digit:]]+'&rxall) ,&< ('[[:upper:]]+'&rxall)
-input=: line ;._2 aoc 2019 14
+input =: line ;._2 aoc 2019 14
 chems =: ~. ; {:"1 input
 chem =: chems&i.
 rules =: (1;chem<'ORE') , ({."1 input) ,. chem &.> {:"1 input

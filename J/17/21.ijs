@@ -11,7 +11,7 @@ rho3 =: 1 2 5 0 4 8 3 6 7
 phi3 =: 2 1 0 5 4 3 8 7 6
 
 NB. see math roots j lab slide 14 for better subgroup generation
-SG=: 1 : '~.@(, ,/@(x/~))^:_'   NB. subgroup
+sg=: 1 : '~.@(, ,/@(x/~))^:_'   NB. subgroup
 p=: (1|.i.5),: (<0 1) C. i.5
 rhos2 =: (rho2&C.^:0)`(rho2&C.^:1)`(rho2&C.^:2)
 rhos3 =: (rho3&C.^:0)`(rho3&C.^:2)`(rho3&C.^:4)`(rho3&C.^:6)
