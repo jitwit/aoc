@@ -8,5 +8,5 @@ A =: [: ,."_1 [ ({"_1) 1|:]
 P =: 1 : 'D^:([: -. u&-:)^:a:'
 Pi =: 4 : '# (x A y) P D x A y'
 
-]partA=: energy step^:1000 ms
+]partA=: E D^:1000 moons
 ]partB=: *./ (i.3) Pi"0 _/ moons
