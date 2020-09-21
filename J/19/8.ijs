@@ -6,4 +6,4 @@ color=: [: {. [ {~ [: I. '2'&~:
 solveA=: [: */ [: +/"1 '12' =/ ({~ [: (i. <./) (+/ .=&'0'))
 
 ]partA=: solveA layers
-]partB=: (' J' {~ '1' = 6 25 $ color"1 @ |:) layers
+]partB=: (' @' {~ '1' = 6 25 $ color"1 @ |:) layers
