@@ -1,5 +1,5 @@
-NB. load'~/code/aoc/aoc.ijs'
-NB. grid =: ];._2 aoc 2019 10
+load'~/code/aoc/aoc.ijs'
+grid =: ];._2 aoc 2019 10
 
 A =: (j.~/"1) 4 $. $. '#'&=;._2 (1!:1) < '10.in'
 >./ C =: (# @ ~. @: (1 {"1 *. @ -.&0))"1 -/~ A
