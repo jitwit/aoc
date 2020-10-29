@@ -1,9 +1,6 @@
 load'~/code/aoc/aoc.ijs'
-layers =: _150 ]\ , ];._2 aoc 2019;8
-NB. (1!:1) < '../../input/19/8.in'
+image =: (-6*25) "."0\ LF -.~ aoc 2019 8
 
-color=: [: {. [ {~ [: I. '2'&~:
-solveA=: [: */ [: +/"1 '12' =/ ({~ [: (i. <./) (+/ .=&'0'))
+]partA =: 1 2 */@:(+/"_1)@(=/) ({~ (i.<./)@(+/ . =&0)) image
+]partB =: '@ ' {~ _25 -.\ (|: {.@-."_1 2:) image
 
-]partA=: solveA layers
-]partB=: (' @' {~ '1' = 6 25 $ color"1 @ |:) layers
