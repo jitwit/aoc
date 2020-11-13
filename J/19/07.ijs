@@ -8,10 +8,10 @@ phase =: 3 : 0
  input__c 2{y [ create__c input [ c =. conew 'intcode'
  input__d 3{y [ create__d input [ d =. conew 'intcode'
  input__e 4{y [ create__e input [ e =. conew 'intcode'
- machs =. a,b,c,d,e
+ machs =. a;b;c;d;<e
  Q =. 2 ]\ 0 ,~ i. 5
  while. -. halted__e '' do.
-   'mi mo' =. <"0 ({.Q) { machs
+   'mi mo' =. machs {~ {. Q
    while. 1 do.
      select. step__mi ''
      case. 'halted' do. Q =. }. Q break.

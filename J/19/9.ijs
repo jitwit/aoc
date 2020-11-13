@@ -5,9 +5,7 @@ input=: ".;._1}:',',aoc 2019;9
 run =: 3 : 0
  m =. conew 'intcode'
  create__m input
- in__m =: in__m,y
- run__m ''
- out__m
+ output__m run__m y
 )
 
 run 1

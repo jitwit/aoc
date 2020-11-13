@@ -52,4 +52,3 @@
   (define x (bisect 0 10000 slink))
   (define-values (loB hiB) (range-y (+ x 99)))
   (+ (* 10000 x) loB))
-

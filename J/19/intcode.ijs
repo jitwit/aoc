@@ -44,6 +44,7 @@ step =: 3 : 0
 )
 
 run =: 3 : 0
+ in =: in,y
  whilst. 1 do.
   select. op=.100|ip{program
   case. 1 do. ip=: ip+4 [ program=: (+/ ref 1 2) (addr 3)} program
