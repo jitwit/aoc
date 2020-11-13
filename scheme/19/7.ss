@@ -9,20 +9,20 @@
 
 (define fuel 50)
 
-  (define-syntax define-network
-    (lambda (x)
-      (syntax-case x (=> <- >?)
-	((_ (A ...) ((x => y) ...) ((m <- phase) ...) (>? T) program)
-	 #'(let* ((A (intcode program)) ...
-		  (feeds (list (feed x y) ...)))
-	     (send-input m phase) ...
-	     (let run ()
-	       (if (done? T)
-		   (peek-output T)
-		   (let ((feed (pop! feeds)))
-		     (unless (eq? 'done (feed))
-		       (set! feeds `(,@feeds ,feed)))
-		     (run)))))))))
+(define-syntax define-network
+  (lambda (x)
+    (syntax-case x (=> <- >?)
+      ((_ (A ...) ((x => y) ...) ((m <- phase) ...) (>? T) program)
+       #'(let* ((A (intcode program)) ...
+		(feeds (list (feed x y) ...)))
+	   (send-input m phase) ...
+	   (let run ()
+	     (if (done? T)
+		 (peek-output T)
+		 (let ((feed (pop! feeds)))
+		   (unless (eq? 'done (feed))
+		     (set! feeds `(,@feeds ,feed)))
+		   (run)))))))))
 
 (define (day7 phase-settings program)
   (match phase-settings
