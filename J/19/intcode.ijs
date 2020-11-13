@@ -24,12 +24,6 @@ addr=: 3 : 0
 
 opcode =: 3 : '100|ip{program'
 halted =: 99 = opcode
-stuck =: 3 : 0
-  select. opcode y
-  case. 3 do. -.*#in
-  case. 99 do. 1
-  case. do. 0 end.
-)
 
 step =: 3 : 0
  select. 100|ip{program
@@ -64,5 +58,3 @@ run =: 3 : 0
   case. 99 do. break. end.
  end.
 )
-
-bigstep =: {{ whilst. -. stuck y do. step y end. }}

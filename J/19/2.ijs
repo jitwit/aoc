@@ -1,5 +1,4 @@
-load'~/code/aoc/aoc.ijs'
-load 'intcode.ijs'
+load'~/code/aoc/aoc.ijs intcode.ijs'
 
 input=: ".;._1}:',',aoc 2019;2
 
@@ -13,4 +12,4 @@ partA =: 3 : 0
   {. program__M
 )
 
-bonsai 'partA'''''
+partA ''
