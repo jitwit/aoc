@@ -12,7 +12,7 @@ W =: wgt ;._2 in
 P =: {&T
 D =: _1+#@~."1 @: |: @: (P ^: a:)
 
-]partA =: ids #~ V = P V
+partA =: ids #~ V = P V
 
 bal =: 3 : 0
 a =. (#V) $ 0
@@ -22,5 +22,4 @@ for_v. (\: D) V do. wv =. v { W [ ws =. a {~ vs =. ids i. }. v {:: gph
 end.
 )
 
-]partB =: bonsaipp 'bal 0'
-
+partA , partB =: < bal ''
