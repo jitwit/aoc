@@ -1,17 +1,17 @@
-parse=: monad define
-select. 2{::y
-case. '' do. 2 2 $ 1,(-".1{::y),0 1
-case. 'increment' do. 2 2$(".3{::y),0 0 1
-case. 'new' do. 2 2$_1 _1 0 1
-end.
-)
+load '~/code/aoc/aoc.ijs'
 
-shuffle=: |. parse"1 ([:<;._1' '&,);._2 freads<'~/code/advent/input/19/22.in'
+PC =: {{2 2 $ 1,(-".1{::y),0 1}}
+PI =: {{2 2 $ (".3{::y),0 0 1}}
+PN =: {{2 2 $ _1 _1 0 1}}
+SEL =: ('';'increment';'new') I. 2&{
+P =: PC`PI`PN@.SEL NB. parse
 
-'Ma Mb'=: 10007 119315717514047x
-'a b'=: {. (+/ .*)/ x: shuffle
+shuffles =: |. P"1 ([:<;._1' '&,);._2 aoc 2019 22
+'a b'=: {. +/ . */ x: shuffles
+10007|b+a*2019 NB. part A
 
-]partA=:Ma|b+a*2019
+M =: 119315717514047x
+an=: a M&|@^ <:M-101741582076661x
 
-an=.a Mb&|@^<:Mb-101741582076661x
-]partB=:Mb|(an*2020)+b*(<:an)*(<:a)Mb&|@^Mb-2
+M | (an*2020)+b * (<:an)*(<:a) M&|@^ M-2 NB. part B
+
