@@ -11,8 +11,8 @@ bez =: 4 : 0
 )
 
 crt =: 4 : 0
- 's t gcd' =. m bez n [ 'b n' =. y [ 'a m' =. x
- (N =. m*n%gcd) (|,[) (a*n*t) + (b*m*s)
+ 's t g' =. m bez n [ 'b n' =. y [ 'a m' =. x
+ (m*n%g) (|,[) (a*n*t) + (b*m*s)
 )
 
 (_2 0;_1 0) { crt/\ x: in,(-1+#in),11x
