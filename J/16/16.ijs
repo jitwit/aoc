@@ -1,8 +1,8 @@
-]input=: ,'1'='m' freads <'~/code/advent/input/16/16.in'
+load '~/code/aoc/aoc.ijs'
+in=: '1' = }: aoc 2016 16
 
-iter=: ,0,|.@:-.
-dragon=: ([$:iter@])`{.@.([<#@])
-checksum=: ([:$:_2=/\])`([:,[:":"0])@.(2|#)
+dragon=: {{(0,:x) ];.0 y,0,|.-.y}}^:_
+checksum=: {{_2 =/\^:(0=2|#y)y}}^:_
 
-]partA=: checksum 272 dragon input
-]partB=: checksum 35651584 dragon input
+,":"0 checksum 272 dragon in
+,":"0 checksum 35651584 dragon in
