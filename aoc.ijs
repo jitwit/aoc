@@ -31,12 +31,17 @@ hdr ; input_url y
 )
 
 get_input =: 3 : 0
-file=. input_file y
+'y d' =. y
+'cy cm cd' =. 3 {. 6!:0 ''
+assert. *./ (1<:d),(d<25),(2015<:y),(y<:2020)
+assert. (y<2020)+.(cy=y)*.(d<:cd)*.(cm=12)
+file=. input_file y,d
 try. assert. fexist file
      1!:1 < file
-catch. 'hdr url'=. input_req y
+catch. 'hdr url'=. input_req y,d
        input=. 2!:0 'curl ', (>hdr) , ' ' , >url
-       input 1!:2 < file
+       if. +./'Puzzle inputs differ by user'E.input do. echo input
+       else. input 1!:2 < file end.
        input
 end.
 )

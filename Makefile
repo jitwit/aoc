@@ -1,3 +1,14 @@
+.PHONY : help fetch clean haskell very-clean
+
+y = 2020
+d = 1
+
+help :
+	echo "idk"
+
+fetch :
+	jconsole aoc.ijs -js "exit (aoc :: 1:) $(y) $(d)"
+
 clean :
 	find . -name "*~" -exec rm {} \;
 	find . -name "*.hi" -exec rm {} \;
@@ -9,8 +20,4 @@ clean :
 very-clean :
 	make clean
 	rm -rf dist-newstyle
-
-haskell :
-	cabal build
-
-.PHONY : clean haskell very-clean
+	rm -rf dist
