@@ -53,6 +53,7 @@ assert. fpathcreate AOCDIR,'/input/2016/'
 assert. fpathcreate AOCDIR,'/input/2017/'
 assert. fpathcreate AOCDIR,'/input/2018/'
 assert. fpathcreate AOCDIR,'/input/2019/'
+assert. fpathcreate AOCDIR,'/input/2020/'
 )
 
 aoc_z_ =: get_input_aoc_
