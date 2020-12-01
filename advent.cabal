@@ -38,7 +38,7 @@ library
 
 executable 19-1
   import: deps
-  main-is:             1.hs
+  main-is:             01.hs
   build-depends:       advent
   hs-source-dirs:      haskell/19
 
@@ -53,3 +53,9 @@ executable 19-24
   main-is:             24.hs
   build-depends:       advent
   hs-source-dirs:      haskell/19
+
+executable 20-1
+  import: deps
+  main-is:             01.hs
+  build-depends:       advent
+  hs-source-dirs:      haskell/20

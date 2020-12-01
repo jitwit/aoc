@@ -1,15 +1,15 @@
 
 module Advent
   ( -- raw input strings or bytes
-    input_string
-  , input_bytes
-  , input_ints
-  , input_ints2d
-  , input_parse
-  , input_parse'
+    input'string
+  , input'bytes
+  , input'ints
+  , input'ints2d
+  , input'parse
+  , input'parse'
     -- parsing ish
-  , ints_of_bytes
-  , puzzle_file
+  , ints'of'bytes
+  , puzzle'file
   , module Advent.Write
   ) where
 
@@ -30,31 +30,30 @@ import Advent.Write
 type Year = Int
 type Day = Int
 
-puzzle_file :: Year -> Day -> FilePath
-puzzle_file y d = chez_advent </> "input" </> show y </> show d <.> "in"
-  where chez_advent = "/Users/jrn/code/advent"
+puzzle'file :: Year -> Day -> FilePath
+puzzle'file y d = "input" </> "20" <> show y </> show d <.> "in"
 
-input_string :: Year -> Day -> IO String
-input_string = (readFile .) . puzzle_file
+input'string :: Year -> Day -> IO String
+input'string = (readFile .) . puzzle'file
 
-input_bytes :: Year -> Day -> IO ByteString
-input_bytes = (B.readFile .) . puzzle_file
+input'bytes :: Year -> Day -> IO ByteString
+input'bytes = (B.readFile .) . puzzle'file
 
 -- for before a parser is settled, to get useful info
-input_parse' :: Parser a -> Year -> Day -> IO (Result a)
-input_parse' p y d = parseFromFileEx p (puzzle_file y d)
+input'parse' :: Parser a -> Year -> Day -> IO (Result a)
+input'parse' p y d = parseFromFileEx p (puzzle'file y d)
 
 -- for after it's settled, to live dangerously
-input_parse :: Parser a -> Year -> Day -> IO a
-input_parse p y d = fromJust <$> parseFromFile p (puzzle_file y d)
+input'parse :: Parser a -> Year -> Day -> IO a
+input'parse p y d = fromJust <$> parseFromFile p (puzzle'file y d)
 
-ints_of_bytes :: ByteString -> [Int]
-ints_of_bytes = unfoldr $ B.readInt . B.dropWhile (not . relevant)
+ints'of'bytes :: ByteString -> [Int]
+ints'of'bytes = unfoldr $ B.readInt . B.dropWhile (not . relevant)
   where relevant c = isDigit c || c == '-'
 
 -- fast ints
-input_ints :: Year -> Day -> IO [Int]
-input_ints y d = input_bytes y d <&> ints_of_bytes
+input'ints :: Year -> Day -> IO [Int]
+input'ints y d = input'bytes y d <&> ints'of'bytes
 
-input_ints2d :: Year -> Day -> IO [[Int]]
-input_ints2d y d = input_bytes y d <&> map ints_of_bytes . B.lines
+input'ints2d :: Year -> Day -> IO [[Int]]
+input'ints2d y d = input'bytes y d <&> map ints'of'bytes . B.lines

@@ -8,8 +8,8 @@ import Control.Monad
 import Linear
 
 main = do
-  worldB <- space0 <$> input_string 19 24
-  let worldA = za_of_zb worldB
+  worldB <- space0 <$> input'string 19 24
+  let worldA = za'of'zb worldB
       partA = biodiversity (firstRepeated worldA)
       partB = size $ (iterate evolve worldB) !! 200
   reportAB partA partB
@@ -23,7 +23,7 @@ zb = ((ZB .) .) . V3
 {-# inline zb #-}
 
 evolve :: PlanetCoordinate p => Planet p -> Planet p
-evolve s = fromList [ (z,1) | z <- zs, 1 == live_die (ref z s) (ref z c) ]
+evolve s = fromList [ (z,1) | z <- zs, 1 == live'die (ref z s) (ref z c) ]
   where c = count s; zs = toList $ keysSet s <> keysSet c
         {-# inline c #-}
         {-# inline zs #-}
@@ -70,16 +70,16 @@ space0 :: String -> Planet ZB
 space0 s = fromList bugs where
   bugs = [ (zb 0 x y,1) | (y,r) <- zip [0..] (lines s), (x,'#') <- zip [0..] r ]
 
-za_of_zb :: Planet ZB -> Planet ZA
-za_of_zb = fromList . map transform . keys where
+za'of'zb :: Planet ZB -> Planet ZA
+za'of'zb = fromList . map transform . keys where
   transform (ZB (V3 _ x y)) = (za x y,1)
 
 ref :: PlanetCoordinate p => p -> Planet p -> Int
 ref z s = maybe 0 id (s !? z)
 {-# inline ref #-}
 
-live_die 1 1 = 1
-live_die 0 1 = 1
-live_die 0 2 = 1
-live_die _ _ = 0
-{-# inline live_die #-}
+live'die 1 1 = 1
+live'die 0 1 = 1
+live'die 0 2 = 1
+live'die _ _ = 0
+{-# inline live'die #-}
