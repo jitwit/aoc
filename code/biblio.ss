@@ -108,7 +108,7 @@
    (date-day (current-date))))
 
 (define (advent-file)
-  (format "~~/code/aoc/input/~a/~a.in" (advent-year) (advent-day)))
+  (format "~~/code/aoc/input/20~a/~a.in" (advent-year) (advent-day)))
 
 (define (fetch-advent)
   (let ((auj (current-date)))

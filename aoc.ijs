@@ -1,11 +1,11 @@
 load 'web/gethttp stats/bonsai'
 coclass 'aoc'
 
-AOCDIR=: '/.aoc' ,~ 2!:5'HOME'
+AOCDIR=: jpath '~/code/aoc'
 USER=: 'jitwit'
 
 cookie_file=: 3 : 0
-AOCDIR,'/cookies/',USER
+AOCDIR,'/cookie'
 )
 
 save_cookie=: 1!:2 <@cookie_file
