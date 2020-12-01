@@ -5,62 +5,16 @@
   Solutions to advent of code problems in ~scheme~, ~J~, and
   ~haskell~.
 
-** By year
+** Writeups
 
-  Solutions by year with "writeups"
+   Nicer writeups can be found [[http://j-raphael.net/posts/aoc.html][here]].
 
-** 2019
-
-I split out the intcode stuff to a separate [[https://github.com/jitwit/intcode][repo]] with versions for
-ChezScheme, Guile, and Racket.
-
-*** J
- 
-   - [[file:J/19/Day22][Day 22: Slam Shuffle]]
-   - [[file:J/19/Day16][Day 16: Flawed Frequency Transmission]]
-   - [[file:J/19/Day12][Day 12: The N-Body Problem]]
-   - [[./J/19/Day10][Day 10: Monitoring Station]]
-   - [[./J/19/Day8][Day 8: Space Image Format]]
-   - [[./J/19/Day6][Day 6: Universal Orbit Map]]
-   - [[./J/19/Day4][Day 4: Secure Container]]
-   - [[./J/19/Day3][Day 3: Crossed Wires]]
-   - [[./J/19/Day2][Day 2: 1202 Program Alarm]]
-   - [[./J/19/Day1][Day 1: The Tyranny of the Rocket Equation]]
-
-*** Scheme
-
-   - [[./scheme/19/Intcode][Intcode : Days 2, 5, 7, 9, 11, 13, 15, 17, 19]]
-   - [[./scheme/19/Day6][Day 6: Universal Orbit Map]]
-
-*** Haskell
-
-    - [[./haskell/19/1.hs][Day 1: The Tyranny of the Rocket Equation]]
-    - [[./haskell/19/Day14][Day 14: Space Stoichiometry]]
-    - [[./haskell/19/24.hs][Day 24: Planet of Discord]]
-
-
-
-** 2017
-
-*** Scheme
-
-   - [[./scheme/17/Day24][Day 24: Electromagnetic Moat]]
-
-** 2015
-
-*** J
-
-   - [[file:J/15/Day1][Day 1: Not Quite Lisp]]
-   - [[file:J/15/Day12.org][Day 12: JSAbacusFramework.io]]
-
-*** Scheme
-
-   - [[./scheme/15/Day7][Day 7: Some Assembly Required]]
-
+   I also split out the intcode stuff to a separate [[https://github.com/jitwit/intcode][repo]] with
+   libraries for ChezScheme, Guile, and Racket.
 
 ** By Language
 
-  Solutions by Language which may or may not be complete
+  Solutions by Language (which may or may not be complete)
 
 #+begin_src J :session :exports both :results raw
 link=: '[[file:'&, @ ,&']]'
@@ -92,6 +46,7 @@ echo link &> {."1 dirtree 'J/??.ijs'
 [[file:J/18/04.ijs]]
 [[file:J/18/10.ijs]]
 [[file:J/18/12.ijs]]
+[[file:J/16/15.ijs]]
 [[file:J/16/20.ijs]]
 [[file:J/16/03.ijs]]
 [[file:J/16/02.ijs]]
@@ -102,6 +57,7 @@ echo link &> {."1 dirtree 'J/??.ijs'
 [[file:J/16/16.ijs]]
 [[file:J/16/05.ijs]]
 [[file:J/16/19.ijs]]
+[[file:J/16/18.ijs]]
 [[file:J/16/04.ijs]]
 [[file:J/16/10.ijs]]
 [[file:J/16/06.ijs]]
@@ -130,6 +86,8 @@ echo link &> {."1 dirtree 'J/??.ijs'
 [[file:J/17/07.ijs]]
 [[file:J/17/16.ijs]]
 [[file:J/17/21.ijs]]
+[[file:J/17/09.ijs]]
+[[file:J/20/01.ijs]]
 
 #+begin_src J :session :exports both :results raw
 echo link &> {."1 dirtree 'scheme/??.ss'
@@ -168,6 +126,8 @@ echo link &> {."1 dirtree 'scheme/??.ss'
 [[file:scheme/19/04.ss]]
 [[file:scheme/19/14.ss]]
 [[file:scheme/17/22.ss]]
+[[file:scheme/20/01.ss]]
+
 
 
 #+begin_src J :session :exports both :results raw
@@ -178,6 +138,7 @@ echo link &> {."1 dirtree 'haskell/*.hs'
 [[file:haskell/Advent.hs]]      
 [[file:haskell/Advent/Write.hs]]
 [[file:haskell/19/14.hs]]       
-[[file:haskell/19/1.hs]]        
 [[file:haskell/19/24.hs]]       
+[[file:haskell/19/01.hs]]       
+[[file:haskell/20/01.hs]]       
 
