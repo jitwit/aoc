@@ -243,3 +243,6 @@
 
 (define (swap x.y)
   (cons (cdr x.y) (car x.y)))
+
+(define (boolean->number b)
+  (if b 1 0))

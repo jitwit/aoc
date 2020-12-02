@@ -1,4 +1,3 @@
-(optimize-level 3)
 (load "~/code/aoc/load.ss")
 (advent-year 20) (advent-day 1)
 
