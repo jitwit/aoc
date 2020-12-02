@@ -1,5 +1,5 @@
-#ifndef _ADVENT_
-#define _ADVENT_ 1
+#ifndef ADVENT
+#define ADVENT
 
 #include <stdio.h>
 #include <stdlib.h>

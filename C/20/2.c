@@ -6,6 +6,5 @@ int main () {
     { DO(strlen(p)+(j=0),j+=p[i]==c);
       a += lo<=j && j<=hi;
       b += (p[lo-1]==c) ^ (p[hi-1]==c); }
-
   printf("part A: %lld\npart B: %lld\n",a,b); R 0;
 }
