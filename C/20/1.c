@@ -2,7 +2,7 @@
 
 int main () {
   I X[200],*p=X,i,j,k,n=0,a=-1,b=-1;
-  while (1==scanf("%lld\n",p++)) n++;
+  while (EOF!=scanf("%lld\n",p++)) n++;
   for(i=0;i<n-1;i++)
     for(j=i+1;j<n;j++)
       if(X[i]+X[j]==2020)
