@@ -59,3 +59,9 @@ executable 20-1
   main-is:             01.hs
   build-depends:       advent
   hs-source-dirs:      haskell/20
+
+executable 20-2
+  import: deps
+  main-is:             02.hs
+  build-depends:       advent
+  hs-source-dirs:      haskell/20
