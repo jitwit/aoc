@@ -4,7 +4,7 @@ We have a slope of trees that wraps around horizontally. We ski down
 it in a straight line and need to find how many trees we hit.
 
 The idea for solving it will be to calculate the path indices, modulo
-the width of the scene, and index back to find the trees. First
+the width of the scene, then to index back to find the trees. First
 parsing the trees:
 
 #+begin_src J :session :exports both
@@ -32,7 +32,7 @@ start from the left.
   g~, applied to arguments like ~x ([: f g) y~ it gives
   ~f(g(x,y))~. All that to say the last thing we do is sum the trees
   we hit at the end.
-+ ~] {~ [: <"1~ says to index into the grid (right argument ~]~) the
++ ~]{~[:<"1~ says to index into the grid (right argument ~]~) the
   indices. Boxing ~<~ is how index ~{~ knows we're indexing by point
   and not by row.
 + ~$@] |"1~ is modulo (~|~) based on the shape of the grid (~$@]~),
