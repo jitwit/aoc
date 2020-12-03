@@ -1,4 +1,4 @@
-#include "advent.h"
+#include "aoc.h"
 
 int main () {
   I lo,hi,j,a=0,b=0;C c,p[20];

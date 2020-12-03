@@ -1,4 +1,4 @@
-#include "advent.h"
+#include "aoc.h"
 
 int main () {
   I X[200],*p=X,i,j,k,n=0,a=-1,b=-1;
