@@ -2,7 +2,6 @@ load 'web/gethttp stats/bonsai'
 coclass 'aoc'
 
 AOCDIR=: jpath '~/code/aoc'
-USER=: 'jitwit'
 
 cookie_file=: 3 : 0
 AOCDIR,'/cookie'
@@ -47,7 +46,6 @@ end.
 )
 
 3 : 0 '' NB. initialize
-assert. fpathcreate AOCDIR,'/cookies/'
 assert. fpathcreate AOCDIR,'/input/2015/'
 assert. fpathcreate AOCDIR,'/input/2016/'
 assert. fpathcreate AOCDIR,'/input/2017/'
