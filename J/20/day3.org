@@ -15,7 +15,7 @@ trees =: '#'&=;._2 aoc 2020 3 [ load '~/code/aoc/aoc.ijs'
 
 Conjunction cut (~;.~) is used to split the input by lines. ~_2~ tells
 it to use the last character as the delimiter and it applies the verb
-~'#'&=~ to each line, representing trees as 1 and empty space as 0.
+'#'&= to each line, representing trees as 1 and empty space as 0.
 
 Now skiing:
 
@@ -32,7 +32,7 @@ start from the left.
   g~, applied to arguments like ~x ([: f g) y~ it gives
   ~f(g(x,y))~. All that to say the last thing we do is sum the trees
   we hit at the end.
-+ ~] {~~ [: <"1~ says to index into the grid (right argument ~]~) the
++ ~] {~ [: <"1~ says to index into the grid (right argument ~]~) the
   indices. Boxing ~<~ is how index ~{~ knows we're indexing by point
   and not by row.
 + ~$@] |"1~ is modulo (~|~) based on the shape of the grid (~$@]~),
