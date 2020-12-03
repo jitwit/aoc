@@ -14,5 +14,5 @@ int main () {
 	if(X[i]+X[j]+X[k]==2020)
 	  { b=X[i]*X[j]*X[k]; goto end; }
  end:
-  R printf("part A: %lld\npart B: %lld\n",a,b);
+  printf("part A: %lld\npart B: %lld\n",a,b); R 0;
 }
