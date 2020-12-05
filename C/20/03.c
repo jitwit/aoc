@@ -3,7 +3,8 @@
 #define W 31
 C T[H][W];
 
-I ski (I dx, I dy) { I t=0;DO(H/dy,t+='#'==T[i*dy][i*dx%W]);R t; }
+I ski (I dx, I dy)
+{ I t=0;DO(H/dy,t+='#'==T[i*dy][i*dx%W]);R t; }
 
 int main ()
 { C*p=(C*)T;

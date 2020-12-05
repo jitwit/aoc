@@ -1,6 +1,6 @@
 .phony : phony $(days)
 
-days = 1 2 3
+days = 1 2 3 5
 
 run : 0$(d)
 	time ./0$(d) < ../../input/2020/$(d).in
