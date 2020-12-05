@@ -1,11 +1,4 @@
-load '~/code/aoc/aoc.ijs'
-parse =: 'BF'
-parse =: 'LR'
-
-row =: {{ #. 'B' = 7 {. y }}
-seat =: {{ #. 'R' = _3 {. y }}
-parse =: seat + 8*row
-parse
-#'FBFBBFFRLR'
-
-,. (i.1024) -. (seat + 8*row);._2 aoc 2020 5
+load '~/code/aoc/aoc.ijs plot'
+ids =: #. (e.&'BR') ;._2 aoc 2020 5
+>./ ids
+(] {~ [: {: [: I. 1 ~: 2 -~/\ ]) (i.1024)-.ids
