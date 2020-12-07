@@ -59,3 +59,17 @@ update_cookie_z_ =: 3 : 0
 1!:55 < cookie_file_aoc_ ''
 y 1!:2 < cookie_file_aoc_ ''
 )
+
+bfs =: 4 : 0
+NB. get tree from bfs starting at x in graph y
+Q =. ~.,x NB. seed queue from x and mark x explored
+S =. -. (T =. i.#y) e. x NB. explored v iff 0 = v{S
+while. #Q do. 'u Q' =. ({.;}.) Q NB. pop Q
+  vs =. I. S * u{y NB. unexplored out edges u -> v
+  Q =. vs ,~ Q NB. push vs
+  S =. 0 vs} S NB. mark vs explored
+  T =. u vs} T NB. indicate parent in tree T
+end. T
+)
+
+bfs_z_ =: bfs_aoc_
