@@ -9,9 +9,9 @@ partA =: 3 : 0
 )
 
 partB =: 3 : 0
-for_j. i.n=.+/LF=in do.
- swap__vm j [ run__vm swap__vm j [ reset__vm in
- if. pc__vm = n do. acc__vm return. end.
+for_j. i. n=.#mem__vm do.
+ swap__vm j [ run__vm swap__vm j [ reset__vm ''
+ if. n = pc__vm do. acc__vm return. end.
 end.
 )
 
