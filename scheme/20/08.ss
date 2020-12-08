@@ -31,22 +31,20 @@
 (define (new program)
   (make-vm 0 0 program s:empty-set))
 
-(define (part-a program)
-  (vm-acc (run (new program))))
-
 (define (swap program j)
   (match (vector-ref program j)
     (`(nop ,dx) (vector-set! program j `(jmp ,dx)))
     (`(jmp ,dx) (vector-set! program j `(nop ,dx)))
     (_          (void))))
 
+(define (part-a program)
+  (vm-acc (run (new program))))
+
 (define (part-b program)
-  (call/cc
-   (lambda (exit)
-     (do ((i 0 (1+ i)))
-	 ((= i (vector-length program)))
-       (swap program i)
-       (let ((vm (run (new program))))
-	 (swap program i)
-	 (when (= (vector-length program) (vm-pc vm))
-	   (exit (vm-acc vm))))))))
+  (let loop ((j 0))
+    (swap program j)
+    (let ((vm (run (new program))))
+      (swap program j)
+      (if (= (vector-length program) (vm-pc vm))
+	  (vm-acc vm)
+	  (loop (1+ j))))))
