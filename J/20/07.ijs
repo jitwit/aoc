@@ -11,7 +11,7 @@ gold =: V i. <'shiny gold'
 
 B =: 3 : 0 M.                                          NB. lookup bags, memoized
  ws =. msk # ws[xs=.(V i. y{E) #~ msk=. * ws=.y{W
- if. xs-:'' do. 1 else. 1 + ws +/ . * B"0 xs end.
+ if. #xs do. 1 + ws +/ . * B"0 xs else. 1 end.
 )
 
 <: B gold                                              NB. part B

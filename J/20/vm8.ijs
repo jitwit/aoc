@@ -26,3 +26,8 @@ swap =: 3 : 0
  case. 'nop' do. mem =: 'jmp' y}mem
  case. do. end.
 )
+
+reset =: 3 : 0
+ pc =: acc =: 0
+ hist =: 0 * hist
+)

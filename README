@@ -7,7 +7,7 @@
 
 ** Writeups
 
-   Nicer writeups can be found [[http://j-raphael.net/posts/aoc.html][here]].
+   Nicer presentation of some solutions can be found [[http://j-raphael.net/posts/aoc.html][here]].
 
    I also split out the intcode stuff to a separate [[https://github.com/jitwit/intcode][repo]] with
    libraries for ChezScheme, Guile, and Racket.
@@ -87,7 +87,14 @@ echo link &> {."1 dirtree 'J/??.ijs'
 [[file:J/17/16.ijs]]
 [[file:J/17/21.ijs]]
 [[file:J/17/09.ijs]]
+[[file:J/20/03.ijs]]
+[[file:J/20/02.ijs]]
 [[file:J/20/01.ijs]]
+[[file:J/20/07.ijs]]
+[[file:J/20/05.ijs]]
+[[file:J/20/04.ijs]]
+[[file:J/20/06.ijs]]
+[[file:J/20/08.ijs]]
 
 #+begin_src J :session :exports both :results raw
 echo link &> {."1 dirtree 'scheme/??.ss'
@@ -126,9 +133,11 @@ echo link &> {."1 dirtree 'scheme/??.ss'
 [[file:scheme/19/04.ss]]
 [[file:scheme/19/14.ss]]
 [[file:scheme/17/22.ss]]
+[[file:scheme/20/08.ss]]
 [[file:scheme/20/01.ss]]
-
-
+[[file:scheme/20/02.ss]]
+[[file:scheme/20/07.ss]]
+[[file:scheme/20/06.ss]]
 
 #+begin_src J :session :exports both :results raw
 echo link &> {."1 dirtree 'haskell/*.hs'
@@ -140,5 +149,7 @@ echo link &> {."1 dirtree 'haskell/*.hs'
 [[file:haskell/19/14.hs]]       
 [[file:haskell/19/24.hs]]       
 [[file:haskell/19/01.hs]]       
+[[file:haskell/20/02.hs]]       
 [[file:haskell/20/01.hs]]       
+[[file:haskell/20/05.hs]]       
 
