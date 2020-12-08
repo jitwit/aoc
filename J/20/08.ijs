@@ -1,4 +1,4 @@
-load '~/code/aoc/aoc.ijs vm8.ijs plot'
+load '~/code/aoc/aoc.ijs'
 
 in =: aoc 2020 8
 jmp =: ({:"1) 0&".;._2 in
