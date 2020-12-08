@@ -1,19 +1,21 @@
-load '~/code/aoc/aoc.ijs vm8.ijs'
+load '~/code/aoc/aoc.ijs vm8.ijs plot'
 
-vm =: conew 'vm8'
-create__vm aoc 2020 8
+in =: aoc 2020 8
+jmp =: ({:"1) 0&".;._2 in
+mem =: 3 {."1 ];._2 in
+msk =: mem e. _3 ]\ 'accnop'
+msk1 =: mem e. _3 ]\ 'accjmp'
+E =: (,#) (([*[+i.@#) msk) + ((+i.@#) jmp)*-. msk
+E1 =: (,#) (([*[+i.@#) msk1) + ((+i.@#) jmp)*-. msk1
+step =: ~. @: (] , [ {~ {:@])
 
-partA =: 3 : 0
- run__vm reset__vm ''
- acc__vm
-)
+NB. part A
++/ jmp {~ IX #~ 'acc' -:"1 (IX =: E step ^: _ ] 0) { mem
 
-partB =: 3 : 0
-for_j. i. n=.#mem__vm do.
- swap__vm j [ run__vm swap__vm j [ reset__vm ''
- if. n = pc__vm do. acc__vm return. end.
-end.
-)
+G =: 1 (<"1 (,.~ i.@#) E)} (0$~,~1+#E)
+X =: /:~ (#~ (~: i.@#)) 0 bfs G
+Y =: I. 649 = ({&E) ^: (1+#E) (i.@#) E
 
-partA''
-partB''
+j =: X #~ (X { E1) e. Y
+NB. part B
++/ jmp {~ IX #~ 'acc' -:"1 (IX =: }: ((j{E1)j}E) step ^: _ ] 0) { mem
