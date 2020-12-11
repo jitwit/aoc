@@ -6,11 +6,11 @@ S =: in * 1 + F @: (2&=) f.
 
 +/ , 2 = S ^: _ in
 
-pi =: /: ; </. i. $ in                   NB. permutation based on razed obliques
-A =: [`]@.(*@])                          NB. janky accumulator for visible seats
-H =: (_1 |.!.0 A/\) +&(=&2) 1|.!.0 A~/\. NB. straight lines
-V =: H + $ $ pi { [: ; <@H/.             NB. lines + diagonals
-G =: (0=])`(5>])@.(2=[) V&.|: + V&.|.    NB. rules by visible chairs
+Z =: [: < 2 <\ (#~ {&in)
+I =: ~. {."1 E =: (,|."1) >;(Z/.J),(Z/.|.J),Z"1 J,|:J =: {;~i.#in
+ES =: E ([:<{:"1)/.~ {."1 E
+VI =: {{ (([: +/ {&y) &> ES) I} y }}
+G =: (0=])`(5>])@.(2=[) (VI@:(2&=))
 T =: in * 1 + G f.
 
 +/ , 2 = T ^: _ in
