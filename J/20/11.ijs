@@ -1,31 +1,16 @@
 load '~/code/aoc/aoc.ijs'
 
 ]in =: =&'L';._2 aoc 2020 11
-NB. L empty 0 => occ
-NB. # occ  >:4 => L
-NB. . floor
-NB. floor always same => 0
-
 F =: {{ y ((0=])`(4>])@.[) +/ (<:3 3 #: (i.9)-.4)|.!.0/ y }}
-S =: {{ in * >: F 0 >. <: y }}
+S =: in * (([: F 0&>.) &.: <:) f.
 +/ , 2 = S ^: _ in
-pi =: ; </. i. $ in
 
-E1 =: ]`(0 >. [)@.(*@[)
-E2 =: [`(0 >. ])@.(*@])
-C =: 0 >. <:
-LU =: [: C 1 |.!.0 E1/\.
-LD =: [: C _1 |.!.0 E2/\
-LL =: [: C 1 |.!.0"1 E1/\."1
-LR =: [: C _1 |.!.0"1 E2/\"1
-D0 =: {{ ($y) $ pi C.^:_1 ; ([:< LD)/. y }}
-D1 =: {{ ($y) $ pi C.^:_1 ; ([:< LU)/. y }}
-D2 =: D0&.|.
-D3 =: D1&.|.
-V =: LD+LU+LL+LR+D0+D1+D2+D3
-
-G =: {{ y ((0=])`(5>])@.(C@[)) V y }}
-T =: {{ in * >: G y }}
-'.L#' {~ T
+pi =: ; </. i. $ in  NB. permutation for undoing obliques, based on input
+E1 =: ]`[@.(*@[)     NB. janky accumulators for scanning visible seats
+E2 =: [`]@.(*@])
+H =: (_1 |.!.0 E2/\) +&(0>.<:) (1 |.!.0 E1/\.) NB. straight lines
+D =: $ $ pi /:~ [: ; ([:< H)/.                 NB. diagonals
+G =: ((0=])`(5>])@.(0>.<:@:[)) H"1+H+D+(D&.|.) NB. rules by visible chairs
+T =: in * [: >: G f.
 
 +/ , 2 = T ^: _ in
