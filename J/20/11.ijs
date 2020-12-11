@@ -1,6 +1,6 @@
 load '~/code/aoc/aoc.ijs'
 
-]in =: =&'L';._2 aoc 2020 11
+in =: '.L#'&i. ;._2 aoc 2020 11
 F =: (0=])`(4>])@.[ [: +/ (<:3 3#:(i.9)-.4)|.!.0/ ]
 S =: in * 1 + F @: (2&=) f.
 
@@ -10,7 +10,7 @@ pi =: /: ; </. i. $ in                   NB. permutation based on razed obliques
 A =: [`]@.(*@])                          NB. janky accumulator for visible seats
 H =: (_1 |.!.0 A/\) +&(=&2) 1|.!.0 A~/\. NB. straight lines
 V =: H + $ $ pi { [: ; <@H/.             NB. lines + diagonals
-G =: (0=])`(5>])@.(2=[) V&.|:+V&.|.      NB. rules by visible chairs
+G =: (0=])`(5>])@.(2=[) V&.|: + V&.|.    NB. rules by visible chairs
 T =: in * 1 + G f.
 
 +/ , 2 = T ^: _ in
