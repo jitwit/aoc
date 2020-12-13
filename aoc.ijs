@@ -72,4 +72,21 @@ bfs =: 4 : 0
  end. T
 )
 
+bez =: 4 : 0 NB. bezout
+ 'a b c d s t' =. 1 0 0 1,x,y
+ while. r =. t - s*q =. <. t%s do.
+   c =. t [ a =. c-q*a [ t =. a
+   d =. t [ b =. d-q*b [ t =. b
+   s =. r [ t =. s
+ end. a,b,s NB. assert. s = (a*x) + b*y
+)
+
+crt =: 4 : 0 NB. chinese remainder theorem
+ 's t g' =. m bez n [ 'b n' =. y [ 'a m' =. x
+ (m*n%g) (|,[) (a*n*t) + (b*m*s)
+)
+
+
 bfs_z_ =: bfs_aoc_
+bez_z_ =: bez_aoc_
+crt_z_ =: crt_aoc_
