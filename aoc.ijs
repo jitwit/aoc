@@ -82,8 +82,8 @@ bez =: 4 : 0 NB. bezout
 )
 
 crt =: 4 : 0 NB. chinese remainder theorem
- 's t g' =. m bez n [ 'b n' =. y [ 'a m' =. x
- (m*n%g) (|,[) (a*n*t) + (b*m*s)
+ 's t g'=.m bez n['b n'=.y['a m'=.x
+ <.(<.m*n%g)(|,[)(a*n*t)+&<.(b*m*s)
 )
 
 
