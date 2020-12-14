@@ -2,24 +2,19 @@ load '~/code/aoc/aoc.ijs'
 
 in =: |. (<;._1~ 'mask'&E.) aoc 2020 14
 
-W =: #~ [: ~: {."1
-D =: (36#2)&#:
+D =: (36#2)&#: NB. D for decode (36 bits)
 
 blockA =: 3 : 0
- mask =. _1 2 {:: y =. |. ;:;._2 y
- off =. -. off [ 'on off' =. '10' =/ mask
- adds =. ". 2 {::"1 }: y
- adds ,. #. off *."1 on +."1 D ". 5 {::"1 }: y
+ off=. -. {: 'on off'=. '10' =/ mask=. _1 2 {:: y=. |. ;:;._2 y
+ (".2{::"1}:y) ,. #. off *."1 on +."1 D ".5{::"1}:y
 )
 
-+/ {:"1 W ; blockA &.> in
++/ {:"1 (#~ [: ~: {."1) ; blockA &.> in
 
 blockB =: 3 : 0
- mask =. _1 2 {:: y =. |. ;:;._2 y
- off =. -. float [ 'on float' =. '1X' =/ mask
- j =. (#. off *."1 on +."1 D ". 2 {::"1 }: y) ,. ". 5 {::"1 }: y
- f =. (#: i. 2^+/float) +/ . * 2^35-I.float
- ,/ (f,.0) +"1/ j
+ off=. -. {: 'on fl' =. '1X' =/ mask=. _1 2 {:: y=. |. ;:;._2 y
+ f =. 0 ,.~ (#: i. 2^+/fl) +/ . * 2^35-I.fl
+ ,/ f +"1/ (#. off *."1 on +."1 D ".2{::"1}:y) ,. ".5{::"1}:y
 )
 
-<. +/ {:"1 W ; blockB &.> in
+<. +/ {:"1 (#~ [: ~: {."1) ; blockB &.> in
