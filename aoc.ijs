@@ -72,7 +72,7 @@ bfs =: 4 : 0
  end. T
 )
 
-egcd =: 4 : 0 NB. bezout
+egcd =: 4 : 0 NB. extended euclid
  'a b c d s t' =. 1 0 0 1,x,y
  while. r =. t - s*q =. <. t%s do.
    c =. t [ a =. c-q*a [ t =. a
@@ -85,7 +85,6 @@ crt =: 4 : 0 NB. chinese remainder theorem
  's t g'=.m egcd n['b n'=.y['a m'=.x
  <.(<.m*n%g)(|,[)(a*n*t)+&<.&(%&g) (b*m*s) assert. 0 = g | a-b
 )
-
 
 bfs_z_ =: bfs_aoc_
 bez_z_ =: bez_aoc_
