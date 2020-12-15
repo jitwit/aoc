@@ -1,21 +1,24 @@
+(optimize-level 3)
 (define in
   '(8 0 17 4 1 12))
 
 (define (solve in n)
   (define mem
-    (make-eq-hashtable))
+    (make-fxvector n -1))
   (define curr)
   (define (previous x t)
-    (let ((t* (hashtable-ref mem x t)))
-      (hashtable-set! mem x t)
-      (set! curr (- t t*))))
+    (cond ((fx< (fxvector-ref mem x) 0)
+	   (set! curr 0)
+	   (fxvector-set! mem x t))
+	  (else
+	   (set! curr (fx- t (fxvector-ref mem x)))
+	   (fxvector-set! mem x t))))
   (for-each (lambda (j x)
-	      (previous x (1+ j)))
+	      (previous x (fx1+ j)))
 	    (iota (length in))
 	    in)
-  (do ((i (1+ (length in)) (1+ i)))
-      ((>= i n)
-       curr)
+  (do ((i (fx1+ (length in)) (fx1+ i)))
+      ((fx>= i n) curr)
     (previous curr i)))
 
 (define (part-a)
