@@ -6,6 +6,11 @@ NB. reverse string and fix parens so ". works
 p =: {{".'('(I.c)}')'(I.o)}y['o c'=.0 1=/'()'i.y=.|.&.;:y}}
 +/ p&> in
 
+sexp =: 3 : 0
+ m=. 0 <: p=. (;:'()') -/@(=/) t=. (0;SM;SA) ;: y
+ t ,~&<&(m&#) (+/\ - 1&=) p
+)
+
 NB. evaluate a block of tokens having no parens
 eb =: 3 : 0
  d =. +/\ -. +./ _1 0|."0 1] y=<,'+'
@@ -16,12 +21,8 @@ NB. evaluate deepest nesting of an expression and return result
 eval =: 3 : 0
  if.     1=#y                 do. y
  elseif. 0=d=.>./0{::'D T'=.y do. eb T
- else. ts =. T ];.1~ ] _1 |.!.1 ] 1,~2 ~:/\ ms=.d=D
-       ls =. _2 eb@:{:\ ts =. }:^:(1=2|#ts) ts
-       ((-.ms)#D) ; < (-.ms)#ls(I.(T=<,'(')*.(d-1)=D)}T end.
+ else. ls =. (2,:2) (eb@:{:);._3 T (];.1)~ _1(|.!.1)1,~2~:/\-.ms=.d~:D
+       (ms#D) ; < ms#ls(I.(T=<,'(')*.(d-1)=D)}T end.
 )       
 
-NB. use mini s-expression parser to read parenthesized expressions. it
-NB. returns a depth vector along with the tokens. see
-NB. https://github.com/jitwit/jexp
-+/ ". > (eval^:_ @: sexp) &> in
++/ ". > eval^:_@:sexp &> in
