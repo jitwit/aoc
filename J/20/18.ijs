@@ -1,4 +1,4 @@
-load '~/code/aoc/aoc.ijs exp.ijs'
+load '~/code/aoc/aoc.ijs sexp.ijs'
 
 in =: <;._2 aoc 2020 18
 
@@ -21,5 +21,7 @@ eval =: 3 : 0
        ((-.ms)#D) ; < (-.ms)#ls(I.(T=<,'(')*.(d-1)=D)}T end.
 )       
 
-NB. uses mini s-expression lexer to parse parenthesized expressions
+NB. uses mini s-expression lexer to parse parenthesized expressions it
+NB. returns a depth vector along with the tokens. see
+NB. https://github.com/jitwit/jexp
 +/ ". > (eval^:_ @: sexp) &> in
