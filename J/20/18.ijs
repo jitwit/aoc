@@ -6,18 +6,15 @@ NB. reverse string and fix parens so ". works. part A
 +/ {{".'('c}')'o}y['o c'=.I.0 1=/'()'i.y=.|.&.;:y}}&> in
 
 NB. char classes and state table for parsing via ;:
-A =: (1 I.~(C =: ' ';'()+*')e.&>~])"0 a.
 S =: 3 3 2 $ , (". ;. _2)  0 : 0
 0 1  1 1  2 1 NB. space
 0 3  1 2  2 2 NB. ()*+
 0 3  1 2  2 0 NB. number
 )
+M =: 0;S;(1 I.~(C =: ' ';'()+*')e.&>~])"0 a.
 
 NB. P for parse a parenthesized. tokenizes + calculates depth vector from parens
-P =: 3 : 0
- m=. 0 <: p=. (;:'()') -/@(=/) t=. (0;S;A) ;: y
- t ,~&<&(m&#) (+/\ - 1&=) p
-)
+P =: {{t ,~&<&((0<:p)&#) (+/\-1&=) p =. (;:'()') -/@(=/) t=. M ;: y}}
 
 NB. B for block. evaluate a block of tokens having no nesting. first + then *
 B =: {{<":".;(+/\-.+./_1 0|."0 1 y=<,'+')(<@:":@:".@:(;:^:_1))`]@.(1=#)/.y}}
