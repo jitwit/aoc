@@ -3,7 +3,7 @@ load '~/code/aoc/aoc.ijs'
 in =: <;._2 aoc 2020 18
 
 NB. reverse string and fix parens so ". works. part A
-+/ {{".'('c}')'o}y['o c'=.I.0 1=/'()'i.y=.|.&.;:y}}&> in
++/ {{".'('c}')'o}y['o c'=.I.'()'=/y=.|.&.;:y}}&> in
 
 NB. char classes and state table for parsing via ;:
 S =: 3 3 2 $ , (". ;. _2)  0 : 0
