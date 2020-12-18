@@ -6,17 +6,16 @@ NB. reverse string and fix parens so ". works. part A
 +/ {{".'('c}')'o}y['o c'=.I.0 1=/'()'i.y=.|.&.;:y}}&> in
 
 NB. char classes and state table for parsing via ;:
-C =: ' ';'()';'+*'
-S =: 4 4 2 $ , (". ;. _2)  0 : 0
-0 1  1 1  3 1  2 1 NB. space
-0 3  1 2  3 2  2 2 NB. paren
-0 3  1 2  3 2  2 0 NB. number
-0 3  1 2  3 2  2 2 NB. */+
+A =: (1 I.~(C =: ' ';'()+*')e.&>~])"0 a.
+S =: 3 3 2 $ , (". ;. _2)  0 : 0
+0 1  1 1  2 1 NB. space
+0 3  1 2  2 2 NB. ()*+
+0 3  1 2  2 0 NB. number
 )
 
 NB. P for parse a parenthesized. tokenizes + calculates depth vector from parens
 P =: 3 : 0
- m=. 0 <: p=. (;:'()') -/@(=/) t=.(0;S;(1 I.~C e.&>~])"0 a.) ;: y
+ m=. 0 <: p=. (;:'()') -/@(=/) t=. (0;S;A) ;: y
  t ,~&<&(m&#) (+/\ - 1&=) p
 )
 
