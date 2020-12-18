@@ -23,12 +23,12 @@ P =: 3 : 0
 NB. B for block. evaluate a block of tokens having no nesting. first + then *
 B =: {{<":".;(+/\-.+./_1 0|."0 1 y=<,'+')(<@:":@:".@:(;:^:_1))`]@.(1=#)/.y}}
 
-NB. E for eval. evaluate deepest nesting to make progress
+NB. E for eval. evaluate deepest nesting to make progress.
 E =: 3 : 0
  if.     1=#y                 do. y
  elseif. 0=d=.>./0{::'D T'=.y do. B T
- else. ls =. (2,:2) (B@:{:);._3 T (];.1)~ _1(|.!.1)1,~2~:/\-.ms=.d~:D
-       (ms#D);<ms#ls(I.(T=<,'(')*.(d-1)=D)}T end.
+ else. b =. (2,:2) (B@:{:);._3 T (];.1)~ _1(|.!.1)1,~2~:/\-.m=.d~:D
+       (m#D) ;< m#b (I. (T=<,'(') *. (d-1)=D)} T end.
 )
 
 +/ ". > E^:_@:P &> in NB. part b
