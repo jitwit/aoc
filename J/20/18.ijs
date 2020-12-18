@@ -3,7 +3,7 @@ load '~/code/aoc/aoc.ijs'
 in =: <;._2 aoc 2020 18
 
 NB. reverse string and fix parens so ". works. part A
-+/ {{".'('(I.c)}')'(I.o)}y['o c'=.0 1=/'()'i.y=.|.&.;:y}}&> in
++/ {{".'('c}')'o}y['o c'=.I.0 1=/'()'i.y=.|.&.;:y}}&> in
 
 NB. char classes and state table for parsing via ;:
 C =: ' ';'()';'+*'
@@ -16,7 +16,7 @@ S =: 4 4 2 $ , (". ;. _2)  0 : 0
 
 NB. P for parse a parenthesized. tokenizes + calculates depth vector from parens
 P =: 3 : 0
- m=. 0 <: p=. (;:'()') -/@(=/) t=. (0;S;(1 I.~ C e.&>~ ])"0 a.) ;: y
+ m=. 0 <: p=. (;:'()') -/@(=/) t=.(0;S;(1 I.~C e.&>~])"0 a.) ;: y
  t ,~&<&(m&#) (+/\ - 1&=) p
 )
 
