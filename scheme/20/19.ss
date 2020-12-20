@@ -1,3 +1,4 @@
+(optimize-level 3)
 (load "~/code/aoc/load.ss")
 (advent-year 20) (advent-day 19)
 
@@ -29,10 +30,10 @@
 	(hashtable-ref mem (list lo hi rule) 'ohno)
 	(let ((result (ormap (lambda (production)
 			       (match production
-				 (((? char? x))
-				  (and (= lo (1- hi)) (eqv? x (string-ref S lo))))
-				 ((x)
-				  (g lo hi x))
+				 ((a)
+				  (if (char? a)
+				      (and (= lo (1- hi)) (eqv? a (string-ref S lo)))
+				      (g lo hi a)))
 				 ((a b)
 				  (let lp ((i (1+ lo)))
 				    (and (< i hi)
@@ -41,7 +42,7 @@
 					     (lp (1+ i))))))
 				 ((a b c)
 				  (let lp1 ((i (1+ lo)))
-				    (and (< i hi)
+				    (and (< i (1- hi))
 					 (let lp2 ((j (1+ i)))
 					   (if (>= j hi)
 					       (lp1 (1+ i))
@@ -57,7 +58,6 @@
 
 (define (do-matching strings rules)
   (length (filter (lambda (s)
-		    (display-ln s)
 		    (matches? s rules))
 		  strings)))
 
@@ -72,7 +72,7 @@
     (filter (lambda (line)
 	      (not (or (zero? (string-length line)) (string-contains line ":"))))
 	    input))
-  (define A (do-matching strings rules))
+  (display-ln (do-matching strings rules))
   (hashtable-set! rules 8 '((42) (42 8)))
   (hashtable-set! rules 11 '((42 31) (42 11 31)))
-  (list A (do-matching strings rules)))
+  (display-ln (do-matching strings rules)))
