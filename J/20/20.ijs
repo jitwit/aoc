@@ -1,38 +1,27 @@
 load '~/code/aoc/aoc.ijs'
 
-NB. 
-in =: (<;._2~ (2#LF)&E.) LF,(1!:1 < '20.in'),LF
-NB. LF,(aoc 2020 20)
-P =: [: <;._2 ,&LF
-Id =: {{{: 0 ". ':'-.~ 1 {:: y}}
-S =: P &.> in
-ids =: Id &> S
-img =: ([: > 2&}.) &> S
-
-sides =: [: (,|."1) {. , {: , ({.,:{:) @: |:
-C =: [: +./ [: , -:"1/~&sides
-G =: (-=/~@i.@#) C"2/~ img
-*/ ids #~ 2 = +/ G
+in =: ([: <;._2 ,&LF) &.> (<;._2~ (2#LF)&E.) LF,(aoc 2020 20)
+NB. (1!:1 < '20.in'),LF
+I =: ([: {: 0 ". ':' -.~ 1&{::) &> in         NB. I for id
+N =: %:#B =: ([: > 2&}.) &> in                NB. B for block, N for NxN grid
+S =: [: (,|."1) {. , {: , ({.,:{:) @: |:      NB. S for sides
+G =: (-=@i.@#) ([: +./ [: , -:"1/~&S)"2/~ B NB. connection graph
+*/ I #~ 2 = +/ G NB. part A
 
 
-NB. ok so we know corners.
-NB. want to build image
-NB. plan, start with corner. connect it.
-NB. connect each row.
-NB. need to now know how to connect
-node =: 3 : 0
-t =. y bfs G
-d =. <: #@~."1 |: ({&t)^:a: t
-NB. ({&t)^:a:
-t ; d ; d = (<:%:#G)
+C0 =: {. I. 2 = +/ G NB. corner/start
+SYM =: (,|:"_1)@:(|:@|.^:(i.4))
+H =: {:"2 X =: SYM"_1 B
+M =: {{ , h #~ ({.y) ~: {."1 h =. 4 $. $. H -:"_2 _ {. X{~<y }}
+R =: {{ (#~ ok"2) M^:(i.N)"1 y,.i.8 }}
+ok =: (=&# ~.) {."1
+
+NB. fill in sides, deselecting conflicting assignments
+T =: {{ r #~ -. +./"1 {."_2 (x-.y) e.~ r =. R y }}
+
+F =: 3 : 0
+F2 =. {."1 {. c0 =. R y
+{."_1 (F2&T)"0 F2
 )
 
-start =: 3 : 0
-'a b' =. I. G {~ c =. 1 i.~ 2 = +/ G
-s1 =. 1 i.~ +/ (c{img) -:"1/~&sides (a{img)
-s2 =. 1 i.~ +/ (c{img) -:"1/~&sides (b{img)
-s1,s2
-)
-
-start ''
-|. 1 { img
+{."_2 F C0
