@@ -17,21 +17,20 @@
 		  (reverse (cdr (iota (1+ (length cards))))))))
 
 (define (combat p1 p2)
-  (cond ((null? p1) (score p2))
-	((null? p2) (score p1))
+  (cond ((null? p1) `(player-2 ,(score p2)))
+	((null? p2) `(player-1 ,(score p1)))
 	(else
 	 (let ((a (car p1)) (b (car p2)) (p1 (cdr p1)) (p2 (cdr p2)))
 	   (if (< a b)
 	       (combat p1 `(,@p2 ,b ,a))
 	       (combat `(,@p1 ,a ,b) p2))))))
 
-(define (recursive-combat player-1 player-2)
+(define (recursive-combat p1 p2)
   (define history
-    (make-hashtable (lambda (state) (equal-hash (list-head state 2))) equal?))
-  (let lp ((p1 player-1)
-	   (p2 player-2)
-	   (n (length player-1))
-	   (m (length player-2)))
+    (make-hashtable (lambda (state)
+		      (equal-hash (list-head state 2)))
+		    equal?))
+  (let lp ((p1 p1) (p2 p2) (n (length p1)) (m (length p2)))
     (cond
      ((null? p1) `(player-2 ,(score p2)))
      ((null? p2) `(player-1 ,(score p1)))
