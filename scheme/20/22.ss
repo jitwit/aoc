@@ -1,4 +1,5 @@
-(optimize-level 3) (load "~/code/aoc/load.ss")
+(optimize-level 3)
+(load "~/code/aoc/load.ss")
 (advent-year 20) (advent-day 22)
 
 (define *input*
@@ -15,6 +16,9 @@
 	     (map *
 		  cards
 		  (reverse (cdr (iota (1+ (length cards))))))))
+
+(define (winner result)
+  (car result))
 
 (define (combat p1 p2)
   (cond ((null? p1) `(player-2 ,(score p2)))
@@ -42,10 +46,15 @@
 	  (cond
 	   (previously? `(player-1 ,(score (cons a p1))))
 	   ((and (< a n) (< b m))
-	    (let ((sub-game (recursive-combat (list-head p1 a) (list-head p2 b))))
-	      (if (eq? 'player-1 (car sub-game))
-		  (lp `(,@p1 ,a ,b) p2 (1+ n) (1- m))
-		  (lp p1 `(,@p2 ,b ,a) (1- n) (1+ m)))))
+	    (let* ((q1 (list-head p1 a)) (m1 (fold-left max 0 q1))
+		   (q2 (list-head p2 b)) (m2 (fold-left max 0 q2)))
+	      (cond ; if player 1 has trump card so to speak
+	       ((and (> m1 m2) (>= m1 (+ a b)))
+		(lp `(,@p1 ,a ,b) p2 (1+ n) (1- m)))
+	       ((eq? 'player-1 (winner (recursive-combat q1 q2)))
+		(lp `(,@p1 ,a ,b) p2 (1+ n) (1- m)))
+	       (else
+		(lp p1 `(,@p2 ,b ,a) (1- n) (1+ m))))))
 	   (else
 	    (if (< a b)
 		(lp p1 `(,@p2 ,b ,a) (1- n) (1+ m))
