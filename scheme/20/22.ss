@@ -1,5 +1,4 @@
-(optimize-level 3)
-(load "~/code/aoc/load.ss")
+(optimize-level 3) (load "~/code/aoc/load.ss")
 (advent-year 20) (advent-day 22)
 
 (define *input*
@@ -9,8 +8,7 @@
   (fields player-1 player-2))
 
 (define start
-  (make-decks (take-while (compose not (curry eq? 'Player))
-			  (list-tail *input* 2))
+  (make-decks (take-while (compose not (curry eq? 'Player)) (list-tail *input* 2))
 	      (list-tail (drop-while (compose not (curry eq? 'Player))
 				     (list-tail *input* 2))
 			 2)))
@@ -32,13 +30,15 @@
 
 (define (recursive-combat game)
   (define history
-    (make-hashtable equal-hash equal?))
+    (make-hashtable (lambda (state)
+		      (equal-hash (list-head state 2)))
+		    equal?))
   (let lp ((game game)
 	   (n (length (decks-player-1 game)))
 	   (m (length (decks-player-2 game))))
     (match game
       (($ decks (a p1 ...) (b p2 ...))
-       (let* ((state `(,(cons a p1) ,(cons b p2)))
+       (let* ((state `(,a ,b ,p1 ,p2))
 	      (previously? (hashtable-contains? history state)))
 	 (hashtable-set! history state #t)
 	 (cond
