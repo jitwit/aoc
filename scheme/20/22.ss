@@ -48,13 +48,17 @@
 	   ((and (< a n) (< b m))
 	    (let* ((q1 (list-head p1 a)) (m1 (fold-left max 0 q1))
 		   (q2 (list-head p2 b)) (m2 (fold-left max 0 q2)))
-	      (cond ; if player 1 has trump card so to speak
-	       ((and (> m1 m2) (>= m1 (+ a b)))
-		(lp `(,@p1 ,a ,b) p2 (1+ n) (1- m)))
-	       ((eq? 'player-1 (winner (recursive-combat q1 q2)))
-		(lp `(,@p1 ,a ,b) p2 (1+ n) (1- m)))
-	       (else
-		(lp p1 `(,@p2 ,b ,a) (1- n) (1+ m))))))
+	      ;; player 1 has trump card so to speak. justification:
+	      ;; in recursive subgames, m1 itself may not trigger
+	      ;; recursive subgames, it's too big. if a subsubgame is
+	      ;; triggered, m1 stays with player 1. therefore, m1
+	      ;; never leaves player 1's control. thus player 1 wins
+	      ;; the subgame either outright or by repetition.
+	      (cond ((and (> m1 m2) (>= m1 (+ a b)))
+		     (lp `(,@p1 ,a ,b) p2 (1+ n) (1- m)))
+		    ((eq? 'player-1 (winner (recursive-combat q1 q2)))
+		     (lp `(,@p1 ,a ,b) p2 (1+ n) (1- m)))
+		    (else (lp p1 `(,@p2 ,b ,a) (1- n) (1+ m))))))
 	   (else
 	    (if (< a b)
 		(lp p1 `(,@p2 ,b ,a) (1- n) (1+ m))
