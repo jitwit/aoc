@@ -42,7 +42,7 @@
       (let ((a (car p1)) (b (car p2)) (p1 (cdr p1)) (p2 (cdr p2)))
 	(let* ((state `(,a ,b ,p1 ,p2))
 	       (previously? (hashtable-contains? history state)))
-	  (hashtable-set! history state #t)	  
+	  (hashtable-set! history state #t)
 	  (cond
 	   (previously? `(player-1 ,(score (cons a p1))))
 	   ((and (< a n) (< b m))
@@ -51,9 +51,11 @@
 	      ;; player 1 has trump card so to speak. justification:
 	      ;; in recursive subgames, m1 itself may not trigger
 	      ;; recursive subgames, it's too big. if a subsubgame is
-	      ;; triggered, m1 stays with player 1. therefore, m1
-	      ;; never leaves player 1's control. thus player 1 wins
-	      ;; the subgame either outright or by repetition.
+	      ;; triggered, m1 stays with player 1, either by same
+	      ;; reasoning on smaller hands or because it's not in the
+	      ;; cut. therefore, m1 never leaves player 1's
+	      ;; control. so, player 1 wins the subgame either
+	      ;; outright or by repetition.
 	      (cond ((and (> m1 m2) (>= m1 (+ a b)))
 		     (lp `(,@p1 ,a ,b) p2 (1+ n) (1- m)))
 		    ((eq? 'player-1 (winner (recursive-combat q1 q2)))
