@@ -1,3 +1,4 @@
+(optimize-level 3)
 (load "~/code/aoc/load.ss")
 (advent-year 20) (advent-day 22)
 
@@ -15,23 +16,19 @@
 			 2)))
 
 (define (score cards)
-  (apply +
-	 (map *
-	      cards
-	      (map 1+ (reverse (iota (length cards)))))))
+  (fold-left + 0
+	     (map *
+		  cards
+		  (reverse (cdr (iota (1+ (length cards))))))))
 
 (define (combat game)
   (match game
     (($ decks (a p1 ...) (b p2 ...))
      (if (< a b)
-	 (make-decks p1 `(,@p2 ,b ,a))
-	 (make-decks `(,@p1 ,a ,b) p2)))
-    (($ decks '() p2) (score p2))
-    (($ decks p1 '()) (score p1))))
-
-(define (do-combat game)
-  (let lp ((game game))
-    (if (number? game) game (lp (combat game)))))
+	 (combat (make-decks p1 `(,@p2 ,b ,a)))
+	 (combat (make-decks `(,@p1 ,a ,b) p2))))
+    (($ decks '() p2) `(player-2 ,(score p2)))
+    (($ decks p1 '()) `(player-1 ,(score p1)))))
 
 (define (recursive-combat game)
   (define history
