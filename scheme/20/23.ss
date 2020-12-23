@@ -3,7 +3,7 @@
 (advent-year 20) (advent-day 23)
 
 (define cups
-  (digits (car (parse-advent input))))
+  (apply digits (parse-advent input)))
 
 (define (follow ring ix)
   (fxvector-ref ring ix))
@@ -13,6 +13,9 @@
 
 (define (point! ring u v)
   (fxvector-set! ring u v))
+
+(define (size ring)
+  (fx1- (fxvector-length ring)))
 
 (define (input->ring cups)
   ;; store current pointer at 0 index. ptrs[i] gives link i->j.
@@ -27,7 +30,7 @@
 (define (destination ring target c1 c2 c3)
   (let lp ((option target) (tries 0))
     (cond ((fxzero? option)
-	   (lp (fx1- (fxvector-length ring)) 0))
+	   (lp (size ring) 0))
 	  ((or (fx= tries 3)
 	       (not (or (fx= option c1)
 			(fx= option c2)
@@ -56,7 +59,7 @@
 
 (define (part-a)
   (define cup (crab-cup cups 100))
-  (do ((i (fx- (fxvector-length cup) 2) (fx1- i))
+  (do ((i (fx1- (size cup)) (fx1- i))
        (p (follow cup 1) (follow cup p))
        (x 0 (+ (* x 10) p)))
       ((fxzero? i) x)))
