@@ -51,7 +51,7 @@
 (define (crab-cup seed times)
   (define ring (input->ring seed))
   (do ((i 0 (fx1+ i)))
-      ((= i times) ring)
+      ((fx= i times) ring)
     (evolve ring)))
 
 (define (part-a)
