@@ -1,14 +1,11 @@
 load '~/code/aoc/aoc.ijs regex'
 
-NB. (-1+-/3)/2
-HEX =: ;: 'e ne nw w sw se'
-P =: HEX i. 'sw|nw|ne|se|e|w'&rxall
-A =: +/@:^@:((j. 1r3p1) * P)
-NB. tolerant equality sucks
-teq =: 1 : '|@- <:!.0 m * >.&|'
-{{ (+:#y) - +/,0.00001 teq"0/~ y }}
-n =: 2^_10
-+/ 2 | #/.(!.n)~ A;._2 ] aoc 2020 24
-NB. 1!:1 < '24.in'
-
-
+NB. better than roots of unity for float reasons
+V =: _2 ]\ 1 0 0 1 _1 1 _1 0 0 _1 1 _1
+A =: +/@:(V{~(;:'e ne nw w sw se')i.'sw|nw|ne|se|e|w'&rxall)
+in =: A;._2 aoc 2020 24
++/ 2 | #/.~ in NB. part a
+P =: {{for_d.i.s=.#$y do.y=.0,"(d+1)y,"(d+1),0 end.}}^:2
+G =: 1 (<"1 G)}(1+>./G=.(-"1<./)in#~2|+/-:"1/~in)$0
+life =: {{2=z+y*1=z=.+/V|.!.0"1 _/y=.P y}}
++/,life ^: 100 G NB. part B
