@@ -12,10 +12,11 @@ G =: (-=@i.@#) +./"_1 ([: +./"1 (-:"1/~))/~ H NB. connection graph
 C0 =: {. I. 2 = +/ G NB. corner/abritrary start
 M =: {{ , h #~ ({.y) ~: {."1 h =. 4 $. $. H -:"_2 _ {. X{~<y }}
 R =: {{ (#~ ((=&# ~.) {."1)"2) M^:(i.-N)"1 y,.i.8 }}
-
 T =: {{ r #~ -. +./"1 {."_2 (x-.y) e.~ r =. R y }}
-NB. dumb hacky stitch (side by side agreement)
-ST =: {{if.({:"1 x)-:{."1 y do. x,.y else. (|."1 x),.y end.}}
+ST =: {{ if.({:"1 x)-:{."1 y do. x,.y
+         elseif. ({."1 x)-:{."1 y do. (|."1 x),.y
+         elseif. ({."1 x)-:{:"1 y do. (|."1 x) ,. |."1 y
+         else. x,.|."1 y end.}}
 SEA =: {{IMG=.ST/,/"_1 X{~<"1{."_1(F2&T)"0 F2=.{."1{.R y
          '#'=,./^:2(2 2$10)(}.@:}:"_1@:}.@:}:);._3 IMG}}
 SMC =: +/,SM =: '#'&=;._2 ] 0 : 0 NB. sea monster
@@ -23,5 +24,8 @@ SMC =: +/,SM =: '#'&=;._2 ] 0 : 0 NB. sea monster
 #    ##    ##    ###
  #  #  #  #  #  #   
 )
-
-(+/,IMG)-SMC*+/,((1 1,:$SM)&(SMC=+/@:,@:(SM&*);._3))"_1 SYM SEA C0
+MON =: (1 1,:$SM)&(SMC=+/@:,@:(SM&*);._3)
+(+/,IMG)-SMC*+/,MON"_1 SYM IMG =: SEA C0
+DIM =: $ IMG =: ,/ (#~([:+./[:,MON)"_1) SYM SEA C0
+monsters =: IMG + +/ (-4$.$.MON IMG) |."1 _/ (DIM $!.0 , SM ,"1 (0$~DIM-&{:$SM))
+(0 30 255,120 10 255,:50 200 140) viewmat monsters
