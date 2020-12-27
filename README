@@ -5,6 +5,9 @@
   Solutions to advent of code problems in ~scheme~, ~J~, and
   ~haskell~.
 
+#+caption: sea monsters
+[[file:output/20-20.png]]
+
 ** Writeups
 
    Nicer presentation of some solutions can be found [[http://j-raphael.net/posts/aoc.html][here]].
@@ -26,6 +29,7 @@ echo link &> {."1 dirtree 'J/??.ijs'
 [[file:J/15/14.ijs]]
 [[file:J/15/17.ijs]]
 [[file:J/15/02.ijs]]
+[[file:J/15/23.ijs]]
 [[file:J/15/13.ijs]]
 [[file:J/15/01.ijs]]
 [[file:J/15/11.ijs]]
@@ -36,6 +40,7 @@ echo link &> {."1 dirtree 'J/??.ijs'
 [[file:J/15/12.ijs]]
 [[file:J/15/08.ijs]]
 [[file:J/15/09.ijs]]
+[[file:J/18/14.ijs]]
 [[file:J/18/03.ijs]]
 [[file:J/18/17.ijs]]
 [[file:J/18/02.ijs]]
@@ -87,14 +92,31 @@ echo link &> {."1 dirtree 'J/??.ijs'
 [[file:J/17/16.ijs]]
 [[file:J/17/21.ijs]]
 [[file:J/17/09.ijs]]
+[[file:J/20/15.ijs]]
+[[file:J/20/14.ijs]]
+[[file:J/20/20.ijs]]
 [[file:J/20/03.ijs]]
+[[file:J/20/17.ijs]]
 [[file:J/20/02.ijs]]
+[[file:J/20/23.ijs]]
+[[file:J/20/13.ijs]]
 [[file:J/20/01.ijs]]
+[[file:J/20/11.ijs]]
 [[file:J/20/07.ijs]]
+[[file:J/20/25.ijs]]
+[[file:J/20/16.ijs]]
 [[file:J/20/05.ijs]]
+[[file:J/20/19.ijs]]
+[[file:J/20/18.ijs]]
 [[file:J/20/04.ijs]]
+[[file:J/20/22.ijs]]
+[[file:J/20/21.ijs]]
+[[file:J/20/24.ijs]]
+[[file:J/20/10.ijs]]
 [[file:J/20/06.ijs]]
+[[file:J/20/12.ijs]]
 [[file:J/20/08.ijs]]
+[[file:J/20/09.ijs]]
 
 #+begin_src J :session :exports both :results raw
 echo link &> {."1 dirtree 'scheme/??.ss'
@@ -133,11 +155,15 @@ echo link &> {."1 dirtree 'scheme/??.ss'
 [[file:scheme/19/04.ss]]
 [[file:scheme/19/14.ss]]
 [[file:scheme/17/22.ss]]
+[[file:scheme/20/19.ss]]
 [[file:scheme/20/08.ss]]
 [[file:scheme/20/01.ss]]
+[[file:scheme/20/23.ss]]
 [[file:scheme/20/02.ss]]
 [[file:scheme/20/07.ss]]
 [[file:scheme/20/06.ss]]
+[[file:scheme/20/15.ss]]
+[[file:scheme/20/22.ss]]
 
 #+begin_src J :session :exports both :results raw
 echo link &> {."1 dirtree 'haskell/*.hs'
