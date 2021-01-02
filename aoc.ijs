@@ -32,8 +32,8 @@ hdr ; input_url y
 get_input =: 3 : 0
 'y d' =. y
 'cy cm cd' =. 3 {. 6!:0 ''
-assert. *./ (1<:d),(d<25),(2015<:y),(y<:2020)
-assert. (y<2020)+.(cy=y)*.(d<:cd)*.(cm=12)
+assert. *./ (1<:d),(d<:25),(2015<:y),(y<:2021)
+assert. (y<2021)+.(cy=y)*.(d<:cd)*.(cm=12)
 file=. input_file y,d
 try. assert. fexist file
      1!:1 < file
@@ -83,9 +83,9 @@ egcd =: 4 : 0 NB. extended euclid
 
 crt =: 4 : 0 NB. chinese remainder theorem
  's t g'=.m egcd n['b n'=.y['a m'=.x
- <.(<.m*n%g)(|,[)(a*n*t)+&<.&(%&g) (b*m*s) assert. 0 = g | a-b
+ <.(<.m*n%g)(|,[)(a*t*<.n%g)+(b*m*<.s%g) assert. 0 = g | a-b
 )
 
-bfs_z_ =: bfs_aoc_
-bez_z_ =: bez_aoc_
-crt_z_ =: crt_aoc_
+bfs_z_   =: bfs_aoc_
+bez_z_   =: bez_aoc_
+crt_z_   =: crt_aoc_
