@@ -2,12 +2,10 @@ load '~/code/aoc/aoc.ijs'
 require 'viewmat'
 
 world=:'#'=];._2 aoc 2019;24
-
-rule =: ([*.=) +. ((-.@[)*.1 2 e.~ ])
+rule =: 1=]-(< 2&=)
 lifeA =: rule [: +/ ((,-)=/~i.2)&(|.!.0)
 
 #. |. , lifeA {: ([:~.],lifeA@:{:)^:_ ,: world
-
 NB. graph for adjacent squares for part B
 G0 =: (12~:i.25) # ([:< -.&_1 12)"1|:,/"_1((,-)=/~i.2)(|.!._1) i. 5 5
 G0 =: ([: /:~ (- 12&<)) &.> G0
@@ -24,6 +22,3 @@ pad =: 0&, @ ,&0
 lifeB =. [: clean [: (rule C0"1+(C1"1@:(1&|.))+(C_1"1@:(_1&|.))) pad
 
 +/,lifeB^:200 ,: (12~:i.25) #,world
-lifeB ,: (12~:i.25) #,world
-V =: (0$~$@[) +"_ 0/ ]
-((12~:i.25) #,world) V~ 1 1 $ 0

@@ -28,4 +28,4 @@ MON =: (1 1,:$SM)&(SMC=+/@:,@:(SM&*);._3) NB. find monsters in given image
 (+/,IMG)-SMC*+/,MON"_1 SYM IMG =: SEA C0 NB. part B
 DIM =: $ IMG =: ,/ (#~([:+./[:,MON)"_1) SYM SEA C0 NB. visualize scene
 monsters =: IMG + +/ (-4$.$.MON IMG) |."1 _/ (DIM $!.0 , SM ,"1 (0$~DIM-&{:$SM))
-(0 30 255,120 10 255,:50 200 140) viewmat monsters
+(0 30 255,130 30 255,:50 200 140) viewmat monsters
