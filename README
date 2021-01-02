@@ -166,16 +166,14 @@ echo link &> {."1 dirtree 'scheme/??.ss'
 [[file:scheme/20/22.ss]]
 
 #+begin_src J :session :exports both :results raw
-echo link &> {."1 dirtree 'haskell/*.hs'
+echo link &> {."1 dirtree 'haskell/??.hs'
 #+end_src
 
 #+RESULTS:
-[[file:haskell/Advent.hs]]      
-[[file:haskell/Advent/Write.hs]]
-[[file:haskell/19/14.hs]]       
-[[file:haskell/19/24.hs]]       
-[[file:haskell/19/01.hs]]       
-[[file:haskell/20/02.hs]]       
-[[file:haskell/20/01.hs]]       
-[[file:haskell/20/05.hs]]       
+[[file:haskell/19/14.hs]]
+[[file:haskell/19/24.hs]]
+[[file:haskell/19/01.hs]]
+[[file:haskell/20/02.hs]]
+[[file:haskell/20/01.hs]]
+[[file:haskell/20/05.hs]]
 
