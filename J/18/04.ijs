@@ -8,10 +8,11 @@ NB. only care about minutes after shift begins, alterates sleep/awake
 N =: [: +/ _2 (1=I.&(1+i.60))\ (1 15,:_ 2)&(".;.0)
 S =: G +//. N &> W
 
-NB. a is guard who slept most, minute of most sleep * id
-a =: (i.>./) +/"1 S
-(a{I) * (i.>./) a{S
+NB. modifier train to abstract out selection method
+T =: ({&I * (i.>./) @ {&S) @ (i.>./) @: (/"1)
 
-NB. b is guard who slept most regularly, minute of most sleep * id
-b =: (i.>./) >./"1 S
-(b{I) * (i.>./) b{S
+NB. guard who slept most, minute of most sleep * id
++ T S
+
+NB. guard who slept most regularly, minute of most sleep * id
+>. T S
