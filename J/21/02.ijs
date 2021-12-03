@@ -1,4 +1,4 @@
-load '~/code/aoc/aoc.ijs plot'
+load '~/code/aoc/aoc.ijs'
 in =: |: ;:;._2 aoc 2021 2
 dir =: ;: 'forward down up'
 
@@ -22,3 +22,4 @@ partB =: 3 : 0
 )
 
 partB ''
+
