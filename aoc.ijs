@@ -32,8 +32,8 @@ hdr ; input_url y
 get_input =: 3 : 0
 'y d' =. y
 'cy cm cd' =. 3 {. 6!:0 ''
-assert. *./ (1<:d),(d<:25),(2015<:y),(y<:2021)
-assert. (y<2021)+.(cy=y)*.(d<:cd)*.(cm=12)
+assert. *./ (1<:d),(d<:25),(2015<:y),(y<:2023)
+assert. (y<2023)+.(cy=y)*.(d<:cd)*.(cm=12)
 file=. input_file y,d
 try. assert. fexist file
      1!:1 < file
@@ -53,6 +53,7 @@ assert. fpathcreate AOCDIR,'/input/2018/'
 assert. fpathcreate AOCDIR,'/input/2019/'
 assert. fpathcreate AOCDIR,'/input/2020/'
 assert. fpathcreate AOCDIR,'/input/2021/'
+assert. fpathcreate AOCDIR,'/input/2022/'
 )
 
 aoc_z_ =: get_input_aoc_
