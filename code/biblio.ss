@@ -66,10 +66,20 @@
       '()
       (cons (car xs) (take-until keyword (cdr xs)))))
 
+(define (take-by predicate xs)
+  (if (or (null? xs) (predicate (car xs)))
+      '()
+      (cons (car xs) (take-by predicate (cdr xs)))))
+
 (define (drop-until keyword xs)
   (if (or (null? xs) (eq? keyword (car xs)))
       xs
       (drop-until keyword (cdr xs))))
+
+(define (drop-by predicate xs)
+  (if (or (null? xs) (predicate (car xs)))
+      xs
+      (drop-by predicate (cdr xs))))
 
 (define (split-on keyword xs)
   (if (null? xs)
@@ -81,6 +91,17 @@
 		  (split-on keyword (drop-until keyword x*)))
 	    (cons (take-until keyword xs)
 		  (split-on keyword (drop-until keyword xs)))))))
+
+(define (split-by predicate xs)
+  (if (null? xs)
+      xs
+      (let ((x (car xs))
+	    (x* (cdr xs)))
+	(if (predicate x)
+	    (cons (cons x (take-by predicate x*))
+		  (split-by predicate (drop-by predicate x*)))
+	    (cons (take-by predicate xs)
+		  (split-by predicate (drop-by predicate xs)))))))
 
 (define (intersperse x xs)
   (let ((xss (fold-right (lambda (y ys)

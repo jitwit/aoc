@@ -32,8 +32,8 @@ hdr ; input_url y
 get_input =: 3 : 0
 'y d' =. y
 'cy cm cd' =. 3 {. 6!:0 ''
-assert. *./ (1<:d),(d<:25),(2015<:y),(y<:2023)
-assert. (y<2023)+.(cy=y)*.(d<:cd)*.(cm=12)
+assert. *./ (1<:d),(d<:25),(2015<:y),(y<:2024)
+assert. (y<2024)+.(cy=y)*.(d<:cd)*.(cm=12)
 file=. input_file y,d
 try. assert. fexist file
      1!:1 < file
@@ -88,6 +88,14 @@ crt =: 4 : 0 NB. chinese remainder theorem
  <.(<.m*n%g)(|,[)(a*t*<.n%g)+(b*m*<.s%g) assert. 0 = g | a-b
 )
 
+P =: 3 : 0 NB. converting depth vector to parent vector
+ps=. 0 #~ n =. # y
+for_lk. 2 ]\ (i.n) </.~ y
+do. ps=. ps k }~ l {~ <: l I. k [ 'l k' =. lk
+end. ps + (i.n) * 0=y
+)
+
 bfs_z_   =: bfs_aoc_
 bez_z_   =: bez_aoc_
 crt_z_   =: crt_aoc_
+P_z_     =: P_aoc_
