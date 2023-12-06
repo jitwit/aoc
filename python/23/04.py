@@ -4,7 +4,7 @@ X = []  # counts for each hand
 for l in open('../../input/2023/4.in','r').readlines():
     tmp = " ".join(l.split()[2:]).split('|')
     [a,b] = [ [ int(y) for y in x.split() ] for x in tmp ]
-    X.append(len([ x for x in b if x in a ]))
+    X.append(len(set(a) & set(b)))
 
 print(sum((2**(np.array(X))) >> 1))
 
