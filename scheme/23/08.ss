@@ -19,12 +19,11 @@
 	      (list-tail in 2))
     G))
 
-(define (search start end?)
-  ; s:cycle creates an infinite stream of instructions
+(define (search start)
   (let lp ((instructions (s:cycle navigation))
 	   (node start)
 	   (n 0))
-    (if (end? node)
+    (if (eqv? (string-ref node 2) #\Z)
 	n
 	(let ((nodes (hashtable-ref network node #f)))
 	  (lp (s:cdr instructions)
@@ -34,14 +33,11 @@
 	      (1+ n))))))
 
 (define (part-a)
-  (search "AAA" (curry string=? "ZZZ")))
+  (search "AAA"))
 
 (define (part-b)
   (apply lcm
 	 (filter-map (lambda (node)
 		       (and (eqv? #\A (string-ref node 2))
-			    (search node
-				    (lambda (node)
-				      (eqv? (string-ref node 2)
-					    #\Z)))))
+			    (search node)))
 		     (vector->list (hashtable-keys network)))))
