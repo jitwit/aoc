@@ -62,5 +62,3 @@
 
 (define (part-b)
   (apply lcm (map period '(0 1 2))))
-
-
