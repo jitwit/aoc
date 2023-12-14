@@ -95,26 +95,20 @@ do. ps=. ps k }~ l {~ <: l I. k [ 'l k' =. lk
 end. ps + (i.n) * 0=y
 )
 
+NB. https://en.wikipedia.org/wiki/Cycle_detection#Brent's_algorithm
 brent =: 1 : 0 NB. brent cycle detection algorithm. outputs period and iterations before cycle
   power =. lambda =. 1
   tortoise =. y
   hare =. u y
-  while. tortoise ~:&< hare do. NB. box trick to get deep whole seems to work...
-    if. power = lambda do.
-      tortoise =. hare
-      power =. 2*power
-      lambda =. 0
-    end.
-    hare =. u hare
-    lambda =. 1+lambda
+  while. tortoise ~:&< hare do. NB. boxing to get deep equality seems to work...
+    if. power = lambda do. lambda =. 0[power =. 2*power[tortoise =. hare end.
+    lambda =. 1+lambda[hare =. u hare
   end.
   tortoise =. y
   hare =. u^:lambda y
   mu =. 0
   while. tortoise ~:&< hare do.
-    tortoise =. u tortoise
-    hare =. u hare
-    mu =. 1+mu
+    mu =. 1+mu[hare =. u hare[tortoise =. u tortoise
   end.
   lambda,mu NB. lambda is period, mu is length until function cycles
 )
