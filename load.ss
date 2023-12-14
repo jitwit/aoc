@@ -21,4 +21,3 @@
   (map advent-file-path '("biblio.ss" "outils.ss" "graph.ss" "svg.ss")))
 
 (for-each load source-files)
-
