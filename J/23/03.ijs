@@ -14,3 +14,4 @@ NB. gear ratio: find *, find numbers connected
 
 NB. part b, for each * find which two groups of indices touch it.
 +/{{*/y{nums}}"1 I.(#~2=+/"1){{(y&([:*./1 1>:[:<./[:|-"1))&>ixs}}"1]4$.$.'*'=in
+

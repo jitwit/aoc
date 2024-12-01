@@ -8,5 +8,5 @@ off=: (10#.7{.]) }. ($~10000*#)
 ffta=: 10 #. 8 {. pat@# (10 | [: | (+/ .*))^:100 ]
 fftb=: 10 #. 7 {. [: (10 | +/\.)^:100 off
 
-]partA=: ffta digits
-]partB=: fftb digits
+ffta digits
+fftb digits
