@@ -26,4 +26,3 @@
 		   (setq b (+ b (* x y)))))))))
     (gui-select-text (number-to-string b)) ;; woah
     (list a b)))
-
