@@ -1,5 +1,6 @@
-(with-temp-buffer
-  (insert-file-contents "~/code/aoc/input/2024/3.in")
+(load "~/code/aoc/aoc.el")
+
+(with-aoc-input 2024 3
   (let ((mul (rx (or (seq "mul("
 			  (group (+ digit))
 			  ","

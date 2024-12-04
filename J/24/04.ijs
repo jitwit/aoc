@@ -10,10 +10,7 @@ D0 =: +/@:,@:D
 D1 =: +/@:,@:D &. |.
 D2 =: +/@:,@:D &. |:
 D3 =: +/@:,@:D &. (|."1@|:)
-
 (S0+S1+S2+S3+D0+D1+D2+D3) in               NB. part A
 
-XMAS =: 'SSAMM','MMASS','MSAMS',:'SMASM'
-X =: XMAS e.~ 0 2 4 6 8 { ,
-
+X =: ('SSAMM','MMASS','MSAMS',:'SMASM') e.~ 0 2 4 6 8 { ,
 +/,(1 1,:3 3) X;._3 in                     NB. part B
