@@ -6,7 +6,6 @@ L =: {{<".' '(I. js)}y[ js=.','=y}};._2 (n+2) }. in         NB. pages
 P =: {{*./<:/"1 js #~ -.(#y) e."1 js=.y i. x}}              NB. in order?
 +/(([:<.2%~#){])&> L #~ C =: R&P &> L                       NB. part A
 
-r =: {{if. (*./x e.y)*.(>:/y i.x)do.(|.x)(y i. x)}y else. y end.}}
 r =: {{(|.x)(y i. x)}^:((*./x e.y)*.>:/y i.x) y}}
 U =: {{for_i. x do. y=. i r y end.}}                        NB. update out of order pairs
 +/(([:<.2%~#){])&> (R&U^:_) &.> L#~-.C                      NB. part B
