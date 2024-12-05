@@ -1,5 +1,3 @@
-(load "~/code/aoc/aoc.el")
-
 (with-aoc-input
   (let ((mul (rx (or (seq "mul(" (group (+ digit)) "," (group (+ digit)) ")")
 		     "do()"
