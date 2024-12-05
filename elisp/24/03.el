@@ -1,6 +1,6 @@
 (load "~/code/aoc/aoc.el")
 
-(with-aoc-input 2024 3
+(with-aoc-input
   (let ((mul (rx (or (seq "mul(" (group (+ digit)) "," (group (+ digit)) ")")
 		     "do()"
 		     "don't()")))

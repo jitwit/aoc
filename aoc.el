@@ -19,10 +19,13 @@
       :success (lambda (data)
 		 data))))
 
-(defmacro with-aoc-input (year day &rest body)
-  (declare (indent 2))
-  `(with-temp-buffer
-     (insert-file-contents (aoc-input-file ,year ,day))
-     ,@body))
+(defmacro with-aoc-input (&rest body)
+  (declare (indent 0))
+  (let* ((path (split-string (buffer-file-name) "/"))
+	 (year (string-to-number (nth 6 path)))
+	 (day (string-to-number (substring (nth 7 path) 0 2))))
+    `(with-temp-buffer
+       (insert-file-contents (aoc-input-file ,(+ 2000 year) ,day))
+       ,@body)))
 
 (provide 'aoc-input-file)
