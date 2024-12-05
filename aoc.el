@@ -20,6 +20,9 @@
 		 data))))
 
 (defmacro with-aoc-input (year day &rest body)
+  (declare (indent 2))
   `(with-temp-buffer
      (insert-file-contents (aoc-input-file ,year ,day))
      ,@body))
+
+(provide 'aoc-input-file)
