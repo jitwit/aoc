@@ -11,13 +11,13 @@
 
 (defun aoc-download-input (year day)
   (let ((url (format "https://adventofcode.com/%d/day/%d/input"
-		     year day)))
+                     year day)))
     (request url
       :type "GET"
 ;;; .... how to do this properly
       :headers `(("Cookie" . ,(format "session=%S" aoc-cookie)))
       :success (lambda (data)
-		 data))))
+                 data))))
 
 (defmacro with-aoc-input (&rest body)
   (declare (indent 0))
@@ -27,5 +27,7 @@
     `(with-temp-buffer
        (insert-file-contents (aoc-input-file ,(+ 2000 year) ,day))
        ,@body)))
+
+(aoc-download-input 2024 1)
 
 (provide 'aoc-input-file)
