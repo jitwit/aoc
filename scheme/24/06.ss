@@ -1,6 +1,7 @@
 (load "~/code/aoc/load.ss")
 (advent-year 24) (advent-day 06)
 (define in (parse-advent lines-raw))
+; (define in (with-input-from-file "06.eg" lines-raw))
 
 (define N (length in))
 (define G (make-eqv-hashtable))
@@ -21,8 +22,7 @@
   (let step ((z z0) (dz dz0) (i 0))
     (hashtable-set! T (cons z dz) #t)
     (let ((u (+ z dz)))
-      (cond ((or (> i (* N N))	        ; out of grid or stopping condition
-		 (< (real-part u) 0)
+      (cond ((or (< (real-part u) 0)  ; out of grid
 		 (= (real-part u) N)
 		 (< (imag-part u) 0)
 		 (= (imag-part u) N))
