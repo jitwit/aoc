@@ -1,3 +1,4 @@
+load '~/code/aoc/aoc.ijs'
 in =: ];._2 aoc 2024 4
 
 S =: 'XMAS'&E."1                           NB. searching for XMAS
