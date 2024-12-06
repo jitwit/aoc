@@ -43,3 +43,6 @@
 			 (matrix-set! G (real-part z) (imag-part z) #f))))
 		   (hashtable-keys (run -1 G)))
   count)
+
+(display-ln (part-a))
+(display-ln (part-b))

@@ -138,7 +138,7 @@
                ;; make sure we're before 10 pm before triggering req
                (and (= 12 (date-month auj))
                     (= (date-day auj) (advent-day))
-                    (< (date-hour auj) 22)))
+                    (< (date-hour auj) 25)))
            ;; fetch.sh contains curl request from firefox dev
            ;; outils. cookie goes stale after 30 days
            (let ((year (mod (advent-year) 100))
