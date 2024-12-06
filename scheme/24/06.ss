@@ -17,23 +17,18 @@
 (define (run z0 dz0 G)
   (define S (make-eqv-hashtable))
   (define T (make-hashtable equal-hash equal?))
-  (hashtable-set! S z0 #t)
   (let step ((z z0) (dz dz0) (i 0))
     (hashtable-set! T (cons z dz) #t)
+    (hashtable-set! S z #t)
     (let ((u (+ z dz)))
-      (cond ((or (< (real-part u) 0)    ; out of grid
+      (cond ((or (< (real-part u) 0)
 		 (= (real-part u) N)
 		 (< (imag-part u) 0)
 		 (= (imag-part u) N))
-	     (hashtable-set! S z #t)    ; about to step off so haven't seen?????
 	     S)
-	    ((hashtable-ref T (cons u dz) #f)
-	     'cycle-detected)
-	    ((hashtable-ref G u #f)	; hit a wall
-	     (step z (* dz 0-i) (1+ i)))
-	    (else			; carry on
-	     (hashtable-set! S u #t)
-	     (step u dz (1+ i)))))))
+	    ((hashtable-ref T (cons u dz) #f) 'cycle-detected)
+	    ((hashtable-ref G u #f) (step z (* dz 0-i) (1+ i)))
+	    (else (step u dz (1+ i)))))))
 
 (define (part-a)
   (vector-length (hashtable-keys (run z0 -1 G))))
