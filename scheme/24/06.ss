@@ -21,7 +21,7 @@
   (let step ((z z0) (dz dz0) (i 0))
     (hashtable-set! T (cons z dz) #t)
     (let ((u (+ z dz)))
-      (cond ((or (< (real-part u) 0)  ; out of grid
+      (cond ((or (< (real-part u) 0)    ; out of grid
 		 (= (real-part u) N)
 		 (< (imag-part u) 0)
 		 (= (imag-part u) N))
