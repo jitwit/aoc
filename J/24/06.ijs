@@ -1,8 +1,7 @@
 load '~/code/aoc/aoc.ijs'
 in =: ];._2 aoc 2024 6
 dim =: $ G =: '#' = in
-z0 =: +.^:_1 ] 4 $. $. '^' = in
-dz =: _1
+dz =: _1 [ z0 =: +.^:_1 ] 4 $. $. '^' = in
 
 A =: {{ xy=.,+.z=.+/'w dz'=.y
         if. +./(xy<0 0),xy>:dim do. y
