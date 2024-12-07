@@ -16,11 +16,9 @@
   (match numbers
     ((n) (= target n))
     ((x y zs ...)
-     (fold-left (lambda (ok? operator)
-                  (or ok?
-                      (iterate target (cons (operator x y) zs) operators)))
-                #f
-                operators))
+     (ormap (lambda (operator)
+              (iterate target (cons (operator x y) zs) operators))
+            operators))
     (_ (error 'iter "oops"))))
 
 (define (solve operators problem)

@@ -33,12 +33,11 @@
 
 (define (part-b)
   ;; only need to check adding walls to squares on original path
-  (length
-   (filter (lambda (z)
-	     (and (not (eqv? z z0))
-		  (begin
-		    (matrix-set! G (real-part z) (imag-part z) #t)
-		    (let ((cycle? (eq? 'cycle-detected (run -1 G))))
-		      (matrix-set! G (real-part z) (imag-part z) #f)
-		      cycle?))))
-	   (vector->list (hashtable-keys (run -1 G))))))
+  (count (lambda (z)
+	   (and (not (eqv? z z0))
+		(begin
+		  (matrix-set! G (real-part z) (imag-part z) #t)
+		  (let ((cycle? (eq? 'cycle-detected (run -1 G))))
+		    (matrix-set! G (real-part z) (imag-part z) #f)
+		    cycle?))))
+	 (vector->list (hashtable-keys (run -1 G)))))
