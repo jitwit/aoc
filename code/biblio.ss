@@ -259,11 +259,49 @@
 (define (vector-sum V)
   (vector-fold-right + 0 V))
 
-(define (digit-at i n)
-  (fxmod (fx/ n (expt 10 (1+ i))) 10))
-
 (define (swap x.y)
   (cons (cdr x.y) (car x.y)))
 
 (define (boolean->number b)
   (if b 1 0))
+
+(define (digit-at i n)
+  (fxmod (fx/ n (expt 10 (fx1+ i))) 10))
+
+(define (sign x)
+  (cond
+   ((< 0 x) 1)
+   ((< x 0) -1)
+   (else 0)))
+
+(define (eq-hashtable-copy H)
+  (define H* (make-eq-hashtable))
+  (hash-table-for-each H
+                       (lambda (x y)
+                         (hashtable-set! H* x y)))
+  H*)
+
+(define (eqv-hashtable-copy H)
+  (define H* (make-eqv-hashtable))
+  (vector-for-each (lambda (x.y)
+                     (match x.y
+                       ((x . y)
+                        (hashtable-set! H* x y))))
+                   (hashtable-cells H))
+  H*)
+
+(define (Re/Im z)
+  (values (real-part z) (imag-part z)))
+
+(define (bounding-box-C zs) ;; assume zs nonempty
+  (define-values (x-lo y-lo) (Re/Im (car zs)))
+  (define x-hi x-lo)
+  (define y-hi y-lo)
+  (for-all (lambda (z)
+             (define-values (z-re z-im) (Re/Im z))
+             (set! x-lo (min x-lo z-re))
+             (set! x-hi (max x-hi z-re))
+             (set! y-lo (min y-lo z-im))
+             (set! y-hi (max y-hi z-im)))
+           (cdr zs))
+  (values x-lo x-hi y-lo y-hi))

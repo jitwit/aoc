@@ -28,6 +28,4 @@
        (insert-file-contents (aoc-input-file ,(+ 2000 year) ,day))
        ,@body)))
 
-(aoc-download-input 2024 1)
-
 (provide 'aoc-input-file)
