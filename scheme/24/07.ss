@@ -8,30 +8,26 @@
 	    (map string->number (cons target (string-tokenize test-values))))))
        (parse-advent lines-raw)))
 
-(define (|| x y)
+(define (|| . args)
   (string->number
-   (string-append (number->string x) (number->string y))))
+   (apply string-append (map number->string args))))
 
-(define (iterate operators partial-solutions)
-  (define (step operators numbers)
-    (match numbers
-      ((n) numbers)
-      ((x y zs ...)
-       (map (lambda (operator)
-	      (cons (operator x y) zs))
-	    operators))))
-  (append-map (curry step operators) partial-solutions))
+(define (iterate target numbers operators)
+  (match numbers
+    ((n) (= target n))
+    ((x y zs ...)
+     (fold-left (lambda (ok? operator)
+                  (or ok?
+                      (iterate target (cons (operator x y) zs) operators)))
+                #f
+                operators))
+    (_ (error 'iter "oops"))))
 
 (define (solve operators problem)
-  (let ((target (car problem)))
-    (let lp ((partial-solutions (list (cdr problem))))
-      (cond ((and (list? partial-solutions)
-		  (list? (car partial-solutions)))
-	     (lp (iterate operators partial-solutions)))
-	    (else (member target partial-solutions))))))
+  (iter (car problem) (cdr problem) operators))
 
 (define (part-a)
-  (apply + (map car (filter-map (curry solve (list + *)) input))))
+  (apply + (map car (filter (curry solve (list + *)) input))))
 
 (define (part-b)
-  (apply + (map car (filter-map (curry solve (list + * ||)) input))))
+  (apply + (map car (filter (curry solve (list + * ||)) input))))
