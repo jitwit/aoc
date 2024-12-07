@@ -1,7 +1,7 @@
 (load "~/code/aoc/load.ss")
 (advent-year 24) (advent-day 07)
 
-(define in
+(define input
   (map (lambda (line)
 	 (match (string-tokenize line (char-set-complement (char-set #\:)))
 	   ((target test-values)
@@ -31,7 +31,7 @@
 	    (else (member target partial-solutions))))))
 
 (define (part-a)
-  (apply + (map car (filter-map (curry solve (list + *)) in))))
+  (apply + (map car (filter-map (curry solve (list + *)) input))))
 
 (define (part-b)
-  (apply + (map car (filter-map (curry solve (list + * ||)) in))))
+  (apply + (map car (filter-map (curry solve (list + * ||)) input))))
