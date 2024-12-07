@@ -22,7 +22,7 @@
     (_ (error 'iter "oops"))))
 
 (define (solve operators problem)
-  (iter (car problem) (cdr problem) operators))
+  (iterate (car problem) (cdr problem) operators))
 
 (define (part-a)
   (apply + (map car (filter (curry solve (list + *)) input))))

@@ -1,10 +1,5 @@
-input=: |: 'm' freads < '~/code/advent/input/16/6.in'
-
-letters=: /:~ ~. , input
-
-analyze=: adverb define
-letters {~ (i. u) +/"1 letters =/ y
-)
-
-]partA=: >./ analyze"1 input
-]partB=: <./ analyze"1 input
+load '~/code/aoc/aoc.ijs'
+S =: /:~~.,in =: |: ];._2 aoc 2016 6
+F =: {{S {~ (i.u) +/"1 S =/ y}}"1
+>./ F in
+<./ F in
