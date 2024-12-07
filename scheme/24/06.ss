@@ -15,7 +15,7 @@
 (define (run dz G)
   (define S (make-eqv-hashtable))
   (define T (make-hashtable equal-hash equal?))
-  (let step ((z z0) (dz dz) (i 0))
+  (let step ((z z0) (dz dz))
     (hashtable-set! T (cons z dz) #t)
     (hashtable-set! S z #t)
     (let ((u (+ z dz)))
@@ -25,8 +25,8 @@
 	    ((matrix-ref G (real-part u) (imag-part u))
 	     (if (hashtable-ref T (cons z (* dz 0-i)) #f)
 		 'cycle-detected
-		 (step z (* dz 0-i) (1+ i))))
-	    (else (step u dz (1+ i)))))))
+		 (step z (* dz 0-i))))
+	    (else (step u dz))))))
 
 (define (part-a)
   (vector-length (hashtable-keys (run -1 G))))
