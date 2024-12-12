@@ -206,8 +206,10 @@
 (define (matrix-dimension M)
   (values (matrix-rows M) (matrix-cols M)))
 
-(define (matrix-ref M i j)
-  (vector-ref (vector-ref M i) j))
+(define matrix-ref
+  (case-lambda
+    ((M i j) (vector-ref (vector-ref M i) j))
+    ((M z) (vector-ref (vector-ref M (real-part z)) (imag-part z)))))
 
 (define (matrix-set! M i j x)
   (vector-set! (vector-ref M i) j x))
