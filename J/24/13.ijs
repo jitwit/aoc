@@ -1,4 +1,6 @@
 load'~/code/aoc/aoc.ijs'
 in=:_6 (_2]\])\".' '(I.-.in e.a09)}in=.aoc 2024 13
+NB. solve linear equations with matrix division. take integral
+NB. solutions and score:
 T =: [:+/(3,.1)+/ .*~[:(*(=<.))({:%.|:@}:)"_1
-T"_1 in,:(13^~10*3 2$0 0 0 0 1 1x)+"2 in
+T"_1 in,:(13^~10*3 2$0 0 0 0 1 1x)+"2 in       NB. parts a & b
