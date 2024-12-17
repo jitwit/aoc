@@ -81,8 +81,7 @@
 	   (string-join (map number->string (reverse out))
 			",")))))
 
-(define (fixpoint seed program)
-  (format #t "trying seed ~a~%" seed)
+(define (fixpoint seed program best dx)
   (call/cc
    (lambda (k)
      (define A seed)
@@ -129,12 +128,13 @@
 	  (set! ip (+ ip 2))
 	  (cond ((and (<= (length out) (vector-length program))
 		      (equal? (reverse out) (list-head (vector->list program) (length out))))
-		 (void)			;we good
-		 (display-ln (cons out program)))
+		 (when (< best (length out)) ; so far so good
+		   (set! best (length out))
+		   (format #t "~a ~a ~a~%" seed (octal seed) (reverse out))))
 		((equal? (reverse out) (vector->list program))
 		 (k seed))
-		(else
-		 (k (fixpoint (1+ seed) program)))))
+		(else ;; need better way to search...
+		 (k (fixpoint (+ seed dx) program best dx)))))
 	 ((6)
 	  (set! B (ash A (- (combo-operand))))
 	  (set! ip (+ ip 2)))
@@ -148,19 +148,23 @@
 	     (else
 	      (if (equal? (reverse out) (vector->list program))
 		  (k seed)
-		  (k (fixpoint (1+ seed) program)))))))))
+		  (k (fixpoint (+ seed dx) program best dx)))))))))
 
-;(define (display-state)  (format #t "reg A: ~a~%reg B: ~a~%reg C: ~a~%ip: ~a~%out: ~a~%~%" A B C ip (reverse out)))
+(define (octal x)
+  (let lp ((x x) (ys '()))
+    (if (zero? x)
+	ys
+	(let-values (((q r) (div-and-mod x 8)))
+	  (lp q (cons r ys))))))
+
+(define p1 '#(0 3 5 4 3 0))
+(define p2 '#(2 4 1 1 7 5 0 3 1 4 4 4 5 5 3 0))
 
 (define (go)
   (run 117440 '#(0 3 5 4 3 0)))
 
 (define (gogo)
-  (run 30886132
-       '#(2 4 1 1 7 5 0 3 1 4 4 4 5 5 3 0)))
+  (run 30886132 '#(2 4 1 1 7 5 0 3 1 4 4 4 5 5 3 0)))
 
-(define (teehee)
-  (fixpoint 0 '#(0 3 5 4 3 0)))
-
-(define (TEEHEE)
-  (fixpoint 0 '#(2 4 1 1 7 5 0 3 1 4 4 4 5 5 3 0)))
+;; process to find call (fixpoint x p2 0 `octal length of x`) where x
+;; is previous best solution found... works ish?
