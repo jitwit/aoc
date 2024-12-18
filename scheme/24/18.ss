@@ -5,7 +5,7 @@
 (define input (parse-advent comma-separated))
 (define N 70)
 (define exit (+ N (* 0+i N)))
-(define bytes-0 1024)
+(define starting-bytes 1024)
 
 (define (init n)
   (set! *memory* (make-eqv-hashtable))
@@ -24,15 +24,14 @@
 	  (nesw v)))
 
 (define (part-a)
-  (init bytes-0)
+  (init starting-bytes)
   (bfs-distance 0 exit adjacent))
 
 (define (part-b)
-  (let bin ((lo bytes-0) (hi (/ (length input) 2)))
+  (let bin ((lo starting-bytes) (hi (/ (length input) 2)))
     (if (< hi lo)
 	(string-join (map number->string
-			  (list-head (list-tail input (* hi 2))
-				     2))
+			  (list-head (list-tail input (* hi 2)) 2))
 		     ",")
 	(let ((n (ash (+ lo hi) -1)))
 	  (init n)
