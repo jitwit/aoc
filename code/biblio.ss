@@ -168,14 +168,14 @@
     ((parser file)
      (run-advent-parser parser file))))
 
-(define (solve-advent part-a part-b parsed-input)
+(define (solve-advent part-a part-b)
   ((with-foreground 'red)
    (lambda ()
-     (format #t "part-a: ~a~%" (time (part-a parsed-input)))
+     (format #t "part-a: ~a~%" (time (part-a)))
      ))
   ((with-foreground 'green)
    (lambda ()
-     (format #t "part-b: ~a~%" (time (part-b parsed-input))))))
+     (format #t "part-b: ~a~%" (time (part-b))))))
 
 ;;;; Grid
 

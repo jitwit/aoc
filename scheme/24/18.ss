@@ -1,0 +1,42 @@
+(load "~/code/aoc/load.ss")
+(advent-year 24) (advent-day 18)
+
+(define *memory* (make-eqv-hashtable))
+(define input (parse-advent comma-separated))
+(define N 70)
+(define exit (+ N (* 0+i N)))
+(define bytes-0 1024)
+
+(define (init n)
+  (set! *memory* (make-eqv-hashtable))
+  (let lp ((xs (list-head input (* n 2))))
+    (match xs
+      ((x y zs ...)
+       (hashtable-set! *memory* (+ y (* 0+i x)) #t)
+       (lp zs))
+      (_ (void)))))
+
+(define (adjacent v)
+  (filter (lambda (u)
+	    (and (not (hashtable-ref *memory* u #f))
+		 (<= 0 (real-part u) N)
+		 (<= 0 (imag-part u) N)))
+	  (nesw v)))
+
+(define (part-a)
+  (init bytes-0)
+  (bfs-distance 0 exit adjacent))
+
+(define (part-b)
+  (let lp ((lo bytes-0) (hi (/ (length input) 2)))
+    (if (< hi lo)
+	(string-join (map number->string
+			  (list-head (list-tail input (* hi 2))
+				     2))
+		     ",")
+	(let ((n (ash (+ lo hi) -1)))
+	  (init n)
+	  (let ((d (bfs-distance 0 exit adjacent)))
+	    (if (< d 0)
+		(lp lo (1- n))
+		(lp (1+ n) hi)))))))
