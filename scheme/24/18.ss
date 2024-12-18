@@ -28,7 +28,7 @@
   (bfs-distance 0 exit adjacent))
 
 (define (part-b)
-  (let lp ((lo bytes-0) (hi (/ (length input) 2)))
+  (let bin ((lo bytes-0) (hi (/ (length input) 2)))
     (if (< hi lo)
 	(string-join (map number->string
 			  (list-head (list-tail input (* hi 2))
@@ -38,5 +38,5 @@
 	  (init n)
 	  (let ((d (bfs-distance 0 exit adjacent)))
 	    (if (< d 0)
-		(lp lo (1- n))
-		(lp (1+ n) hi)))))))
+		(bin lo (1- n))
+		(bin (1+ n) hi)))))))
