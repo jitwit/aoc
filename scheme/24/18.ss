@@ -2,16 +2,16 @@
 (advent-year 24) (advent-day 18)
 
 (define *memory* (make-eqv-hashtable))
-(define input (parse-advent comma-separated))
+(define input (n-tuples 2 (parse-advent comma-separated)))
 (define N 70)
 (define exit (+ N (* 0+i N)))
 (define starting-bytes 1024)
 
 (define (init n)
   (set! *memory* (make-eqv-hashtable))
-  (let lp ((xs (list-head input (* n 2))))
+  (let lp ((xs (list-head input n)))
     (match xs
-      ((x y zs ...)
+      (((x y) zs ...)
        (hashtable-set! *memory* (+ y (* 0+i x)) #t)
        (lp zs))
       (_ (void)))))
@@ -28,10 +28,10 @@
   (bfs-distance 0 exit adjacent))
 
 (define (part-b)
-  (let bin ((lo starting-bytes) (hi (/ (length input) 2)))
+  (let bin ((lo starting-bytes) (hi (length input)))
     (if (< hi lo)
 	(string-join (map number->string
-			  (list-head (list-tail input (* hi 2)) 2))
+			  (car (list-tail input hi)))
 		     ",")
 	(let ((n (ash (+ lo hi) -1)))
 	  (init n)
