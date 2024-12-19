@@ -2,8 +2,7 @@
 (advent-year 24) (advent-day 19)
 (define patterns) (define designs)
 (define (init)
-  (match (parse-advent lines-raw ;; "small.in"
-		       )
+  (match (parse-advent lines-raw) ;; "small.in"
     ((ps "" ds ...)
      (set! patterns (string-split ps ", "))
      (set! designs ds))))
