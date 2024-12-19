@@ -7,5 +7,5 @@ O =: T map i.~ P =: ~. ,/ map         NB. O for orbits, P for planets
 D =: <: @ # @ ({&O ^: a:)             NB. D for depth
 L =: +/ @ (=/) @ ,: & (|.@({&O^:a:))  NB. L for least common ancestor
 
-]partA =: +/ D"0 i.#P
-]partB =: 'SAN' (+&D - 2*L) & (P&i.) 'YOU'
++/ D"0 i.#P                           NB. part A
+'SAN' (+&D - 2*L) & (P&i.) 'YOU'      NB. part B

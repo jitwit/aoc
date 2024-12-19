@@ -2,7 +2,7 @@ load '~/code/aoc/aoc.ijs intcode.ijs'
 
 input=: ".;._1}:',',aoc 2019;7
 
-phase =: 3 : 0
+P =: 3 : 0"1 NB. phase
  input__a 0,~0{y [ create__a input [ a =. conew 'intcode'
  input__b 1{y [ create__b input [ b =. conew 'intcode'
  input__c 2{y [ create__c input [ c =. conew 'intcode'
@@ -21,5 +21,5 @@ phase =: 3 : 0
  end. output__e ''
 )
 
->./ phase"1 (i.@! A. i.) 5
->./ phase"1 ] 5 + (i.@! A. i.) 5
+>./ P (A.~&i. !) 5
+>./ P 5 + (A.~&i. !) 5

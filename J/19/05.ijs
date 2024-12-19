@@ -1,9 +1,9 @@
 load'~/code/aoc/aoc.ijs intcode.ijs'
-input=: ".;._1}:',',aoc 2019;5
+in=: ".;._1}:',',aoc 2019;5
 
 run =: 3 : 0
  m =. conew 'intcode'
- create__m input
+ create__m in
  output__m run__m,y
 )
 

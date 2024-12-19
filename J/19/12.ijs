@@ -7,5 +7,5 @@ E =: +/@:(*&(+/@:,@:|)"1/)
 P =: 1 : 'D^:([: -. u&-:)^:a:'
 Pi =: 4 : '# mi P D mi=. (($,1:)$,) x {"_2 y'
 
-]partA=: E D^:1000 moons
-]partB=: (i.3) *./@:(Pi"0 _) moons
+E D^:1000 moons               NB. part A
+(i.3) *./@:(Pi"0 _) moons     NB. part B
