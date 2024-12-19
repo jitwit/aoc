@@ -307,3 +307,7 @@
              (set! y-hi (max y-hi z-im)))
            (cdr zs))
   (values x-lo x-hi y-lo y-hi))
+
+(define (string-split s seps)
+  (string-tokenize s (char-set-complement
+		      (apply char-set (string->list seps)))))
