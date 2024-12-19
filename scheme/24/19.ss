@@ -8,27 +8,14 @@
      (set! patterns (string-split ps ", "))
      (set! designs ds))))
 
-(define-syntax defmemo
-  (syntax-rules ()
-    ((_ (f x) body ...)
-     (define f
-       (let ((mem (make-hashtable string-hash string=?))
-             (g (lambda (x) body ...)))
-         (lambda (y)
-           (let ((f-y (hashtable-ref mem y #f)))
-             (or f-y
-                 (let ((f-y (g y)))
-                   (hashtable-set! mem y f-y)
-                   f-y)))))))))
-
-(defmemo (F design)
+(defmemo (F design : string)
   (if (string-null? design)
       1
-      (fold-right (lambda (pat n)
+      (fold-right (lambda (pattern n)
 		    (+ n
-		       (if (string-prefix? pat design)
+		       (if (string-prefix? pattern design)
 			   (F (substring design
-					 (string-length pat)
+					 (string-length pattern)
 					 (string-length design)))
 			   0)))
 		  0
