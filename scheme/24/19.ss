@@ -1,12 +1,7 @@
 (load "~/code/aoc/load.ss")
 (advent-year 24) (advent-day 19)
-(define patterns) (define designs)
-(define (init)
-  (match (parse-advent lines-raw) ;; "small.in"
-    ((ps "" ds ...)
-     (set! patterns (string-split ps ", "))
-     (set! designs ds))))
 
+(define patterns) (define designs)
 (defmemo (F design : string)
   (if (string-null? design)
       1
@@ -27,5 +22,8 @@
   (apply + (map F designs)))
 
 (define (main)
-  (init)
+  (match (parse-advent lines-raw) ;; "small.in"
+    ((ps "" ds ...)
+     (set! patterns (string-split ps ", "))
+     (set! designs ds)))
   (solve-advent part-a part-b))
