@@ -1,15 +1,9 @@
-input=: 'b'freads<'~/code/advent/input/16/20.in'
-intervals=: /:~>([:".(;._1)'-',])&.>input
-
+load'~/code/aoc/aoc.ijs'
 NB. swallow as many intervals as possble based on endpoint of first.
-step=: verb define
-j =. (0{"1 y)I.(<0 1){y
-(j}.y),~((<0 0){y),>./,j{.y
-)
-
+step=: {{ j=.(0{"1 y)I.(<0 1){y
+          (j}.y),~((<0 0){y),>./,j{.y }}
 merge=: ({.,$:@}.)@:(step^:_)`]@.(0=#)
+ips=: merge /:~>([:".(;._1)'-',]);._2 aoc 2016 20
 
-ips=: merge intervals
-
-]partA=: >:{:{. ips
-]partB=: (2^32x) + +/<:-/"1 ips
+>:{:{. ips
+(2^32x) + +/<:-/"1 ips
