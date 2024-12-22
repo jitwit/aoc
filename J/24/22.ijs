@@ -15,7 +15,7 @@ NB. since brute force is slow, print progress as we look at how many
 NB. bananas from each sequence
 partB =: 3 : 0
 i =. 0[b =. 0
-for_s. /:~ S do.
+for_s. S do.
   i =. 1+i [ b =. b >. t =. B s
   echo (i%#S);b;t;s
 end.
