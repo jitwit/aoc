@@ -4,8 +4,7 @@
 (define hvac
   (list->vector
    (map (compose list->vector string->list)
-	(parse-advent lines-raw ;; "small.in"
-		      ))))
+	(parse-advent lines-raw))))
 
 (define R (vector-length hvac))
 (define C (vector-length (vector-ref hvac 0)))
@@ -19,6 +18,7 @@
 	  (nesw v)))
 
 (define (init)
+  (set! V '())
   (do ((i 0 (1+ i)))
       ((= i R))
     (do ((j 0 (1+ j)))
@@ -41,16 +41,16 @@
   (define (dist u v)
     (let ((table (bfs-result-distances (cdr (assv u T)))))
       (hashtable-ref table v +inf.0)))
-  (define (try-path vs d)
+  (define (explore-path vs d)
     (match vs
-      ((u v vs ...) (try-path (cons v vs) (+ d (dist u v))))
+      ((u v vs ...) (explore-path (cons v vs) (+ d (dist u v))))
       (_ (when (< d best) (set! best d)))))
   (for-each (lambda (vs)
-	      (try-path (cons start vs) 0))
+	      (explore-path (cons start vs) 0))
 	    (permutations vertices))
   (format #t "part a: ~a~%" best)
   (set! best +inf.0)
   (for-each (lambda (vs)
-	      (try-path `(,start ,@vs ,start) 0))
+	      (explore-path `(,start ,@vs ,start) 0))
 	    (permutations vertices))
   (format #t "part b: ~a~%" best))
