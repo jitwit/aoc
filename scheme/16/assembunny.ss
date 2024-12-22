@@ -55,25 +55,14 @@
 
   (lambda (me . args)
     (case me
-      ((step) (step))
       ((status) status)
-      ((ip) ip)
-      ((memory) memory)
-      ((program) program)
+      ((step) (step))
+      ((read-clock) (read-clock))
       ((set-register!) (apply set-register! args))
-      ((get-register) (apply get-register args))
-      ((read-clock) (read-clock)))))
+      ((get-register) (apply get-register args)))))
 
 (define (step machine)
   (machine 'step))
-
-(define (step* machine n)
-  (do ((i 0 (1+ i)))
-      ((= i n) (clock-signal machine))
-    (step machine)))
-
-(define (memory machine)
-  (machine 'memory))
 
 (define (status machine)
   (machine 'status))
