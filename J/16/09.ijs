@@ -1,4 +1,5 @@
-input=: LF-.~advent_reads 16 9
+load'~/code/aoc/aoc.ijs'
+input=: LF-.~aoc 2016 9
 
 eg=: 'X(8x2)(3x3)ABCY'
 
