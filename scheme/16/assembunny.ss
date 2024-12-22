@@ -1,10 +1,10 @@
-(define (assembunny input . trace?)
+(define (assembunny input)
   (define ip 0)
   (define status 'ok)
   (define memory (make-fxvector 5 0))
   (define program (list->vector input))
   (define N (vector-length program))
-  (define trace (not (null? trace?)))
+  (define clock-signal '())
   (define (symbol->register r)
     (case r ((a) 0) ((b) 1) ((c) 2) ((d) 3) ((e) 4)))
   (define (val x)
@@ -28,6 +28,10 @@
 	   (if (fxzero? (val x))
 	       (inc! ip)
 	       (inc! ip (val y))))
+	  (('out x)
+	   (push! (val x) clock-signal)
+	   (set! status 'ready)
+	   (inc! ip))
 	  (('tgl x)
 	   (let ((ix (+ ip (val x))))
 	     (inc! ip)
@@ -45,9 +49,11 @@
     (fxvector-set! memory (symbol->register x) v))
   (define (get-register x)
     (fxvector-ref memory (symbol->register x)))
+  (define (read-clock)
+    (set! status 'ok)
+    (car clock-signal))
+
   (lambda (me . args)
-    (when trace
-      (format #t "~a~%" memory))
     (case me
       ((step) (step))
       ((status) status)
@@ -55,10 +61,16 @@
       ((memory) memory)
       ((program) program)
       ((set-register!) (apply set-register! args))
-      ((get-register) (apply get-register args)))))
+      ((get-register) (apply get-register args))
+      ((read-clock) (read-clock)))))
 
 (define (step machine)
   (machine 'step))
+
+(define (step* machine n)
+  (do ((i 0 (1+ i)))
+      ((= i n) (clock-signal machine))
+    (step machine)))
 
 (define (memory machine)
   (machine 'memory))
@@ -72,8 +84,17 @@
 (define (get-register machine register)
   (machine 'get-register register))
 
+(define (read-clock machine)
+  (machine 'read-clock))
+
 (define (run-until-halt machine)
   (let lp ()
     (unless (eq? 'done (status machine))
+      (step machine)
+      (lp))))
+
+(define (run-until-clock machine)
+  (let lp ()
+    (unless (eq? 'ready (status machine))
       (step machine)
       (lp))))

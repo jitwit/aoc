@@ -14,10 +14,9 @@
   (run-until-halt machine)
   (get-register machine 'a))
 
-(define (part-b v)
+(define (part-b) ;; takes ~50 seconds, but ok
   (define machine
     (assembunny program))
-  (set-register! machine 'a v)
+  (set-register! machine 'a 12)
   (run-until-halt machine)
   (get-register machine 'a))
-
