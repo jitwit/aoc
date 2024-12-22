@@ -191,6 +191,9 @@
     ,(+ z -1) ,(+ z 1)
     ,(+ z 1-i) ,(+ z 0-i) ,(+ z -1-i)))
 
+(define (complex x y)
+  (+ x (* 0+i y)))
+
 (define (matrix m n)
   (let ((v (make-vector m)))
     (do ((i 0 (fx1+ i)))
