@@ -8,23 +8,19 @@
        (parse-advent lines-raw)))
 
 ;; create stream of machine's clock output
-(define (clock-signal machine)
-  (run-until-clock machine)
-  (s:cons (read-clock machine)
-	  (clock-signal machine)))
-
-(define (make-machine n)
+(define (clock-signal n)
   (define machine
     (assembunny program))
   (set-register! machine 'a n)
-  (clock-signal machine))
+  (let lp ()
+    (run-until-clock machine)
+    (s:cons (read-clock machine)
+	    (lp))))
 
 (define (solution)
   (define N 8)
+  (define P (map (compose boolean->number odd?) (iota N)))
   (length
-   (s:take-while (lambda (machine)
-		   (not
-		    (equal? (map (compose boolean->number odd?)
-				 (iota N))
-			    (s:take N machine))))
-		 (s:map make-machine (s:iter 1+ 0)))))
+   (s:take-while (lambda (signals)
+		   (not (equal? P (s:take N signals))))
+		 (s:map clock-signal (s:iter 1+ 0)))))
