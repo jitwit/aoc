@@ -9,13 +9,11 @@
 
 ;; create stream of machine's clock output
 (define (clock-signal n)
-  (define machine
-    (assembunny program))
+  (define machine (assembunny program))
   (set-register! machine 'a n)
   (let lp ()
     (run-until-clock machine)
-    (s:cons (read-clock machine)
-	    (lp))))
+    (s:cons (read-clock machine) (lp))))
 
 (define (solution)
   (define N 8)
