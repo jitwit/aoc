@@ -1,5 +1,5 @@
 (load "~/code/aoc/load.ss")
-(advent-year 16) (advent-day 12)
+(advent-year 16) (advent-day 23)
 (load "assembunny.ss")
 
 (define program
@@ -10,12 +10,14 @@
 (define (part-a)
   (define machine
     (assembunny program))
+  (set-register! machine 'a 7)
   (run-until-halt machine)
   (get-register machine 'a))
 
-(define (part-b)
+(define (part-b v)
   (define machine
     (assembunny program))
-  (set-register! machine 'c 1)
+  (set-register! machine 'a v)
   (run-until-halt machine)
   (get-register machine 'a))
+
