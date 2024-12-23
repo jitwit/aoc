@@ -22,7 +22,7 @@
 	    (parse-advent lines-raw)))
 
 (define (part-a)
-  (define T '())
+  (define T (make-hashtable equal-hash equal?))
   (init)
   (for-each
    (lambda (a)
@@ -31,12 +31,12 @@
 	(for-each
 	 (lambda (c)
 	   (when (connected? c a)
-	     (push! (sort string<? (list a b c)) T)))
+	     (hashtable-set! T (sort string<? (list a b c)) #t)))
 	 (adjacent b)))
       (adjacent a)))
    (filter (curry string-prefix? "t")
 	   (vector->list (hashtable-keys G))))
-  (length (nub-equal T)))
+  (vector-length (hashtable-keys T)))
 
 (define (expand-clique c)
   (for-each (lambda (v)
