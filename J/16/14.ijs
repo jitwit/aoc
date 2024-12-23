@@ -6,3 +6,4 @@ F =: {{if. #j=.I. 1 1 0 E. 2=/\{.y
        do. +./ , ] 1 1 1 1 1 E."1 (({.y){~{.j) = }. y
        else. 0 end. }}
 62 { I. 1001 F\ H NB. ???
+bonsai 'md5 ^: 64 salt'
