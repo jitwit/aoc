@@ -16,7 +16,7 @@ part'a g = length $ nub triangles where
 
 part'b g = intercalate "," $ max'clique where
   max'clique = maximumBy (comparing length) cliques
-  expand v c | all id [ hasEdge v x g | x <- c ] = v:c
+  expand v c | all (`S.member` postSet v g) c = v:c
              | otherwise = c
   expand'clique g x = foldr expand [x] $ S.elems $ postSet x g
   cliques = [ expand'clique g v | v <- vertexList g ]
