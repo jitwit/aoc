@@ -1,4 +1,4 @@
-{-# language GADTs, OverloadedStrings, TupleSections #-}
+{-# language GADTs, OverloadedStrings, TupleSections, FlexibleContexts #-}
 
 import Algebra.Graph.AdjacencyMap.Algorithm
 import Algebra.Graph.AdjacencyMap
