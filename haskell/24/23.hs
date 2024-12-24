@@ -8,17 +8,17 @@ import Data.Ord
 import Advent
 
 part'a g = length $ nub triangles where
-  triangles = nub [ sort [a,b,c]
-                  | a@('t':_) <- vertexList g
-                  , b <- S.elems $ postSet a g
-                  , c <- S.elems $ postSet b g
-                  , hasEdge c a g ]
+  triangles = [ sort [a,b,c]
+              | a@('t':_) <- vertexList g
+              , b <- S.elems $ postSet a g
+              , c <- S.elems $ postSet b g
+              , hasEdge c a g ]
 
-part'b g = intercalate "," $ max'clique where
+part'b g = intercalate "," $ S.elems max'clique where
   max'clique = maximumBy (comparing length) cliques
-  expand v c | all (`S.member` postSet v g) c = v:c
+  expand v c | all (`S.member` postSet v g) c = S.insert v c
              | otherwise = c
-  expand'clique g x = foldr expand [x] $ S.elems $ postSet x g
+  expand'clique g x = foldr expand (S.singleton x) $ postSet x g
   cliques = [ expand'clique g v | v <- vertexList g ]
 
 main =
