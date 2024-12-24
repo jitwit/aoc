@@ -4,7 +4,7 @@
  Clearing of the throat
 
 #+BEGIN_SRC scheme :session :exports code
-(load "~/code/advent/load.ss")
+(load "~/code/aoc/load.ss")
 
 (advent-year 17)
 (advent-day 24)

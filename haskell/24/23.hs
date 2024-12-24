@@ -4,9 +4,10 @@ import Algebra.Graph.AdjacencyMap
 import qualified Data.Set as S
 import Data.Tuple
 import Data.List
+import Data.Ord
 import Advent
 
-adj g = S.toList . postSet g
+adj g = S.elems . postSet g
 
 part'a g = length $ nub triangles where
   triangles = nub [ sort [a,b,c]
@@ -15,8 +16,8 @@ part'a g = length $ nub triangles where
                   , c <- adj b g
                   , hasEdge c a g ]
 
-part'b g = intercalate "," $ sort max'clique where
-  max'clique = maximumBy (\a b -> compare (length a) (length b)) cliques
+part'b g = intercalate "," $ max'clique where
+  max'clique = maximumBy (comparing length) cliques
   cliques = [ expand'clique g v | v <- vertexList g ]
 
 expand'clique g x = foldr expand [x] $ adj x g where
@@ -24,6 +25,6 @@ expand'clique g x = foldr expand [x] $ adj x g where
              | otherwise = c
 
 main =
-  do ls <- map (\l -> (take 2 l,drop 3 l)) . lines <$> input'string 24 23
+  do ls <- map (\l -> (take 2 l, drop 3 l)) . lines <$> input'string 24 23
      let g = edges $ ls ++ map swap ls
      output $ AB (part'a g) (part'b g)
