@@ -15,10 +15,10 @@ part'a g = length $ nub triangles where
                   , c <- adj b g
                   , hasEdge c a g ]
 
-part'b g = concat $ intersperse "," $ sort max'clique where
+part'b g = intercalate "," $ sort max'clique where
   max'clique = maximumBy (\a b -> compare (length a) (length b)) cliques
   cliques = [ expand'clique g v | v <- vertexList g ]
-  
+
 expand'clique g x = foldr expand [x] $ adj x g where
   expand v c | all id [ hasEdge v x g | x <- c ] = v:c
              | otherwise = c
