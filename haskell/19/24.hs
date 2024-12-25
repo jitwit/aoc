@@ -10,7 +10,7 @@ import Linear
 main = do
   worldB <- space0 <$> input'string 19 24
   let worldA = za'of'zb worldB
-      partA = biodiversity (firstRepeated worldA)
+      partA = biodiversity (first'repeated worldA)
       partB = size $ (iterate evolve worldB) !! 200
   reportAB partA partB
 
@@ -35,8 +35,8 @@ evolve s = fromList [ (z,1) | z <- zs, 1 == live'die (ref z s) (ref z c) ]
 biodiversity :: Planet ZA -> Int
 biodiversity p = sum [ 2^(5*y+x) | x <- [0..4], y <- [0..4], ref (za x y) p == 1 ]
 
-firstRepeated :: PlanetCoordinate p => Planet p -> Planet p
-firstRepeated p = aux mempty p where
+first'repeated :: PlanetCoordinate p => Planet p -> Planet p
+first'repeated p = aux mempty p where
   aux seen p | p `member` seen = p
              | otherwise = aux (insert p seen) (evolve p)
 
