@@ -2,8 +2,7 @@
 
 module Main where
 
-import Data.List
-import Advent
+import Advent; import Data.List
 
 main =
   do input <- map (fromEnum.(=='#')) . filter (/='\n') <$> input'string 24 25
