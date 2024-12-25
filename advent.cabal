@@ -77,3 +77,9 @@ executable 24-23
   main-is:             23.hs
   build-depends:       advent
   hs-source-dirs:      haskell/24
+
+executable 24-25
+  import: deps
+  main-is:             25.hs
+  build-depends:       advent
+  hs-source-dirs:      haskell/24
