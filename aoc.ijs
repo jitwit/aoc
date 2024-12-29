@@ -79,9 +79,9 @@ bfs =: 4 : 0
 egcd =: 4 : 0 NB. extended euclid
  'a b c d s t' =. 1 0 0 1,x,y
  while. r =. t - s*q =. <. t%s do.
-   c =. t [ a =. c-q*a [ t =. a
-   d =. t [ b =. d-q*b [ t =. b
-   s =. r [ t =. s
+  c =. t [ a =. c-q*a [ t =. a
+  d =. t [ b =. d-q*b [ t =. b
+  s =. r [ t =. s
  end. a,b,s assert. s = (a*x) + b*y
 )
 
@@ -92,8 +92,8 @@ crt =: 4 : 0 NB. chinese remainder theorem
 
 P =: 3 : 0 NB. converting depth vector to parent vector
  ps=. 0 #~ n =. # y
- for_lk. 2 ]\ (i.n) </.~ y
- do. ps=. ps k }~ l {~ <: l I. k [ 'l k' =. lk
+ for_lk. 2 ]\ (i.n) </.~ y do.
+  ps=. ps k }~ l {~ <: l I. k [ 'l k' =. lk
  end. ps + (i.n) * 0=y
  )
 
@@ -103,14 +103,14 @@ brent =: 1 : 0 NB. brent cycle detection algorithm. outputs period and iteration
  tortoise =. y
  hare =. u y
  while. tortoise ~:&< hare do. NB. boxing to get deep equality seems to work...
-   if. power = lambda do. lambda =. 0[power =. 2*power[tortoise =. hare end.
-   lambda =. 1+lambda[hare =. u hare
+  if. power = lambda do. lambda =. 0[power =. 2*power[tortoise =. hare end.
+  lambda =. 1+lambda[hare =. u hare
  end.
  tortoise =. y
  hare =. u^:lambda y
  mu =. 0
  while. tortoise ~:&< hare do.
-   mu =. 1+mu[hare =. u hare[tortoise =. u tortoise
+  mu =. 1+mu[hare =. u hare[tortoise =. u tortoise
  end.
  lambda,mu NB. lambda is period, mu is length until function cycles
 )
