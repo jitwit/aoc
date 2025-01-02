@@ -29,11 +29,13 @@ input_req=: 3 : 0
  hdr ; input_url y
 )
 
+'Y0 Y1' =: 2015;2025
+
 get_input =: 3 : 0
  'y d' =. y
  'cy cm cd' =. 3 {. 6!:0 ''
- assert. *./ (1<:d),(d<:25),(2015<:y),(y<:2024)
- assert. (y<2024)+.(cy=y)*.(d<:cd)*.(cm=12)
+ assert. *./ (1<:d),(d<:25),(Y0<:y),(y<:Y1)
+ assert. (y<Y1)+.(cy=y)*.(d<:cd)*.(cm=12)
  file=. input_file y,d
  try. assert. fexist file
       1!:1 < file
@@ -43,26 +45,20 @@ get_input =: 3 : 0
         else. input 1!:2 < file end.
         input
  end.
- )
+)
 
 3 : 0 '' NB. initialize
-assert. fpathcreate AOCDIR,'/input/2015/'
-assert. fpathcreate AOCDIR,'/input/2016/'
-assert. fpathcreate AOCDIR,'/input/2017/'
-assert. fpathcreate AOCDIR,'/input/2018/'
-assert. fpathcreate AOCDIR,'/input/2019/'
-assert. fpathcreate AOCDIR,'/input/2020/'
-assert. fpathcreate AOCDIR,'/input/2021/'
-assert. fpathcreate AOCDIR,'/input/2022/'
-assert. fpathcreate AOCDIR,'/input/2023/'
-assert. fpathcreate AOCDIR,'/input/2024/'
+ for_j. Y0+i.1+Y1-Y0 do.
+  assert. fpathcreate AOCDIR,'/input/',(":j),'/'
+ end.
 )
 
 aoc_z_ =: get_input_aoc_
- update_cookie_z_ =: 3 : 0
+
+update_cookie_z_ =: 3 : 0
  1!:55 < cookie_file_aoc_ ''
  y 1!:2 < cookie_file_aoc_ ''
- )
+)
 
 bfs =: 4 : 0
  NB. get tree from bfs starting at x in graph y
@@ -95,7 +91,7 @@ P =: 3 : 0 NB. converting depth vector to parent vector
  for_lk. 2 ]\ (i.n) </.~ y do.
   ps=. ps k }~ l {~ <: l I. k [ 'l k' =. lk
  end. ps + (i.n) * 0=y
- )
+)
 
 NB. https://en.wikipedia.org/wiki/Cycle_detection#Brent's_algorithm
 brent =: 1 : 0 NB. brent cycle detection algorithm. outputs period and iterations before cycle
@@ -103,14 +99,14 @@ brent =: 1 : 0 NB. brent cycle detection algorithm. outputs period and iteration
  tortoise =. y
  hare =. u y
  while. tortoise ~:&< hare do. NB. boxing to get deep equality seems to work...
-  if. power = lambda do. lambda =. 0[power =. 2*power[tortoise =. hare end.
-  lambda =. 1+lambda[hare =. u hare
+  if. power = lambda do. lambda =. 0 [ power =. 2*power [ tortoise =. hare end.
+  lambda =. 1+lambda [ hare =. u hare
  end.
  tortoise =. y
  hare =. u^:lambda y
  mu =. 0
  while. tortoise ~:&< hare do.
-  mu =. 1+mu[hare =. u hare[tortoise =. u tortoise
+  mu =. 1+mu [ hare =. u hare [ tortoise =. u tortoise
  end.
  lambda,mu NB. lambda is period, mu is length until function cycles
 )
