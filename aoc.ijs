@@ -111,8 +111,16 @@ brent =: 1 : 0 NB. brent cycle detection algorithm. outputs period and iteration
  lambda,mu NB. lambda is period, mu is length until function cycles
 )
 
+NB. some typical charsets
+az =: a.{~97+i.26
+AZ =: a.{~65+i.26
+a09 =: a.{~48+i.10
+
 bfs_z_   =: bfs_aoc_
 bez_z_   =: bez_aoc_
 crt_z_   =: crt_aoc_
 P_z_     =: P_aoc_
 brent_z_ =: brent_aoc_
+az_z_    =: az_aoc_
+AZ_z_    =: AZ_aoc_
+a09_z_   =: a09_aoc_

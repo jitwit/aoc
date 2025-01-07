@@ -347,6 +347,16 @@
                  (let ((f-y (g y)))
                    (hashtable-set! mem y f-y)
                    f-y)))))))
+    ((_ (f x : hash eq) body ...)
+     (define f
+       (let ((mem (make-hashtable hash eq))
+             (g (lambda (x) body ...)))
+         (lambda (y)
+           (let ((f-y (hashtable-ref mem y #f)))
+             (or f-y
+                 (let ((f-y (g y)))
+                   (hashtable-set! mem y f-y)
+                   f-y)))))))
     ((_ (f x y ...) body ...)
      (define f
        (let ((mem (make-hashtable equal-hash equal?))
