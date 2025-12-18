@@ -36,6 +36,12 @@ library
     Advent.Write
   build-depends:
 
+executable 18-9
+  import: deps
+  main-is:             09.hs
+  build-depends:       advent
+  hs-source-dirs:      haskell/18
+
 executable 19-1
   import: deps
   main-is:             01.hs

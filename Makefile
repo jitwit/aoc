@@ -1,6 +1,6 @@
 .PHONY : help fetch clean haskell very-clean leaderboard.json
 
-y = 2024
+y = 2025
 d = 1
 
 help :

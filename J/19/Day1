@@ -1,7 +1,7 @@
 # -*- mode: org -*-
 #+title:   [[https://adventofcode.com/2019/day/1][Day 1: The Tyranny of the Rocket Equation]]
 
-#+begin_src j :session :exports both :tangle 1.ijs 
+#+begin_src j :session :exports both :tangle 01.ijs
 load '~/code/aoc/aoc.ijs'
 masses =: ".;._2 aoc 2019;1
 gas =: 0>.2-~<.@%&3

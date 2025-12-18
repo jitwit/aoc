@@ -29,7 +29,7 @@ input_req=: 3 : 0
  hdr ; input_url y
 )
 
-'Y0 Y1' =: 2015;2025
+'Y0 Y1' =: 2015;2026
 
 get_input =: 3 : 0
  'y d' =. y
